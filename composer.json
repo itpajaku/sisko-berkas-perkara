@@ -11,13 +11,13 @@
 		"source": "https://github.com/bcit-ci/CodeIgniter"
 	},
 	"require": {
-		"php": ">=5.3.7",
+		"php": ">=7.4",
 		"vlucas/phpdotenv": "^4.1.8",
 		"azharlihan/ci3-modules": "^1.0",
 		"robmorgan/phinx": "^0.13.4",
-		"illuminate/database": "^8.0",
-		"illuminate/events": "^8.0",
-		"hashids/hashids": "^5.0"
+		"illuminate/database": "8.0",
+		"illuminate/events": "8.0",
+		"hashids/hashids": "^4.1.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
