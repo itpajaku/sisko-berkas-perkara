@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Libraries\AuthData;
 use App\Libraries\Eloquent;
 use App\Models\BerkasGugatan;
 use APP_Controller;
+use Auth;
 
 class BerkasGugatanService
 {
@@ -46,6 +48,7 @@ class BerkasGugatanService
 
       $berkas->ekspedisi()->attach($this->app->input->post("posisi_berkas", true), [
         "save_time" => date("Y-m-d H:i:s"),
+        "created_by" => AuthData::getUserData()->username
       ]);
 
       $this->eloquent->capsule->connection("default")->commit();

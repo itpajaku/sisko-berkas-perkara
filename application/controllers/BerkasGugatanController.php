@@ -35,7 +35,7 @@ class BerkasGugatanController extends APP_Controller
 			if ($start > $end) {
 				$this->session->set_flashdata(
 					'error_alert',
-					Templ::component("components/exceptions_alert", ["message" => "Tanggal awal tidak boleh lebih besar dari tanggal akhir"])
+					Templ::component("components/exception_alert", ["message" => "Tanggal awal tidak boleh lebih besar dari tanggal akhir"])
 				);
 			}
 		}
@@ -63,7 +63,7 @@ class BerkasGugatanController extends APP_Controller
 		if ($berkas) {
 			$this->load->view("berkas_gugatan/form_set_pbt", ["berkas" => $berkas]);
 		} else {
-			$this->load->view("components/exceptions_alert", [
+			$this->load->view("components/exception_alert", [
 				"message" => "Berkas tidak ditemukan",
 			]);
 		}
@@ -107,7 +107,7 @@ class BerkasGugatanController extends APP_Controller
 				"daftar_posisi_berkas" => PosisiEkspedisi::where("status", 1)->get(),
 			]);
 		} catch (\Throwable $th) {
-			$this->load->view("components/exceptions_alert", ["message" => $th->getMessage()]);
+			$this->load->view("components/exception_alert", ["message" => $th->getMessage()]);
 		}
 	}
 
@@ -122,7 +122,7 @@ class BerkasGugatanController extends APP_Controller
 			header("HX-Redirect: /berkas_gugatan/register");
 		} catch (\Throwable $th) {
 			$this->eloquent->capsule->connection("default")->rollBack();
-			$this->load->view("components/exceptions_alert", ["message" => $th->getMessage()]);
+			$this->load->view("components/exception_alert", ["message" => $th->getMessage()]);
 		}
 	}
 
@@ -138,7 +138,7 @@ class BerkasGugatanController extends APP_Controller
 
 			$this->output->set_header("HX-Redirect:" . base_url("/berkas_gugatan/register"))->set_output("Berkas Gugatan berhasil diupdate");
 		} catch (\Throwable $th) {
-			$this->load->view("components/exceptions_alert", ["message" => $th->getMessage()]);
+			$this->load->view("components/exception_alert", ["message" => $th->getMessage()]);
 		}
 	}
 
@@ -149,7 +149,7 @@ class BerkasGugatanController extends APP_Controller
 			$this->berkasGugatanService->remove($this->hash->decode($id)[0]);
 			$this->output->set_header("HX-Refresh: true")->set_output("Berkas berhasil dihapus");
 		} catch (\Throwable $th) {
-			$this->load->view("components/exceptions_alert", ["message" => $th->getMessage()]);
+			$this->load->view("components/exception_alert", ["message" => $th->getMessage()]);
 		}
 	}
 
@@ -197,10 +197,30 @@ class BerkasGugatanController extends APP_Controller
 		$berkas = BerkasGugatan::findOrFail($this->hash->decode($id)[0]);
 		Templ::render("berkas_gugatan/ekspedisi_berkas_gugatan", [
 			"berkas" => $berkas,
+			"posisi_berkas" => PosisiEkspedisi::where("status", 1)->get()
 		])
 			->sidebar("layouts/sidebar_menu", [
 				"title" => "Edit Berkas Gugatan",
 			])
 			->layout("layouts/main_layout");
+	}
+
+	public function add_ekspedisi($berkas_id)
+	{
+		MethodFilter::must("post");
+		try {
+			$berkasId = $this->hash->decode($berkas_id)[0];
+
+			$berkas = BerkasGugatan::findOrFail($berkasId);
+			$berkas->ekspedisi()->attach($this->input->post("posisi_ekspedisi"), [
+				"save_time" => date("Y-m-d H:i:s"),
+				"created_by" => $this->userdata->username
+			]);
+			$this->output->set_header("HX-Refresh: true")->set_output("Berhasil menambahkan ekspedisi");
+		} catch (\Throwable $th) {
+			$this->output->set_output(
+				Templ::component("components/exception_alert", ["message" => $th->getMessage()])
+			);
+		}
 	}
 }

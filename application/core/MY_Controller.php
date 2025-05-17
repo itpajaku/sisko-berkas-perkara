@@ -26,6 +26,7 @@ class APP_Controller extends CI_Controller
 	public CI_Form_validation $form_validation;
 	public CI_Output $output;
 	public CI_Session $session;
+	public stdClass  $userdata;
 
 	public function __construct()
 	{
@@ -41,5 +42,6 @@ class APP_Controller extends CI_Controller
 
 		$this->hash = new Hashids();
 		AuthData::authenticatedPass();
+		$this->userdata = AuthData::getUserData();
 	}
 }

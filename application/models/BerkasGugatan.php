@@ -18,4 +18,9 @@ class BerkasGugatan extends Model
   {
     return $this->belongsTo(Perkara::class, "perkara_id", "perkara_id");
   }
+
+  public function berkas_ekspedisi()
+  {
+    return $this->morphMany(BerkasEkspedisi::class, "berkas");
+  }
 }

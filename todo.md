@@ -8,17 +8,16 @@ What to do
     - [&check;] Validasi sudah putus
     - [&check;] Form UI
     - [&check;] Attach ekspedisi
-- [] List Berkas
+- [&check;] List Berkas
     - [&check;] DataTable
     - [&check;] Show by Date
-    - [] Set Ekspedisi UI
+    - [&check;] Set Ekspedisi UI
     - [&check;] Count Selisih
-- [] Edit Berkas
+- [&check] Edit Berkas
     - [&check;] Fungsi Update
     - [&check;] Form UI
     - [&check;] Set PBT via modal
-    - [] Update ekspedisi
+    - [&check;] Update ekspedisi
     - [&check;] Sinkron Berkas SIPP
 - [&check;] Delete Berkas
     - [&check;] Detach Ekspedisi
-    

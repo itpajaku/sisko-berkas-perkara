@@ -96,7 +96,7 @@
             </div>
             <?php if (!$berkas) { ?>
                 <div class="form-group px-3">
-                    <?= $this->load->view("components/exceptions_alert", ["message" => "Perkara ini belum ditetapkan"], true) ?>
+                    <?= $this->load->view("components/exception_alert", ["message" => "Perkara ini belum ditetapkan"], true) ?>
                 </div>
             <?php } ?>
             <div class="form-group p-3 text-bg-light">
@@ -147,7 +147,7 @@
             </div>
             <?php if (!$berkas) { ?>
                 <div class="form-group px-3">
-                    <?= $this->load->view("components/exceptions_alert", ["message" => "Perkara ini belum diputus"], true) ?>
+                    <?= $this->load->view("components/exception_alert", ["message" => "Perkara ini belum diputus"], true) ?>
                 </div>
             <?php } ?>
             <div class="form-group p-3">
