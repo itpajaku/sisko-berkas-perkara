@@ -47,7 +47,7 @@ trait BerkasGugatanValidation
       $validator->set_rules(
         'tanggal_bht',
         'Tanggal BHT',
-        'required|trim'
+        'trim'
       );
     }
     if (isset($body["para_pihak"])) {

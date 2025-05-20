@@ -18,7 +18,9 @@ $route['berkas_gugatan/register'] = 'BerkasGugatanController/daftar_register';
 $route['berkas_gugatan/create'] = 'BerkasGugatanController/add';
 $route['berkas_gugatan/store'] = 'BerkasGugatanController/store';
 $route['berkas_gugatan/fetch_form'] = 'BerkasGugatanController/fetchForm';
-$route['berkas_gugatan/datatable'] = 'BerkasGugatanController/datatable';
+$route['berkas_gugatan/fetch_form_bht/(:any)'] = 'BerkasGugatanController/fetch_form_bht/$1';
+$route['berkas_gugatan/datatable']['POST'] = 'BerkasGugatanController/datatable';
+$route['berkas_gugatan/bht_datatable']['POST'] = 'BerkasGugatanController/bht_datatable';
 $route['berkas_gugatan/(:any)/ekspedisi']['POST'] = 'EkspedisiBerkasController/attach_to_berkas/$1';
 $route['berkas_gugatan/(:any)/ekspedisi']['DELETE'] = 'EkspedisiBerkasController/detach_from_berkas/$1';
 $route['berkas_gugatan/ekspedisi/(:any)']['GET'] = 'BerkasGugatanController/ekspedisi_berkas/$1';
@@ -27,6 +29,7 @@ $route['berkas_gugatan/(:any)']['GET'] = 'BerkasGugatanController/edit/$1';
 $route['berkas_gugatan/set_pbt']['POST'] = 'BerkasGugatanController/fetchFormPbt';
 $route['berkas_gugatan/(:any)']['PATCH'] = 'BerkasGugatanController/save/$1';
 $route['berkas_gugatan/(:any)']['DELETE'] = 'BerkasGugatanController/delete/$1';
+$route['bht_hari_ini'] = "BerkasGugatanController/bht_page";
 
 $route['perkara/suggest'] = 'perkara/AutocompletePerkara';
 

@@ -223,4 +223,30 @@ class BerkasGugatanController extends APP_Controller
 			);
 		}
 	}
+
+	public function bht_page()
+	{
+		MethodFilter::must("get");
+		Templ::render("/berkas_gugatan/bht_hari_ini")
+			->sidebar("layouts/sidebar_menu", [
+				"title" => "Perkara BHT Hari Ini | Sistem Kontrol Berkas",
+			])
+			->layout("layouts/main_layout");
+	}
+
+	public function bht_datatable()
+	{
+		MethodFilter::must("post");
+		$datatableJson = $this->berkasGugatanService->bht_datatable();
+		$this->output->set_header("Content-Type: application/json")->set_output(json_encode($datatableJson));
+	}
+
+	public function fetch_form_bht($enid = null)
+	{
+		$id = $this->hash->decode($enid)[0];
+		$berkas = BerkasGugatan::findOrFail($id);
+		$this->output->set_output(
+			Templ::component("/berkas_gugatan/form_set_bht", ["berkas" => $berkas])
+		);
+	}
 }

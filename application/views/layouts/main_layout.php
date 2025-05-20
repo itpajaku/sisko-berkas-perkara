@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/assets/css/bs.datepicker.css" />
   <link rel="stylesheet" href="/assets/css/addons.css?v=2" />
   <link rel="stylesheet" href="/assets/libs/swal2/swal2.css" />
+  <link rel="stylesheet" href="/assets/libs/material_datepicker/material.datepicker.css" />
 
   <script src="/assets/js/htmx.min.js"></script>
 </head>
@@ -103,6 +104,7 @@
   <script src="/assets/js/typeahead.jquery.js"></script>
   <script src="/assets/js/moment.min.js"></script>
   <script src="/assets/js/bs.datepicker.min.js"></script>
+  <script src="/assets/libs/material_datepicker/material.datepicker.js"></script>
   <script src="/assets/libs/swal2/swal2.js"></script>
   <script src="/assets/libs/toastr/toastr.js"></script>
 
@@ -112,6 +114,12 @@
         format: "yyyy-mm-dd",
         autoclose: true,
         todayHighlight: true,
+      });
+
+      $(".mt-datepicker").bootstrapMaterialDatePicker({
+        weekStart: 0,
+        time: false,
+        format: "YYYY-MM-DD"
       });
 
       htmx.on("htmx:beforeRequest", function() {

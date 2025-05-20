@@ -13,7 +13,7 @@ What to do
     - [&check;] Show by Date
     - [&check;] Set Ekspedisi UI
     - [&check;] Count Selisih
-- [&check] Edit Berkas
+- [&check;] Edit Berkas
     - [&check;] Fungsi Update
     - [&check;] Form UI
     - [&check;] Set PBT via modal
@@ -21,3 +21,7 @@ What to do
     - [&check;] Sinkron Berkas SIPP
 - [&check;] Delete Berkas
     - [&check;] Detach Ekspedisi
+
+2. Menu BHT Hari Ini
+- [$check;] List Datatable
+    - [$check;] Aksi instant add tanggal bht

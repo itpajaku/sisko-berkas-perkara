@@ -6,7 +6,6 @@ use App\Libraries\AuthData;
 use App\Libraries\Eloquent;
 use App\Models\BerkasGugatan;
 use APP_Controller;
-use Auth;
 
 class BerkasGugatanService
 {
@@ -43,7 +42,7 @@ class BerkasGugatanService
         "tanggal_putusan" => $this->app->input->post("tanggal_putusan", true),
         "tanggal_pendaftaran" => $this->app->input->post("tanggal_pendaftaran", true),
         "tanggal_pbt" => empty($this->app->input->post("tanggal_pbt")) ? null : $this->app->input->post("tanggal_pbt", true),
-        "tanggal_bht" => $this->app->input->post("tanggal_bht", true),
+        "tanggal_bht" => empty($this->app->input->post("tanggal_bht")) ? null : $this->app->input->post("tanggal_bht", true),
       ]);
 
       $berkas->ekspedisi()->attach($this->app->input->post("posisi_berkas", true), [
@@ -125,5 +124,49 @@ class BerkasGugatanService
     }
 
     return $berkas;
+  }
+
+
+  public function bht_datatable()
+  {
+    $draw = $this->app->input->post('draw');
+    $start = $this->app->input->post('start');
+    $length = $this->app->input->post('length');
+    $search = $this->app->input->post('search')['value'];
+
+    $query = BerkasGugatan::selectRaw("*, datediff(curdate(), tanggal_pbt) as selisih")
+      ->whereRaw("datediff(curdate(), tanggal_pbt) >= 18")
+      ->whereNull("tanggal_bht")
+      ->whereNotNull("tanggal_pbt");
+
+    if ($search) {
+      $query->where(function ($q) use ($search) {
+        $q
+          ->where("nomor_perkara", "like", "$search%")
+          ->orWhere("majelis_hakim", "like", "$search%")
+          ->orWhere("panitera", "like", "$search%")
+          ->orWhere("jurusita", "like", "$search%");
+      });
+    }
+
+    $total = BerkasGugatan::selectRaw("COUNT(*) as total")->first()->total;
+    $filtered = $query->count();
+    $data = $query->offset($start)->limit($length)->get();
+
+    $data->transform(function ($item, $n) {
+      $item->no = ++$n;
+      $item->tanggal_pendaftaran = tanggal_indo($item->tanggal_pendaftaran, false);
+      $item->tanggal_putusan = tanggal_indo($item->tanggal_putusan, false);
+      $item->tanggal_pbt = tanggal_indo($item->tanggal_pbt);
+      $item->aksi = $this->app->load->view("berkas_gugatan/aksi_add_bht", ["berkas" => $item], true);
+      return $item;
+    });
+
+    return [
+      'draw' => intval($draw),
+      'recordsTotal' => $total,
+      'recordsFiltered' => $filtered,
+      'data' => $data->all()
+    ];
   }
 }
