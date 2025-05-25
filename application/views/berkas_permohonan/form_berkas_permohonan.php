@@ -1,5 +1,5 @@
  <form
-   hx-post="<?= base_url("/berkas_gugatan/store") ?>"
+   hx-post="<?= base_url("/berkas_permohonan") ?>"
    hx-target="#submit-result"
    hx-on::before-request="$('#btn-submit').attr('disabled', true).html('<i class=\'ti ti-loader ti-pulse\'></i> Mohon Tunggu...')"
    hx-on::after-request="$('#btn-submit').attr('disabled', false).html('<i class=\'ti ti-device-floppy\'></i> Simpan')"
@@ -51,7 +51,7 @@
          <div class="input-group">
            <input
              type="text"
-             value="<?= $perkara->pihak1_text ?> Melawan <?= $perkara->pihak2_text ?>"
+             value="<?= $perkara->pihak1_text ?>, <?= $perkara->pihak2_text ?>"
              class="form-control"
              name="para_pihak"
              id="inputParaPihak"
@@ -134,32 +134,6 @@
            <span class="input-group-text">
              <i class="ti ti-calendar"></i>
            </span>
-         </div>
-       </div>
-     </div>
-   </div>
-   <div class="form-group p-3">
-     <div class="row">
-       <label for="inputTanggalPbt" class="col-sm-3 text-end  col-form-label">Tanggal Pemberitahuan</label>
-       <div class="col-sm-9">
-         <div class="input-group">
-           <input type="text" name="tanggal_pbt" class="form-control form-control-datepicker" id="inputTanggalPbt" placeholder="Isi disini" />
-           <div class="input-group-text">
-             <i class="ti ti-calendar"></i>
-           </div>
-         </div>
-       </div>
-     </div>
-   </div>
-   <div class="form-group p-3">
-     <div class="row">
-       <label for="inputTanggalBht" class="col-sm-3 text-end  col-form-label">Tanggal BHT</label>
-       <div class="col-sm-9">
-         <div class="input-group">
-           <input type="text" name="tanggal_bht" class="form-control form-control-datepicker" id="inputTanggalBht" placeholder="Isi disini" value="<?= $putusan->tanggal_bht ?? null ?>" />
-           <div class="input-group-text">
-             <div class="ti ti-calendar"></div>
-           </div>
          </div>
        </div>
      </div>

@@ -21,7 +21,21 @@ What to do
     - [&check;] Sinkron Berkas SIPP
 - [&check;] Delete Berkas
     - [&check;] Detach Ekspedisi
-
+---
 2. Menu BHT Hari Ini
 - [$check;] List Datatable
-    - [$check;] Aksi instant add tanggal bht
+    - [&check;] Aksi instant add tanggal bht
+    - [] Sinkron BHT Ke SIPP
+---
+3. Menu Berkas Permohonan
+- [&check;] Page List Berkas
+    - [&check;] Datatable
+    - [&check;] Filter by date
+- [&check;] Page Create Berkas
+    - [&check;] Action create berkas
+    - [&check;] Attach ekspedisi
+    - [] Sinkron ke SIPP
+- [] Page Edit Berkas
+    - [&check;] Nav Detail berkas
+    - [&check;] Nav Ekspedisi berkas
+    - [] Action update data

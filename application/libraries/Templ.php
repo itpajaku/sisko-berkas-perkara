@@ -2,46 +2,57 @@
 
 namespace App\Libraries;
 
-use CI_Controller;
-
 class Templ
 {
-  protected CI_Controller $app;
-  private string $layout = "";
-  private string $sidebar = "layouts/sidebar_menu";
-  private string $page_content = "";
+  protected static $CI;
 
-  public function __construct($app)
+  protected string $layout = '';
+  protected string $sidebarViewPath = 'layouts/sidebar_menu';
+  protected string $sidebarContent = '';
+  protected string $pageContent = '';
+
+  // Get CI instance (lazy init)
+  protected static function ci()
   {
-    $this->app = $app;
+    if (self::$CI === null) {
+      self::$CI = &get_instance();
+    }
+    return self::$CI;
   }
+
+  // Constructor private untuk memaksa pakai static::render()
+  private function __construct() {}
 
   public static function render(string $view, array $data = []): Templ
   {
-    $self = new self(get_instance());
-    $self->page_content = $self->app->load->view($view, $data, true);
+    $self = new self();
+    $self->pageContent = self::ci()->load->view($view, $data, true);
+    $self->sidebarContent = self::ci()->load->view($self->sidebarViewPath, [], true);
     return $self;
   }
 
   public function layout(string $layout, array $data = []): Templ
   {
     $this->layout = $layout;
-    $this->app->load->view($layout, [
-      "page_content" => $this->page_content,
-      "sidebar_menu" => $this->sidebar,
-      $data
+
+    $viewData = array_merge($data, [
+      'page_content' => $this->pageContent,
+      'sidebar_menu' => $this->sidebarContent
     ]);
+
+    self::ci()->load->view($layout, $viewData);
     return $this;
   }
 
-  public function sidebar(string $sidebar, array $data = []): Templ
+  public function sidebar(string $sidebarView, array $data = []): Templ
   {
-    $this->sidebar = $this->app->load->view($sidebar, $data, true);
+    $this->sidebarViewPath = $sidebarView;
+    $this->sidebarContent = self::ci()->load->view($sidebarView, $data, true);
     return $this;
   }
 
   public static function component(string $view, array $data = []): string
   {
-    return get_instance()->load->view($view, $data, true);
+    return self::ci()->load->view($view, $data, true);
   }
 }

@@ -115,8 +115,12 @@ class BerkasGugatanService
   {
     $berkas = BerkasGugatan::findOrFail($id);
     $berkas->status = $status;
+    if ($status = 1) {
+      $berkas->tanggal_terima = date("Y-m-d");
+    }
 
     $berkas->save();
+
     if ($status == 0) {
       $selisih = BerkasGugatan::selectRaw("datediff(curdate(), tanggal_bht) as selisih")
         ->where("id", $id)->first();

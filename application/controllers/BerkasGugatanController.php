@@ -157,7 +157,7 @@ class BerkasGugatanController extends APP_Controller
 	{
 		MethodFilter::must("get");
 
-		$berkas = BerkasGugatan::findOrFail($this->hash->decode($id)[0]);
+		$berkas = BerkasGugatan::findOrFail($this->hash->decode($id));
 		Templ::render("berkas_gugatan/edit_berkas_gugatan", [
 			"berkas" => $berkas,
 		])

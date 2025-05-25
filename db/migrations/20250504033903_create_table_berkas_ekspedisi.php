@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
@@ -20,9 +21,10 @@ final class CreateTableBerkasEkspedisi extends AbstractMigration
     {
         $table = $this->table("berkas_ekspedisi");
         $table->addColumn("save_point", "string", ["null" => false]);
-        $table->addColumn("save_time", "timestamp", ["null" => true] );
+        $table->addColumn("save_time", "timestamp", ["null" => true]);
         $table->addColumn("berkas_id", "integer", ["null" => false]);
         $table->addColumn("berkas_type", "string");
+        $table->addColumn("created_by", "string", ["limit" => 191]);
         $table->addTimestamps();
         $table->create();
     }

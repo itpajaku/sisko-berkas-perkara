@@ -32,3 +32,8 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 .vscode/launch.json
 .vscode/settings.json
 .env
+
+*.pem
+*.crt
+*.cert
+*.key

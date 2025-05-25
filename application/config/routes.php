@@ -33,6 +33,15 @@ $route['bht_hari_ini'] = "BerkasGugatanController/bht_page";
 
 $route['perkara/suggest'] = 'perkara/AutocompletePerkara';
 
+$route['berkas_permohonan']['GET'] = "BerkasPermohonanController/register_page";
+$route['berkas_permohonan/register'] = "BerkasPermohonanController/register_page";
+$route['berkas_permohonan/datatable']['POST'] = "BerkasPermohonanController/datatable";
+$route['berkas_permohonan/create'] = "BerkasPermohonanController/create_page";
+$route['berkas_permohonan/fetch_form'] = "BerkasPermohonanController/render_fetch_form";
+$route['berkas_permohonan']['POST'] = "BerkasPermohonanController/store";
+$route['berkas_permohonan/(:any)'] = "BerkasPermohonanController/detail_page/$1";
+
+
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes

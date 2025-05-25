@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
@@ -19,15 +20,19 @@ final class CreateTableBerkasPermohonan extends AbstractMigration
     public function change(): void
     {
         $table = $this->table("berkas_permohonan");
-        $table->addColumn("perkara_id", "integer", ["null" => false]);
-        $table->addColumn("nomor_perkara", "string", ["null" => false]);
-        $table->addColumn("jenis_perkara", "string", ["null" => false]);
+        $table->addColumn("hash_id", "string", ["null" => true]);
+        $table->addColumn("perkara_id", "integer");
+        $table->addColumn("nomor_perkara", "string");
+        $table->addColumn("jenis_perkara", "string");
         $table->addColumn("para_pihak", "text");
         $table->addColumn("tanggal_pendaftaran", "date");
-        $table->addColumn("majelis", "string", ["null" => false]);
-        $table->addColumn("panitera", "string", ["null" => false]);
-        $table->addColumn("jurusita", "string", ["null" => false]);
-        $table->addColumn("tanggal_putusan", "string", ["null" => false]);
+        $table->addColumn("majelis_hakim", "string");
+        $table->addColumn("panitera", "string");
+        $table->addColumn("jurusita", "string");
+        $table->addColumn("tanggal_putusan", "string");
+        $table->addColumn("keterangan", "text");
+        $table->addColumn("status", "boolean", ["default" => false]);
+        $table->addColumn("tanggal_diterima", "date", ["null" => true]);
         $table->addTimestamps();
         $table->create();
     }

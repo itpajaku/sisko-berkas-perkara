@@ -5,7 +5,7 @@
       <span class="hide-menu">Beranda</span>
     </li>
     <li class="sidebar-item">
-      <a class="sidebar-link" href="./index.html" aria-expanded="false">
+      <a class="sidebar-link" href="<?= base_url("meja_3/dashboard") ?>" aria-expanded="false">
         <span>
           <i class="ti ti-layout-dashboard"></i>
         </span>
@@ -30,6 +30,18 @@
           <i class="ti ti-gavel"></i>
         </span>
         <span class="hide-menu">BHT Hari Ini</span>
+      </a>
+    </li>
+    <li class="nav-small-cap">
+      <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+      <span class="hide-menu">Berkas Permohonan</span>
+    </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="<?= base_url("berkas_permohonan/register") ?>" aria-expanded="false">
+        <span>
+          <i class="ti ti-books"></i>
+        </span>
+        <span class="hide-menu">Register</span>
       </a>
     </li>
   </ul>

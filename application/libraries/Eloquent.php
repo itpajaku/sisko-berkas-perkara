@@ -9,6 +9,7 @@ use Illuminate\Container\Container;
 class Eloquent
 {
   public Capsule $capsule;
+  private static Capsule $instance;
 
   public function boot()
   {
@@ -42,41 +43,18 @@ class Eloquent
 
     $capsule->bootEloquent();
 
-    $this->capsule = $capsule;
+    $this->capsule = &$capsule;
+    self::$instance = &$capsule;
+
 
     return $this;
   }
 
-  public function loadModel()
+  public static function &get_instance()
   {
-    $entity_path = APPPATH . 'models' . DIRECTORY_SEPARATOR;
-    if (file_exists($entity_path)) {
-      $this->_read_entity_dir($entity_path);
+    if (!self::$instance) {
+      throw new \Exception("Capsule belum di inisialisasi", 1);
     }
-  }
-
-  private function _read_entity_dir($dirpath)
-  {
-    $ci = &get_instance();
-
-    $handle = opendir($dirpath);
-    if (!$handle) return;
-
-    while (false !== ($filename = readdir($handle))) {
-      if ($filename == "." or $filename == "..") {
-        continue;
-      }
-
-      $filepath = $dirpath . $filename;
-      if (is_dir($filepath)) {
-        $this->_read_entity_dir($filepath);
-      } elseif (strpos(strtolower($filename), '.php') !== false) {
-        require_once $filepath;
-      } else {
-        continue;
-      }
-    }
-
-    closedir($handle);
+    return self::$instance;
   }
 }
