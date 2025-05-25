@@ -107,9 +107,33 @@ class BerkasPermohonanController extends APP_Controller
     $berkas = BerkasPermohonan::findOrFail($id[0]);
 
     Templ::render("berkas_permohonan/detail_berkas_permohonan_page", [
-      "berkas" => $berkas
+      "berkas" => $berkas,
+      "posisi_berkas" => PosisiEkspedisi::where("status", 1)->get()
     ])->layout("layouts/main_layout", [
       "title" => "Detail Berkas " . $berkas->nomor_perkara
     ]);
+  }
+
+  public function update($id)
+  {
+    MethodFilter::must("patch");
+    try {
+      $this->validation(RequestBody::post()->toArray(), $this->form_validation);
+      $this->berkasPermohonanService->update($this->hash->decode($id)[0], $this->hash->decode(RequestBody::post("perkara_id"))[0]);
+      $this->session->set_flashdata("alert_error", Templ::component("components/success_alert", ["message" => "Berhasil mengupdate berkas"]));
+      $this->output
+        ->set_header("HX-Refresh: true")
+        ->set_header("HX-Trigger: " . json_encode([
+          "htmx:toastr" => [
+            "level" => "success",
+            "message" => "Berhasil mengupdate berkas. Anda akan diarahkan sebentar lagi."
+          ]
+        ]))
+        ->set_output("Berhasil mengupdate data berkas");
+    } catch (\Throwable $th) {
+      $this->output->set_output(
+        Templ::component("components/exception_alert", ["message" => $th->getMessage()])
+      );
+    }
   }
 }

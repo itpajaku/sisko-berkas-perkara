@@ -39,7 +39,10 @@ $route['berkas_permohonan/datatable']['POST'] = "BerkasPermohonanController/data
 $route['berkas_permohonan/create'] = "BerkasPermohonanController/create_page";
 $route['berkas_permohonan/fetch_form'] = "BerkasPermohonanController/render_fetch_form";
 $route['berkas_permohonan']['POST'] = "BerkasPermohonanController/store";
-$route['berkas_permohonan/(:any)'] = "BerkasPermohonanController/detail_page/$1";
+$route['berkas_permohonan/(:any)']['GET'] = "BerkasPermohonanController/detail_page/$1";
+$route['berkas_permohonan/(:any)']['PATCH'] = "BerkasPermohonanController/update/$1";
+$route['berkas_permohonan/(:any)/ekspedisi']['POST'] = "EkspedisiBerkasController/attach_to_berkas/$1";
+$route['berkas_permohonan/(:any)/ekspedisi']['DELETE'] = 'EkspedisiBerkasController/detach_from_berkas/$1';
 
 
 /*

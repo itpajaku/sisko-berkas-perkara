@@ -35,7 +35,16 @@ What to do
     - [&check;] Action create berkas
     - [&check;] Attach ekspedisi
     - [] Sinkron ke SIPP
-- [] Page Edit Berkas
+- [&check;] Page Edit Berkas
     - [&check;] Nav Detail berkas
     - [&check;] Nav Ekspedisi berkas
-    - [] Action update data
+    - [&check;] Action update data
+    - [&check;] Update Ekspedisi Berkas
+    - [] Sinkron Sipp
+- [] Delete Berkas
+    - [] Warning prevent
+    - [] Detach Ekspedisi
+    - [] Action Delete
+---
+4. Menu Berkas Upaya Hukum
+- [] Page list perkara upaya hukum

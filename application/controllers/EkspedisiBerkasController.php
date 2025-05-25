@@ -27,7 +27,15 @@ class EkspedisiBerkasController extends APP_Controller
                 "created_by" => $this->userdata->username
             ]);
 
-            $this->output->set_header("HX-Refresh: true")->set_output("Berhasil menambahkan ekspedisi");
+            $this->output
+                ->set_header("HX-Refresh: true")
+                ->set_header("HX-Trigger: " . json_encode([
+                    "htmx:toastr" => [
+                        "level" => "success",
+                        "message" => "Berhasil mengupdate ekspedisi. Anda akan diarahkan sebentar lagi."
+                    ]
+                ]))
+                ->set_output("Berhasil menambahkan ekspedisi");
         } catch (\Throwable $th) {
             $this->output->set_output(
                 Templ::component("/component/exception_alert", ["messasge" => $th->getMessage()])

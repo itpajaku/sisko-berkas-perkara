@@ -116,4 +116,23 @@ class BerkasPermohonanService
       throw $th;
     }
   }
+
+  public function update($id, $perkara_id)
+  {
+    $berkas = BerkasPermohonan::findOrFail($id);
+    $berkas->update([
+      "perkara_id" => $perkara_id,
+      "nomor_perkara" => RequestBody::post("nomor_perkara"),
+      "jenis_perkara" => RequestBody::post("jenis_perkara"),
+      "para_pihak" => RequestBody::post("para_pihak"),
+      "majelis_hakim" => RequestBody::post("majelis_hakim"),
+      "panitera" => RequestBody::post("panitera"),
+      "jurusita" => RequestBody::post("jurusita"),
+      "keterangan" => RequestBody::post("keterangan"),
+      "tanggal_putusan" => RequestBody::post("tanggal_putusan"),
+      "tanggal_pendaftaran" => RequestBody::post("tanggal_pendaftaran"),
+      "tanggal_diterima" => RequestBody::post("tanggal_diterima") ?: null,
+      "status" => RequestBody::post("status")
+    ]);
+  }
 }

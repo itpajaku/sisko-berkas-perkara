@@ -6,6 +6,8 @@ class RequestBody
 {
   protected static $ci;
   protected static $queryObj;
+  protected static $input = [];
+  protected static $inputCollection;
 
   private static function init()
   {
@@ -27,7 +29,7 @@ class RequestBody
    * Isi param jika akan menggunakan native post method
    * @param string $par
    */
-  public static function post(string $par = null)
+  public static function post(string $par = "")
   {
     self::init();
     $rawinput = file_get_contents("php://input");
@@ -39,9 +41,19 @@ class RequestBody
       return self::$ci->input->post($par, true);
     }
 
-    $input = [];
-    parse_str($rawinput, $input);
-    return collect($input);
+    if (empty(self::$input)) {
+      parse_str($rawinput, self::$input);
+    }
+
+    if ($par) {
+      return self::$input[$par];
+    }
+
+    if (!self::$inputCollection) {
+      self::$inputCollection = collect(self::$input);
+      return self::$inputCollection;
+    }
+    return self::$inputCollection;
   }
 
   public static function get()
