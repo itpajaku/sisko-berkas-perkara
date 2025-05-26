@@ -4,6 +4,7 @@ defined("BASEPATH") or exit("Cannot Pass");
 use App\Libraries\MethodFilter;
 use App\Libraries\RequestBody;
 use App\Libraries\Templ;
+use App\Models\Arsip;
 use App\Models\BerkasPermohonan;
 use App\Models\Perkara;
 use App\Models\PosisiEkspedisi;
@@ -108,7 +109,8 @@ class BerkasPermohonanController extends APP_Controller
 
     Templ::render("berkas_permohonan/detail_berkas_permohonan_page", [
       "berkas" => $berkas,
-      "posisi_berkas" => PosisiEkspedisi::where("status", 1)->get()
+      "posisi_berkas" => PosisiEkspedisi::where("status", 1)->get(),
+      "arsip" => Arsip::where("perkara_id", $berkas->perkara_id)->first(),
     ])->layout("layouts/main_layout", [
       "title" => "Detail Berkas " . $berkas->nomor_perkara
     ]);
@@ -130,6 +132,33 @@ class BerkasPermohonanController extends APP_Controller
           ]
         ]))
         ->set_output("Berhasil mengupdate data berkas");
+    } catch (\Throwable $th) {
+      $this->output->set_output(
+        Templ::component("components/exception_alert", ["message" => $th->getMessage()])
+      );
+    }
+  }
+
+  public function delete($hash_id)
+  {
+    MethodFilter::must("delete");
+    try {
+      $id = $this->hash->decode($hash_id);
+      $berkas = BerkasPermohonan::findOrFail($id[0]);
+
+      $berkas->ekspedisi()->detach();
+      $berkas->delete();
+
+      $this->session->set_flashdata("alert_error", Templ::component("components/success_alert", ["message" => "Berhasil menghapus berkas"]));
+      $this->output
+        ->set_header("HX-Redirect: /berkas_permohonan")
+        ->set_header("HX-Trigger: " . json_encode([
+          "htmx:toastr" => [
+            "level" => "success",
+            "message" => "Berhasil menghapus berkas. Anda akan diarahkan sebentar lagi."
+          ]
+        ]))
+        ->set_output("Berhasil menghapus data berkas");
     } catch (\Throwable $th) {
       $this->output->set_output(
         Templ::component("components/exception_alert", ["message" => $th->getMessage()])

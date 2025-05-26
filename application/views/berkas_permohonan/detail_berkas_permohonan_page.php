@@ -13,7 +13,7 @@
     <div class="form-horizontal">
       <div class="form-body">
         <div class="card-body">
-          <h5 class="card-title mb-0">Info Berkas</h5>\
+          <h5 class="card-title mb-0">Info Berkas</h5>
           <?= $this->session->flashdata("success_alert") ?>
           <?= $this->session->flashdata("error_alert") ?>
         </div>
@@ -117,12 +117,15 @@
                 <div class="col-md-8">
                   <p>
                     <?= $berkas->status ? "Diarsipkan" : "Belum Diarsipkan" ?> |
-                    <a href="javascript:void(0)"
-                      data-bs-toggle="popover"
-                      title="Data register ini akan di sinkronkand dengan arsip di SIPP">
-                      <i class="ti ti-link"></i>
-                      Sinkronkan arsip
-                    </a>
+                    <?php if ($berkas->status) {
+                      echo App\Libraries\Templ::component("berkas_permohonan/unlink_berkas_ke_sipp", [
+                        "berkas" => $berkas,
+                      ]);
+                    } else {
+                      echo App\Libraries\Templ::component("berkas_permohonan/link_berkas_ke_sipp", [
+                        "berkas" => $berkas,
+                      ]);
+                    } ?>
                   </p>
                 </div>
               </div>
@@ -132,16 +135,15 @@
             <div class="col-md-6">
               <div class="form-group row">
                 <label class="form-label text-end col-md-4">Tanggal Diterima :</label>
-                <div class="col-md-9 text-start">
-                  <?= tanggal_indo($berkas->tanggal_diterima) ?>
-                </div>
+                <div class="col-md-8 text-start"> <?= tanggal_indo($berkas->tanggal_diterima) ?></div>
               </div>
             </div>
             <!--/span-->
             <div class="col-md-6">
               <div class="form-group row">
                 <label class="form-label text-end col-md-4">Tanggal Arsip :</label>
-                <div class="col-md-9">
+                <div class="col-md-8">
+                  <?= $berkas->status ? tanggal_indo($arsip->tanggal_masuk_arsip, false)  : null ?>
                 </div>
               </div>
             </div>
@@ -173,7 +175,12 @@
               Kembali
             </a>
           </div>
-          <button type="submit" class="btn btn-danger">
+          <button
+            hx-delete="<?= base_url("/berkas_permohonan/$berkas->hash_id") ?>"
+            hx-confirm="Apakah anda yakin ingin menghapus berkas ini? Data yang dihapus tidak bisa dikembalikan."
+            hx-swap="none"
+            type="button"
+            class="btn btn-danger">
             <i class="ti ti-trash fs-5"></i>
             Hapus
           </button>
@@ -181,35 +188,41 @@
         <hr class="m-0" />
         <div class="card-body py-4">
           <h5 class="card-title widget-card-title mb-3">Ekspedisi Berkas Nomor <?= $berkas->nomor_perkara ?></h5>
-          <ul class="timeline">
-            <?php foreach ($berkas->berkas_ekspedisi as $ekspedisi) { ?>
-              <li class="timeline-item">
-                <div class="timeline-body">
-                  <div class="timeline-meta">
-                    <span><?= $ekspedisi->save_time->diffForHumans() . " oleh : " . $ekspedisi->created_by ?></span>
-                  </div>
-                  <div class="timeline-content timeline-indicator">
-                    <h5 class="mb-1">Diterima oleh : <?= $ekspedisi->posisi_ekspedisi->posisi ?>.</h5>
-                    <h6 class="text-primary"> <?= $ekspedisi->posisi_ekspedisi->keterangan ?></h6>
-                    <span class="text-secondary fs-7"> <?= $ekspedisi->save_time->format("d F Y") ?> |
-                      <a
-                        class="text-danger"
-                        href="javascript:void(0)"
-                        hx-delete="<?= base_url("/berkas_gugatan/" . $this->hash->encode($berkas->id) . "/ekspedisi") ?>"
-                        hx-confirm="Data yang dihapus tidak bisa dikembalikan."
-                        hx-vals='<?= json_encode([
-                                    "save_point" => $ekspedisi->save_point,
-                                    "save_time" => $ekspedisi->save_time,
-                                    "berkas_type" => class_basename($berkas)
-                                  ]) ?>'>
-                        <i class="ti ti-trash"></i>
-                      </a>
-                    </span>
-                  </div>
-                </div>
-              </li>
-            <?php } ?>
-          </ul>
+          <div class="row">
+            <div class="col-3"></div>
+            <div class="col">
+              <ul class="timeline">
+                <?php foreach ($berkas->berkas_ekspedisi as $ekspedisi) { ?>
+                  <li class="timeline-item">
+                    <div class="timeline-body">
+                      <div class="timeline-meta">
+                        <span><?= $ekspedisi->save_time->diffForHumans() . " oleh : " . $ekspedisi->created_by ?></span>
+                      </div>
+                      <div class="timeline-content timeline-indicator">
+                        <h5 class="mb-1">Diterima oleh : <?= $ekspedisi->posisi_ekspedisi->posisi ?>.</h5>
+                        <h6 class="text-primary"> <?= $ekspedisi->posisi_ekspedisi->keterangan ?></h6>
+                        <span class="text-secondary fs-7"> <?= $ekspedisi->save_time->format("d F Y") ?> |
+                          <a
+                            class="text-danger"
+                            href="javascript:void(0)"
+                            hx-delete="<?= base_url("/berkas_gugatan/" . $this->hash->encode($berkas->id) . "/ekspedisi") ?>"
+                            hx-confirm="Data yang dihapus tidak bisa dikembalikan."
+                            hx-vals='<?= json_encode([
+                                        "save_point" => $ekspedisi->save_point,
+                                        "save_time" => $ekspedisi->save_time,
+                                        "berkas_type" => class_basename($berkas)
+                                      ]) ?>'>
+                            <i class="ti ti-trash"></i>
+                          </a>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                <?php } ?>
+              </ul>
+            </div>
+          </div>
+
           <button
             data-bs-toggle="modal"
             data-bs-target="#modalEkspedisi"

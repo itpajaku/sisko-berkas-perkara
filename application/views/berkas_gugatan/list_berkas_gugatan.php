@@ -180,7 +180,6 @@
 
   document.addEventListener("htmx:confirm", function(e) {
     if (!e.detail.question) return
-
     e.preventDefault()
 
     Swal.fire({

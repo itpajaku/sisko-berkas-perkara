@@ -1,6 +1,7 @@
 <?php
 defined("BASEPATH") or exit("No direct script access allowed");
 
+use App\Libraries\AuthData;
 use App\Traits\AuthRedirectDest;
 use App\Libraries\Eloquent;
 use App\Libraries\MethodFilter;
@@ -23,6 +24,10 @@ class Auth extends CI_Controller
   {
     parent::__construct();
 
+    if (isset($_SEVER["HTTP_REFERER"]) && strpos($_SERVER["HTTP_REFERER"], "auth") !== false) {
+      $this->session->set_userdata("redirect_url", $_SERVER["HTTP_REFERER"]);
+    }
+
     $this->eloquent = new Eloquent();
     $this->eloquent->boot();
 
@@ -34,6 +39,14 @@ class Auth extends CI_Controller
   public function index()
   {
     MethodFilter::must("get");
+    if (AuthData::isLogedIn()) {
+      $userData = AuthData::getUserData();
+      if (isset($this->redirectPage[$userData->groupid])) {
+        redirect($this->redirectPage[$userData->groupid]);
+      } else {
+        redirect("auth/logout");
+      }
+    }
 
     Templ::render("auth/login_content")->layout("layouts/auth_layout");
   }
@@ -76,8 +89,19 @@ class Auth extends CI_Controller
       $this->session->set_userdata("app_user_data", $profile);
 
       set_status_header(200);
-      header("HX-Redirect: " . base_url($this->redirectPage[$profile->groupid]));
-      echo $this->load->view("auth/auth_alert", ["message" => "Anda akan diarahakn sebentar lagi"], true);
+      if (isset($this->session->userdata["redirect_url"])) {
+        $redirectUrl = $this->session->userdata["redirect_url"];
+      } else {
+        $redirectUrl = base_url($this->redirectPage[$profile->groupid]);
+      }
+
+      $this->session->unset_userdata("redirect_url");
+      $this->output
+        ->set_header("HX-Redirect: " . $redirectUrl)
+        ->set_content_type("text/html")
+        ->set_output(Templ::component("auth/auth_alert", [
+          "message" => "Login Berhasil, Anda akan diarahkan sebentar lagi."
+        ]));
     } catch (\Throwable $th) {
       echo $this->load->view("auth/auth_alert", ["message" => $th->getMessage()], true);
     }

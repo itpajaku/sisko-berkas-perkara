@@ -31,20 +31,20 @@ What to do
 - [&check;] Page List Berkas
     - [&check;] Datatable
     - [&check;] Filter by date
+    - [] ~~Sinkron ke SIPP~~
 - [&check;] Page Create Berkas
     - [&check;] Action create berkas
     - [&check;] Attach ekspedisi
-    - [] Sinkron ke SIPP
 - [&check;] Page Edit Berkas
     - [&check;] Nav Detail berkas
     - [&check;] Nav Ekspedisi berkas
     - [&check;] Action update data
     - [&check;] Update Ekspedisi Berkas
-    - [] Sinkron Sipp
-- [] Delete Berkas
-    - [] Warning prevent
-    - [] Detach Ekspedisi
-    - [] Action Delete
+    - [&check;] Sinkron Sipp
+- [&check;] Delete Berkas
+    - [&check;] Warning prevent
+    - [&check;] Detach Ekspedisi
+    - [&check;] Action Delete
 ---
 4. Menu Berkas Upaya Hukum
 - [] Page list perkara upaya hukum

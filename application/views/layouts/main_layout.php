@@ -109,6 +109,23 @@
   <script src="/assets/libs/toastr/toastr.js"></script>
 
   <script>
+    $(document).on("htmx:confirm", function(e) {
+      if (!e.detail.question) return
+      e.preventDefault()
+
+      Swal.fire({
+        title: "Apa anda yakin?",
+        text: e.detail.question,
+        showCancelButton: true,
+        icon: "warning",
+        confirmButtonText: "Ya, Saya mengerti"
+      }).then(function(result) {
+        if (result.isConfirmed) {
+          e.detail.issueRequest(true);
+        }
+      })
+    })
+
     $(document).ready(function() {
       $(".datepicker").datepicker({
         format: "yyyy-mm-dd",
@@ -134,39 +151,24 @@
       htmx.on("htmx:afterRequest", function() {
         Swal.close();
       })
-
-
     })
 
     $(document).on("htmx:toastr", (evt) => {
-      if (evt.detail.level === "info") {
-        toastr.info(
-          evt.detail.message,
-          "Notifikasi", {
-            positionClass: "toastr toast-bottom-left",
-            containerId: "toast-bottom-left",
-          }
-        );
+      const notifFunc = {
+        "info": toastr.info,
+        "error": toastr.error,
+        "success": toastr.success
       }
 
-      if (evt.detail.level === "error") {
-        toastr.error(
-          evt.detail.message,
+      try {
+        toast = notifFunc[evt.detail.level]
+        toast(evt.detail.message,
           "Notifikasi", {
             positionClass: "toastr toast-bottom-left",
             containerId: "toast-bottom-left",
-          }
-        );
-      }
-
-      if (evt.detail.level === "success") {
-        toastr.success(
-          evt.detail.message,
-          "Notifikasi", {
-            positionClass: "toastr toast-bottom-left",
-            containerId: "toast-bottom-left",
-          }
-        );
+          })
+      } catch (error) {
+        console.error("Kesalahan pada toast : ", error);
       }
     })
   </script>

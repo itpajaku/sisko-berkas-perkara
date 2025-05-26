@@ -43,6 +43,9 @@ $route['berkas_permohonan/(:any)']['GET'] = "BerkasPermohonanController/detail_p
 $route['berkas_permohonan/(:any)']['PATCH'] = "BerkasPermohonanController/update/$1";
 $route['berkas_permohonan/(:any)/ekspedisi']['POST'] = "EkspedisiBerkasController/attach_to_berkas/$1";
 $route['berkas_permohonan/(:any)/ekspedisi']['DELETE'] = 'EkspedisiBerkasController/detach_from_berkas/$1';
+$route['berkas_permohonan/(:any)/sinkron']['PATCH'] = 'PerkaraController/sinkron_berkas/$1';
+$route['berkas_permohonan/(:any)/unsinkron']['PATCH'] = 'PerkaraController/unsinkron_berkas/$1';
+$route['berkas_permohonan/(:any)']['DELETE'] = 'BerkasPermohonanController/delete/$1';
 
 
 /*
