@@ -116,6 +116,9 @@ class BerkasGugatanService
     $berkas = BerkasGugatan::findOrFail($id);
     $berkas->status = $status;
     if ($status = 1) {
+      if (!$berkas->tanggal_pbt) {
+        throw new \Exception("Tanggal PBT harus diisi terlebih dahulu", 1);
+      }
       $berkas->tanggal_terima = date("Y-m-d");
     }
 

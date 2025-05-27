@@ -24,10 +24,6 @@ class Auth extends CI_Controller
   {
     parent::__construct();
 
-    if (isset($_SEVER["HTTP_REFERER"]) && strpos($_SERVER["HTTP_REFERER"], "auth") !== false) {
-      $this->session->set_userdata("redirect_url", $_SERVER["HTTP_REFERER"]);
-    }
-
     $this->eloquent = new Eloquent();
     $this->eloquent->boot();
 
@@ -77,6 +73,7 @@ class Auth extends CI_Controller
       }
 
       $profile = $this->authService->getProfileData($user);
+      $profile->userid = $user->userid;
 
       if (!$profile) {
         throw new Exception("Akun anda tidak ditemukan");
@@ -89,13 +86,13 @@ class Auth extends CI_Controller
       $this->session->set_userdata("app_user_data", $profile);
 
       set_status_header(200);
-      if (isset($this->session->userdata["redirect_url"])) {
-        $redirectUrl = $this->session->userdata["redirect_url"];
+      if (isset($this->session->userdata["http_auth_redirect"])) {
+        $redirectUrl = $this->session->userdata["http_auth_redirect"];
       } else {
         $redirectUrl = base_url($this->redirectPage[$profile->groupid]);
       }
 
-      $this->session->unset_userdata("redirect_url");
+      $this->session->unset_userdata("http_auth_redirect");
       $this->output
         ->set_header("HX-Redirect: " . $redirectUrl)
         ->set_content_type("text/html")
@@ -114,8 +111,9 @@ class Auth extends CI_Controller
     $this->session->sess_destroy();
     if (isset($this->input->request_headers()['Hx-Request'])) {
       $this->output->set_header("HX-Redirect: /auth")->set_output("Logout Berhasil");
-      exit;
+    } else {
+      $this->session->set_flashdata("success_alert", "Logout Berhasil");
+      redirect("auth");
     }
-    redirect("auth");
   }
 }

@@ -1,3 +1,7 @@
+<?php
+
+use App\Libraries\AuthData;
+?>
 <!doctype html>
 <html lang="en">
 
@@ -59,25 +63,20 @@
           </ul>
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-              <a href="https://adminmart.com/product/modernize-free-bootstrap-admin-dashboard/" target="_blank" class="btn btn-primary">Download Free</a>
+              <div class="d-flex flex-column align-items-end ">
+                <a href="javascript:void(0)" class=" text-dark"><?= AuthData::getUserData()->fullname ?></a>
+                <a href="javascript:void(0)"><?= AuthData::getUserData()->name ?></a>
+              </div>
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <img src="/assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                  <img src="https://api.dicebear.com/9.x/micah/svg?seed=<?= AuthData::getAvatar()->dice_bear_query ?? "w0e9as" ?>" alt="" width="35" height="35" class="rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="<?= base_url("/profile") ?>" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3">My Profile</p>
-                    </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-mail fs-6"></i>
-                      <p class="mb-0 fs-3">My Account</p>
-                    </a>
-                    <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                      <i class="ti ti-list-check fs-6"></i>
-                      <p class="mb-0 fs-3">My Task</p>
                     </a>
                     <button
                       hx-post="<?= base_url("/logout") ?>"

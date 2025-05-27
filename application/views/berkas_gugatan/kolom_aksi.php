@@ -13,7 +13,7 @@
           class="dropdown-item"
           hx-post="<?= base_url("berkas_gugatan/sinkron/" . $this->hash->encode($berkas->id)) ?>"
           hx-target="#kolom-selisih-<?= $this->hash->encode($berkas->id) ?>"
-          hx-swap="outerHTML"
+          hx-swap="none"
           hx-vals='{"status":1}'
           href="javascript:void(0)">Sinkron Berkas SIPP</a>
       </li>
@@ -24,7 +24,7 @@
           class="dropdown-item"
           hx-post="<?= base_url("berkas_gugatan/sinkron/" . $this->hash->encode($berkas->id)) ?>"
           hx-target="#kolom-selisih-<?= $this->hash->encode($berkas->id) ?>"
-          hx-swap="outerHTML"
+          hx-swap="none"
           hx-vals='{"status":0}'
           href="javascript:void(0)">Hapus Status Berkas</a>
       </li>

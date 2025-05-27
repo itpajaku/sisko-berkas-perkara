@@ -47,6 +47,8 @@ $route['berkas_permohonan/(:any)/sinkron']['PATCH'] = 'PerkaraController/sinkron
 $route['berkas_permohonan/(:any)/unsinkron']['PATCH'] = 'PerkaraController/unsinkron_berkas/$1';
 $route['berkas_permohonan/(:any)']['DELETE'] = 'BerkasPermohonanController/delete/$1';
 
+$route['profile'] = 'ProfileController/edit_page';
+$route['profile/update_avatar']['PATCH'] = 'ProfileController/update_avatar';
 
 /*
 | -------------------------------------------------------------------------

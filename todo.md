@@ -48,3 +48,18 @@ What to do
 ---
 4. Menu Berkas Upaya Hukum
 - [] Page list perkara upaya hukum
+---
+5. Profile Magamenet
+- [&check;] Edit Own Profile
+    - [] ~~Reset Password~~
+    - [&check;] Update Avatar
+- [] ~~Create Profile~~
+- [] ~~Update Profile~~
+- [] ~~Delete Profile~~
+- [] Profile Access Action 
+- [] Profile Access Menu
+---
+6. Menu Management
+- [] Fetch by role 
+- [] Attach sub menu 
+- [] Detach sub menu 
