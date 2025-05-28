@@ -9,7 +9,11 @@ use App\Libraries\AuthData;
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= $title ?? $_ENV["APP_NAME"] ?></title>
-  <link rel="shortcut icon" type="image/png" href="/assets/images/logos/favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('favicon/apple-touch-icon.png') ?>/">
+  <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('favicon/favicon-32x32.png') ?>">
+  <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('favicon/favicon-16x16.png') ?>">
+  <link rel="manifest" href="<?= base_url('favicon/site.webmanifest') ?>">
+
   <link rel="stylesheet" href="/assets/css/styles.min.css" />
   <link rel="stylesheet" href="/assets/libs/datatable/datatable.bs5.css" />
   <link rel="stylesheet" href="/assets/css/bs.datepicker.css" />
@@ -29,8 +33,8 @@ use App\Libraries\AuthData;
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
-          <a href="./index.html" class="text-nowrap logo-img">
-            <img src="/assets/images/logos/dark-logo.svg" width="180" alt="" />
+          <a href="javascript:void(0)" class="text-nowrap logo-img">
+            <img src="<?= base_url($_SERVER['LOGO']) ?>" width="180" alt="" />
           </a>
           <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
             <i class="ti ti-x fs-8"></i>

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Libraries\AuthData;
 use App\Libraries\Eloquent;
+use App\Libraries\Templ;
 use App\Models\BerkasGugatan;
 use APP_Controller;
 
@@ -162,6 +163,8 @@ class BerkasGugatanService
 
     $data->transform(function ($item, $n) {
       $item->no = ++$n;
+      $item->selisih = Templ::component("berkas_gugatan/kolom_selisih", ["berkas" => $item]);
+      $item->nomor_perkara = $item->nomor_perkara . " <br/><span class='text-primary'><strong>$item->jenis_perkara</strong></span>";
       $item->tanggal_pendaftaran = tanggal_indo($item->tanggal_pendaftaran, false);
       $item->tanggal_putusan = tanggal_indo($item->tanggal_putusan, false);
       $item->tanggal_pbt = tanggal_indo($item->tanggal_pbt);

@@ -60,6 +60,20 @@ What to do
 - [] Profile Access Menu
 ---
 6. Menu Management
-- [] Fetch by role 
+- [] Manage by role 
+    - [] Set Menu to role
 - [] Attach sub menu 
 - [] Detach sub menu 
+---
+7. Menu Akta Cerai
+- [] List Akta Cerai
+    - [] Datatable Akta
+    - [] Filter by date
+- [&check;] Config Akta page
+    - [&check;] Update action config
+    - [] Auto increment no series
+8. Assets
+- [&check;] Change Icon
+- [&check;] Create manifest
+- [&check;] Create favico
+- [&check;] Set icon at env 

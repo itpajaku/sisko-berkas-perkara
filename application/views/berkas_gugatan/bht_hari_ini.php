@@ -20,7 +20,7 @@
             </div>
         </div>
     </div>
-    <div class="card border-shadow bg-info-subtle">
+    <div class="card border-shadow">
         <div class="card-body">
             <?= $this->session->flashdata("success_alert") ?>
             <?= $this->session->flashdata("error_alert") ?>
@@ -29,8 +29,8 @@
                 Perhitungan BHT hanya dilakukan setelah berkas perkara diresgiter dan ditentukan tanggal PBT nya
             </p>
             <div class="table-responsive">
-                <table id="table-bht" class="table table-hover table-striped table-bordered text-nowrap align-middle">
-                    <thead class="bg-white">
+                <table id="table-bht" class="table table-hover table-bordered text-nowrap align-middle">
+                    <thead class="bg-info-subtle">
                         <tr>
                             <th>No</th>
                             <th>Perkara</th>

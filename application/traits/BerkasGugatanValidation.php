@@ -86,6 +86,13 @@ trait BerkasGugatanValidation
       );
     }
 
+    if (isset($body["tanggal_bht"]) && isset($body["tanggal_pbt"]) && $body["tanggal_bht"] < $body["tanggal_pbt"]) {
+      $validator->set_error(
+        'tanggal_bht',
+        'Tanggal BHT tidak boleh kurang dari Tanggal PBT'
+      );
+    }
+
 
     if ($validator->run() == false) {
       throw new \Exception("Validaiton error:" . validation_errors("Validation error"), 1);

@@ -5,9 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Login | Sistem Kontrol Berkas</title>
-  <link rel="shortcut icon" type="image/png" href="/assets/images/logos/favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('favicon/apple-touch-icon.png') ?>/">
+  <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('favicon/favicon-32x32.png') ?>">
+  <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('favicon/favicon-16x16.png') ?>">
+  <link rel="manifest" href="<?= base_url('favicon/site.webmanifest') ?>">
   <link rel="stylesheet" href="/assets/css/styles.min.css" />
-  <script src="/assets/js/htmx.min.js"></script>
+  <script src="/assets/js/htmx.min.js">
+
+  </script>
 </head>
 
 <body>

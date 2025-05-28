@@ -32,6 +32,14 @@
         <span class="hide-menu">BHT Hari Ini</span>
       </a>
     </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="/berkas_gugatan/laporan" aria-expanded="false">
+        <span>
+          <i class="ti ti-report"></i>
+        </span>
+        <span class="hide-menu">Laporan</span>
+      </a>
+    </li>
     <li class="nav-small-cap">
       <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
       <span class="hide-menu">Berkas Permohonan</span>
@@ -42,6 +50,54 @@
           <i class="ti ti-books"></i>
         </span>
         <span class="hide-menu">Register</span>
+      </a>
+    </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="/berkas_permohonan/laporan" aria-expanded="false">
+        <span>
+          <i class="ti ti-report"></i>
+        </span>
+        <span class="hide-menu">Laporan</span>
+      </a>
+    </li>
+    <li class="nav-small-cap">
+      <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+      <span class="hide-menu">Akta Cerai</span>
+    </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="<?= base_url("akta_cerai/register") ?>" aria-expanded="false">
+        <span>
+          <i class="ti ti-books"></i>
+        </span>
+        <span class="hide-menu">Register</span>
+      </a>
+    </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="<?= base_url("akta_cerai/konfigurasi") ?>" aria-expanded="false">
+        <span>
+          <i class="ti ti-settings"></i>
+        </span>
+        <span class="hide-menu">Konfigurasi</span>
+      </a>
+    </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="/akta_cerai/laporan" aria-expanded="false">
+        <span>
+          <i class="ti ti-report"></i>
+        </span>
+        <span class="hide-menu">Laporan</span>
+      </a>
+    </li>
+    <li class="nav-small-cap">
+      <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+      <span class="hide-menu">Pengaturan</span>
+    </li>
+    <li class="sidebar-item">
+      <a class="sidebar-link" href="/menu/pengaturan_akses" aria-expanded="false">
+        <span>
+          <i class="ti ti-category"></i>
+        </span>
+        <span class="hide-menu">Akses Menu</span>
       </a>
     </li>
   </ul>

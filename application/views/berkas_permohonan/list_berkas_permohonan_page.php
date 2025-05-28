@@ -36,7 +36,7 @@
       Tambah Data
     </a>
   </div>
-  <div class="card border shadow bg-info-subtle">
+  <div class="card border shadow">
     <div class="card-body">
       <?= $this->session->flashdata("success_alert") ?>
       <?= $this->session->flashdata("error_alert") ?>
@@ -47,8 +47,8 @@
       <div class="table-responsive">
         <table
           id="table-berkas-permohonan"
-          class="table table-hover table-striped table-bordered text-nowrap align-middle bg-white">
-          <thead class="bg-white">
+          class="table table-hover table-bordered text-nowrap align-middle ">
+          <thead class="bg-info-subtle">
             <tr>
               <th>No</th>
               <th>Perkara</th>

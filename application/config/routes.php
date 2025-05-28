@@ -50,6 +50,11 @@ $route['berkas_permohonan/(:any)']['DELETE'] = 'BerkasPermohonanController/delet
 $route['profile'] = 'ProfileController/edit_page';
 $route['profile/update_avatar']['PATCH'] = 'ProfileController/update_avatar';
 
+$route['akta_cerai/register'] = 'AktaCeraiController/register_page';
+$route['akta_cerai/konfigurasi']['GET'] = 'AktaCeraiController/konfigurasi_page';
+$route['akta_cerai/konfigurasi']['POST'] = 'AktaCeraiController/update_konfigurasi';
+
+
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes
