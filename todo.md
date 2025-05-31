@@ -69,6 +69,7 @@ What to do
 - [] List Akta Cerai
     - [] Datatable Akta
     - [] Filter by date
+- [&check;] Create Berkas Akta
 - [&check;] Config Akta page
     - [&check;] Update action config
     - [] Auto increment no series

@@ -26,11 +26,15 @@ final class CreateKonfigurasiAKtaTable extends AbstractMigration
             'null' => false,
             'comment' => 'Prefix untuk kode akta cerai',
         ]);
-        $table->addColumn('nomor_akta_terakhir', 'string', [
-            'limit' => 20,
-            'default' => '',
+        $table->addColumn('nomor_akta_terakhir', 'integer', [
+            'default' => 0,
             'null' => false,
             'comment' => 'Nomor akta terakhir yang digunakan',
+        ]);
+        $table->addColumn('nomor_seri_terakhir', 'integer', [
+            'default' => 0,
+            'null' => false,
+            'comment' => 'Nomor seri akta yang digunakan',
         ]);
         $table->addTimestamps();
         $table->create();

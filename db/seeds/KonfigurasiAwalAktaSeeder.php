@@ -21,6 +21,7 @@ class KonfigurasiAwalAktaSeeder extends AbstractSeed
                 "id" => 1,
                 "prefix" => "J ",
                 "nomor_akta_terakhir" => 0,
+                "nomor_seri_terakhir" => 0
             ],
         ])->saveData();
     }

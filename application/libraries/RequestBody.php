@@ -8,6 +8,7 @@ class RequestBody
   protected static $queryObj;
   protected static $input = [];
   protected static $inputCollection;
+  protected static $inputObj;
 
   private static function init()
   {
@@ -32,27 +33,39 @@ class RequestBody
   public static function post(string $par = "")
   {
     self::init();
-    $rawinput = file_get_contents("php://input");
+
     if (self::$ci->input->method() == "post") {
-      if (isset(self::$ci->input->request_headers()["application/json"])) {
-        return collect(json_decode($rawinput));
+      if ($par) {
+        return htmlspecialchars(self::$ci->input->post($par, true), ENT_QUOTES, "utf-8");
       }
+      self::$input = self::$ci->input->post();
+    } else {
+      $rawinput = file_get_contents("php://input");
 
-      return self::$ci->input->post($par, true);
-    }
-
-    if (empty(self::$input)) {
-      parse_str($rawinput, self::$input);
+      if (isset(self::$ci->input->request_headers()["application/json"])) {
+        self::$input = json_decode($rawinput);
+      } else {
+        parse_str($rawinput, self::$input);
+      }
     }
 
     if ($par) {
-      return self::$input[$par];
+      return htmlspecialchars(self::$input[$par], ENT_QUOTES, "utf-8");
     }
 
-    if (!self::$inputCollection) {
-      self::$inputCollection = collect(self::$input);
-      return self::$inputCollection;
+    foreach (self::$input as $key => $value) {
+      $input[$key] = htmlspecialchars($value, ENT_QUOTES, "utf-8");
     }
+
+    if (self::$inputCollection === null) {
+      $container = [];
+
+      foreach (self::$input as $key => $value) {
+        $container[$key] = htmlspecialchars($value, ENT_QUOTES, "utf-8");
+      }
+      self::$inputCollection = collect($container);
+    }
+
     return self::$inputCollection;
   }
 

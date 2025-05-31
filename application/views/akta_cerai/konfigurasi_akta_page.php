@@ -35,7 +35,7 @@
               <span class="input-group-text bg-transparent px-6 border-0" id="basic-addon1">
                 <i class="ti ti-id fs-6"></i>
               </span>
-              <input required name="nomor_akta_terakhir" type="text" id="exampleInputText32" class="form-control border-0 ps-2" placeholder="000" value="<?= $konfigurasi->nomor_akta_terakhir ?>">
+              <input required name="nomor_akta_terakhir" type="text" id="exampleInputText32" class="form-control border-0 ps-2" placeholder="000" value="<?= $konfigurasi->nomor_akta_terakhir ?? null ?>">
             </div>
           </div>
         </div>
