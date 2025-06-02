@@ -36,6 +36,9 @@ class RequestBody
 
     if (self::$ci->input->method() == "post") {
       if ($par) {
+        if (is_array(self::$ci->input->post($par, true))) {
+          return self::$ci->input->post($par, true);
+        }
         return htmlspecialchars(self::$ci->input->post($par, true), ENT_QUOTES, "utf-8");
       }
       self::$input = self::$ci->input->post();

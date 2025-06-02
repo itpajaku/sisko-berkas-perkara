@@ -5,6 +5,7 @@ use App\Libraries\Hashid;
 use App\Libraries\MethodFilter;
 use App\Libraries\RequestBody;
 use App\Libraries\Templ;
+use App\Models\BerkasAkta;
 use App\Models\Perkara;
 use App\Models\KonfigurasiAkta;
 use App\Models\PosisiEkspedisi;
@@ -133,6 +134,51 @@ class AktaCeraiController extends APP_Controller
       $this->output->set_output(
         Templ::component("components/exception_alert", ["message" => $th->getMessage() . "<br>" . $th->getTraceAsString()])
       );
+    }
+  }
+
+  public function datatable()
+  {
+    MethodFilter::must("post");
+    try {
+      $data = $this->aktaCeraiService->datatable();
+      $this->output
+        ->set_content_type("application/json")
+        ->set_output(json_encode($data));
+    } catch (\Throwable $th) {
+      $this->output
+        ->set_content_type("application/json")
+        ->set_output(
+          Templ::component("components/exception_alert", ["message" => $th->getMessage() . "<br>" . $th->getTraceAsString()])
+        );
+    }
+  }
+
+  public function detail_page($hash_id)
+  {
+    MethodFilter::must("get");
+    $data["akta"] = BerkasAkta::find(Hashid::singleDecode($hash_id));
+    Templ::render("akta_cerai/detail_akta_page", $data)->layout("layouts/main_layout");
+  }
+
+  public function delete($hash_id)
+  {
+    MethodFilter::must("delete");
+    try {
+      $akta = BerkasAkta::find(Hashid::singleDecode($hash_id));
+      $akta->ekspedisi()->detach();
+      $akta->delete();
+      $this->session->set_flashdata("success_alert", Templ::component("components/success_alert", ["message" => "Berhasil menghapus data"]));
+      $this->output
+        ->set_header("HX-Redirect: /akta_cerai")
+        ->set_output("Berhasil menghapus akta");
+    } catch (\Throwable $th) {
+      $this->output->set_header("HX-Trigger: " . json_encode([
+        "htmx:toastr" => [
+          "level" => "error",
+          "message" => $th->getMessage()
+        ]
+      ]));
     }
   }
 }

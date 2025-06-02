@@ -50,12 +50,16 @@ $route['berkas_permohonan/(:any)']['DELETE'] = 'BerkasPermohonanController/delet
 $route['profile'] = 'ProfileController/edit_page';
 $route['profile/update_avatar']['PATCH'] = 'ProfileController/update_avatar';
 
+$route['akta_cerai']['GET'] = 'AktaCeraiController/register_page';
+$route['akta_cerai']['POST'] = 'AktaCeraiController/store';
 $route['akta_cerai/register'] = 'AktaCeraiController/register_page';
+$route['akta_cerai/datatable']['POST'] = 'AktaCeraiController/datatable';
 $route['akta_cerai/konfigurasi']['GET'] = 'AktaCeraiController/konfigurasi_page';
 $route['akta_cerai/konfigurasi']['POST'] = 'AktaCeraiController/update_konfigurasi';
 $route['akta_cerai/create']['GET'] = 'AktaCeraiController/create_page';
 $route['akta_cerai/fetch_form']['POST'] = 'AktaCeraiController/fetch_form';
-$route['akta_cerai']['POST'] = 'AktaCeraiController/store';
+$route['akta_cerai/(:any)']['GET'] = 'AktaCeraiController/detail_page/$1';
+$route['akta_cerai/(:any)']['DELETE'] = 'AktaCeraiController/delete/$1';
 
 
 /*

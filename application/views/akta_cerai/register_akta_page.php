@@ -45,30 +45,68 @@
       <p>Register berikut adalah register tahun <?= date("Y")  ?>. Gunakan filter by tanggal untuk melihat diluar tahun <?= date("Y") ?></p>
       <?= $this->session->flashdata("error_alert") ?>
       <?= $this->session->flashdata("success_alert") ?>
-      <table id="table-akta-cerai" class="table table-bordered ">
-        <thead class="bg-info-subtle">
-          <tr>
-            <th>No</th>
-            <th>Perkara</th>
-            <th>Pihak</th>
-            <th>Majelis</th>
-            <th>Putus</th>
-            <th>BHT</th>
-            <th>Nomor Akta</th>
-            <th>Tanggal Akta</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-      </table>
-      <tbody>
+      <div class="table-responsive">
+        <table id="table-akta-cerai" class="table table-hover table-bordered text-nowrap align-middle">
+          <thead class="bg-info-subtle">
+            <tr>
+              <th>No</th>
+              <th>Perkara</th>
+              <th>Pihak</th>
+              <th>Majelis</th>
+              <th>Putus</th>
+              <th>PBT</th>
+              <th>BHT</th>
+              <th>Nomor Akta</th>
+              <th>Nomor Seri</th>
+              <th>Tanggal Akta</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+        </table>
+        <tbody>
 
-      </tbody>
+        </tbody>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
   window.addEventListener("load", function() {
-    $("#table-akta-cerai").DataTable()
+    $("#table-akta-cerai").DataTable({
+      processing: true,
+      serverSide: true,
+      ordering: false,
+      ajax: {
+        url: "<?= base_url("akta_cerai/datatable") ?>",
+        method: "POST"
+      },
+      columns: [{
+        "data": "no"
+      }, {
+        "data": "nomor_perkara"
+      }, {
+        data: "para_pihak"
+      }, {
+        data: "majelis"
+      }, {
+        data: "tanggal_putusan"
+      }, {
+        data: "tanggal_pbt"
+      }, {
+        data: "tanggal_bht"
+      }, {
+        data: "nomor_akta"
+      }, {
+        data: "nomor_seri"
+      }, {
+        data: "tanggal_akta"
+      }, {
+        data: "action"
+      }],
+      drawCallback: () => {
+        // htmx.proccess("#table-akta-cerai")
+      }
+    })
   })
 </script>

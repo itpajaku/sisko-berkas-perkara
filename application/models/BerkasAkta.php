@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Libraries\Hashid;
+use App\Libraries\Sysconf;
 use Illuminate\Database\Eloquent\Model;
 
 class BerkasAkta extends Model
@@ -21,6 +22,11 @@ class BerkasAkta extends Model
             $model->hash_id = Hashid::encode($model->id);
             $model->save();
         });
+    }
+
+    public function getNomorAktaCeraiAttribute()
+    {
+        return "$this->nomor_akta/AC/" . date("Y") . "/" . Sysconf::getVar()->KodePN;
     }
 
     public function ekspedisi()

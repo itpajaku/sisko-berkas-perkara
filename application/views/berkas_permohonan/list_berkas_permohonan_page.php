@@ -47,7 +47,7 @@
       <div class="table-responsive">
         <table
           id="table-berkas-permohonan"
-          class="table table-hover table-bordered text-nowrap align-middle ">
+          class="table table-hover table-bordered text-nowrap align-middle">
           <thead class="bg-info-subtle">
             <tr>
               <th>No</th>
