@@ -21,7 +21,6 @@ class Sysconf
   protected static function init()
   {
     if (!self::$sysObj) {
-      echo "Init sys";
       $sysdata = Eloquent::get_instance()
         ->connection("sipp")
         ->table("sys_config")

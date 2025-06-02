@@ -33,7 +33,7 @@
                             <div class="form-group row">
                                 <label class="form-label text-end col-md-4">Majelis :</label>
                                 <div class="col-md-8">
-                                    <?= $akta->majelis_hakim ?>
+                                    <?= $akta->majelis ?>
                                 </div>
                             </div>
                         </div>
@@ -106,7 +106,7 @@
                                 <label class="form-label text-end col-md-4">Tanggal Putusan :</label>
                                 <div class="col-md-8">
                                     <p>
-                                        <?= tanggal_indo($akta->tanggal_putusan)  ?>
+                                        <?= tanggal_indo($akta->tanggal_putus, false)  ?>
                                     </p>
                                 </div>
                             </div>
@@ -118,11 +118,11 @@
                                     <p>
                                         <?= $akta->status ? "Diarsipkan" : "Belum Diarsipkan" ?> |
                                         <?php if ($akta->status) {
-                                            echo App\Libraries\Templ::component("berkas_permohonan/unlink_berkas_ke_sipp", [
+                                            echo App\Libraries\Templ::component("akta_cerai/unlink_akta_ke_sipp", [
                                                 "berkas" => $akta,
                                             ]);
                                         } else {
-                                            echo App\Libraries\Templ::component("berkas_permohonan/link_berkas_ke_sipp", [
+                                            echo App\Libraries\Templ::component("akta_cerai/link_akta_ke_sipp", [
                                                 "berkas" => $akta,
                                             ]);
                                         } ?>
@@ -143,7 +143,7 @@
                             <div class="form-group row">
                                 <label class="form-label text-end col-md-4">Tanggal Arsip :</label>
                                 <div class="col-md-8">
-                                    <?= $akta->status ? tanggal_indo($arsip->tanggal_masuk_arsip, false)  : null ?>
+                                    <?= tanggal_indo($akta->tanggal_arsip, false)   ?>
                                 </div>
                             </div>
                         </div>
@@ -248,7 +248,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalTitleId">
-                    Form Edit Berkas
+                    Form Edit Akta
                 </h5>
                 <button
                     type="button"
@@ -259,12 +259,12 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <form
-                        hx-patch="<?= base_url("/berkas_permohonan/$akta->hash_id") ?>"
+                        hx-put="<?= base_url("/akta_cerai/$akta->hash_id") ?>"
                         hx-target="#submit-result"
                         hx-on::before-request="$('#btn-submit').attr('disabled', true).html('<i class=\'ti ti-loader ti-pulse\'></i> Mohon Tunggu...')"
                         hx-on::after-request="$('#btn-submit').attr('disabled', false).html('<i class=\'ti ti-device-floppy\'></i> Simpan')"
                         class="form-horizontal r-separator">
-                        <input type="hidden" name="perkara_id" value="<?= $this->hash->encode($akta->perkara_id)  ?>" />
+                        <input type="hidden" name="perkara_id" value="<?= App\Libraries\Hashid::encode($akta->perkara_id)  ?>" />
                         <input type="hidden" name="nomor_perkara" value="<?= $akta->nomor_perkara ?>" />
                         <div class="form-group p-3 ">
                             <div class="row">
@@ -333,7 +333,7 @@
                                             class="form-control"
                                             id="inputKetuaMajelis"
                                             placeholder="Isi disini"
-                                            value="<?= $akta->majelis_hakim ?>" />
+                                            value="<?= $akta->majelis ?>" />
                                         <div class="input-group-text">
                                             <i class="ti ti-user"></i>
                                         </div>
@@ -387,7 +387,7 @@
                                             class="form-control form-control-datepicker"
                                             id="inputTanggalPutusan"
                                             placeholder="Isi disini"
-                                            value="<?= $akta->tanggal_putusan ?? null ?>" />
+                                            value="<?= $akta->tanggal_putus ?? null ?>" />
                                         <span class="input-group-text">
                                             <i class="ti ti-calendar"></i>
                                         </span>
@@ -395,6 +395,70 @@
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <?= App\Libraries\Templ::component("akta_cerai/input_akta", [
+                            "form" => [
+                                "aditional_attribute" => "required",
+                                "id" => "inputTanggalBht",
+                                "name" => "tanggal_bht",
+                                "label" => "Tanggal BHT",
+                                "placeholder" => "Tanggal Terbit Akta Cerai",
+                                "icon" => "<i class=\"ti ti-calendar\"></i>",
+                                "aditional_class" => "form-control-datepicker",
+                                "value" => $akta->tanggal_bht ?? null
+                            ]
+                        ])
+                        ?>
+                        <?= App\Libraries\Templ::component("akta_cerai/input_akta", [
+                            "form" => [
+                                "aditional_attribute" => "required",
+                                "id" => "inputTanggalPbt",
+                                "name" => "tanggal_pbt",
+                                "label" => "Tanggal PBT",
+                                "placeholder" => "Tanggal Terbit Akta Cerai",
+                                "icon" => "<i class=\"ti ti-calendar\"></i>",
+                                "aditional_class" => "form-control-datepicker",
+                                "value" => $akta->tanggal_pbt ?? null
+                            ]
+                        ])
+                        ?>
+                        <?= App\Libraries\Templ::component("akta_cerai/input_akta", [
+                            "form" => [
+                                "aditional_attribute" => "required",
+                                "id" => "inputTanggalAkta",
+                                "name" => "tanggal_akta",
+                                "label" => "Tanggal Akta Cerai",
+                                "placeholder" => "Tanggal Terbit Akta Cerai",
+                                "icon" => "<i class=\"ti ti-calendar\"></i>",
+                                "aditional_class" => "form-control-datepicker",
+                                "value" => $akta->tanggal_akta ?? null
+                            ]
+                        ])
+                        ?>
+                        <?= App\Libraries\Templ::component("akta_cerai/input_akta", [
+                            "form" => [
+                                "aditional_attribute" => "required",
+                                "id" => "inputNomorSeriAkta",
+                                "name" => "nomor_seri",
+                                "label" => "Nomor Seri",
+                                "placeholder" => "J 0000",
+                                "icon" => "<i class=\"ti ti-id\"></i>",
+                                "value" => $akta->nomor_seri ?? null
+                            ]
+                        ])
+                        ?>
+                        <?= App\Libraries\Templ::component("akta_cerai/input_akta", [
+                            "form" => [
+                                "aditional_attribute" => "required",
+                                "id" => "inputNomorAkta",
+                                "name" => "nomor_akta",
+                                "label" => "Nomor Akta Cerai",
+                                "placeholder" => "Nomor awal saja",
+                                "icon" => "<i class=\"ti ti-id\"></i>",
+                                "value" => $akta->nomor_akta ?? null
+                            ]
+                        ])
+                        ?>
                         <div class="form-group p-3">
                             <div class="row">
                                 <label for="inputKeterangan" class="col-sm-3 text-end  col-form-label">Keterangan</label>

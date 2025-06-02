@@ -11,6 +11,7 @@ use App\Models\KonfigurasiAkta;
 use App\Models\PosisiEkspedisi;
 use App\Services\AktaCeraiService;
 use App\Traits\AktaCeraiValidation;
+use Cake\Utility\Hash;
 
 class AktaCeraiController extends APP_Controller
 {
@@ -54,6 +55,7 @@ class AktaCeraiController extends APP_Controller
         ->update([
           "prefix" => RequestBody::post("prefix"),
           "nomor_akta_terakhir" => RequestBody::post("nomor_akta_terakhir"),
+          "nomor_seri_terakhir" => RequestBody::post("nomor_seri_terakhir"),
         ]);
 
       $this->session->set_flashdata("success", "Konfigurasi berhasil diperbarui");
@@ -128,7 +130,7 @@ class AktaCeraiController extends APP_Controller
         Templ::component("components/success_alert", ["message" => $message])
       );
       $this->output
-        ->set_header("HX-Refresh: true")
+        ->set_header("HX-Redirect: /akta_cerai")
         ->set_output($message);
     } catch (\Throwable $th) {
       $this->output->set_output(
@@ -179,6 +181,78 @@ class AktaCeraiController extends APP_Controller
           "message" => $th->getMessage()
         ]
       ]));
+    }
+  }
+
+  public function update($hash_id)
+  {
+    MethodFilter::must("put");
+    try {
+      $this->validate(RequestBody::post()->toArray());
+      $this->aktaCeraiService->updateOne(Hashid::singleDecode($hash_id));
+
+      $this->session->set_flashdata("success_alert", Templ::component("components/success_alert", ["message" => "Berhasil memperbarui data"]));
+      $this->output
+        ->set_header("HX-Refresh: true")
+        ->set_output("Berhasil memperbarui akta");
+    } catch (\Throwable $th) {
+      $this->output->set_header("HX-Trigger: " . json_encode([
+        "htmx:toastr" => [
+          "level" => "error",
+          "message" => $th->getMessage()
+        ]
+      ]));
+      $this->output->set_output(
+        Templ::component("components/exception_alert", ["message" => $th->getMessage() . "<br>" . $th->getTraceAsString()])
+      );
+    }
+  }
+
+  public function sinkron($hash_id)
+  {
+    MethodFilter::must("patch");
+    try {
+      $this->aktaCeraiService->sinkron_sipp(Hashid::singleDecode($hash_id));
+
+      $this->session->set_flashdata("success_alert", Templ::component("components/success_alert", ["message" => "Berhasil menyinkronkan akta dengan SIPP"]));
+
+      $this->output
+        ->set_header("HX-Refresh: true")
+        ->set_output("Berhasil menyinkronkan akta dengan SIPP");
+    } catch (\Throwable $th) {
+      $this->output
+        ->set_header("HX-Trigger: " . json_encode([
+          "htmx:toastr" => [
+            "level" => "error",
+            "message" => $th->getMessage()
+          ]
+        ]))->set_output(
+          Templ::component("components/exception_alert", ["message" => $th->getMessage() . "<br>" . $th->getTraceAsString()])
+        );
+    }
+  }
+
+  public function unsinkron($hash_id)
+  {
+    MethodFilter::must("patch");
+    try {
+      $this->aktaCeraiService->hapus_sinkron_sipp(Hashid::singleDecode($hash_id));
+
+      $this->session->set_flashdata("success_alert", Templ::component("components/success_alert", ["message" => "Berhasil menghapus sinkronisasi akta dengan SIPP"]));
+
+      $this->output
+        ->set_header("HX-Refresh: true")
+        ->set_output("Berhasil menghapus sinkronisasi akta dengan SIPP");
+    } catch (\Throwable $th) {
+      $this->output
+        ->set_header("HX-Trigger: " . json_encode([
+          "htmx:toastr" => [
+            "level" => "error",
+            "message" => $th->getMessage()
+          ]
+        ]))->set_output(
+          Templ::component("components/exception_alert", ["message" => $th->getMessage() . "<br>" . $th->getTraceAsString()])
+        );
     }
   }
 }

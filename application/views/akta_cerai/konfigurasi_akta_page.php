@@ -40,6 +40,17 @@
           </div>
         </div>
         <div class="mb-4 row align-items-center">
+          <label for="exampleInputText36" class="form-label col-sm-3 col-form-label">Nomor Seri Terakhir</label>
+          <div class="col-sm-9">
+            <div class="input-group border rounded-1">
+              <span class="input-group-text bg-transparent px-6 border-0" id="basic-addon1">
+                <i class="ti ti-id fs-6"></i>
+              </span>
+              <input required name="nomor_seri_terakhir" type="text" id="exampleInputText36" class="form-control border-0 ps-2" placeholder="000" value="<?= $konfigurasi->nomor_seri_terakhir ?? null ?>">
+            </div>
+          </div>
+        </div>
+        <div class="mb-4 row align-items-center">
           <label for="exampleInputText32" class="form-label col-sm-3 col-form-label">Kode Satker</label>
           <div class="col-sm-9">
             <div class="input-group border rounded-1">

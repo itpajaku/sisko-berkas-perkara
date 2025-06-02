@@ -21,11 +21,12 @@ What to do
     - [&check;] Sinkron Berkas SIPP
 - [&check;] Delete Berkas
     - [&check;] Detach Ekspedisi
+- [] Report
 ---
 2. Menu BHT Hari Ini
 - [$check;] List Datatable
     - [&check;] Aksi instant add tanggal bht
-    - [] Sinkron BHT Ke SIPP
+    - [&check;] Sinkron BHT Ke SIPP
 ---
 3. Menu Berkas Permohonan
 - [&check;] Page List Berkas
@@ -45,6 +46,7 @@ What to do
     - [&check;] Warning prevent
     - [&check;] Detach Ekspedisi
     - [&check;] Action Delete
+- [] Report
 ---
 4. Menu Berkas Upaya Hukum
 - [] Page list perkara upaya hukum
@@ -66,13 +68,18 @@ What to do
 - [] Detach sub menu 
 ---
 7. Menu Akta Cerai
-- [] List Akta Cerai
-    - [] Datatable Akta
+- [&check;] List Akta Cerai
+    - [&check;] Datatable Akta
     - [] Filter by date
 - [&check;] Create Berkas Akta
+- [&check;] Update Berkas Akta
+    - [&check;] Sinkron akta ke sipp
+    - [] Ekspedisi akta
 - [&check;] Config Akta page
     - [&check;] Update action config
-    - [] Auto increment no series
+    - [&check;] Auto increment no series
+    - [&check;] Auto increment no akta
+- [] Report
 8. Assets
 - [&check;] Change Icon
 - [&check;] Create manifest

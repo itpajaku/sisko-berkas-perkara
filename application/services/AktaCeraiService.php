@@ -8,6 +8,7 @@ use App\Libraries\Hashid;
 use App\Libraries\RequestBody;
 use App\Libraries\Templ;
 use App\Models\BerkasAkta;
+use Illuminate\Support\Facades\Request;
 
 class AktaCeraiService
 {
@@ -115,5 +116,65 @@ class AktaCeraiService
             'recordsFiltered' => $filtered,
             'data' => $data->all()
         ];
+    }
+
+    public function updateOne($id): void
+    {
+        $eloquent = Eloquent::get_instance();
+        try {
+            $eloquent->connection("default")->beginTransaction();
+            BerkasAkta::where("id", $id)->update([
+                "nomor_perkara" => RequestBody::post("nomor_perkara"),
+                "perkara_id" => Hashid::singleDecode(RequestBody::post("perkara_id")),
+                "jenis_perkara" => RequestBody::post("jenis_perkara"),
+                "tanggal_pendaftaran" => RequestBody::post("tanggal_pendaftaran"),
+                "para_pihak" => RequestBody::post("para_pihak"),
+                "majelis" => RequestBody::post("majelis_hakim"),
+                "panitera" => RequestBody::post("panitera"),
+                "jurusita" => RequestBody::post("jurusita"),
+                "nomor_akta" => RequestBody::post("nomor_akta"),
+                "nomor_seri" => RequestBody::post("nomor_seri"),
+                "tanggal_putus" => RequestBody::post("tanggal_putusan"),
+                "tanggal_pbt" => RequestBody::post("tanggal_pbt"),
+                "tanggal_bht" => RequestBody::post("tanggal_bht"),
+                "tanggal_akta" => RequestBody::post("tanggal_akta"),
+                "keterangan" => RequestBody::post("keterangan"),
+            ]);
+
+            $eloquent->connection("default")->commit();
+        } catch (\Throwable $th) {
+            $eloquent->connection("default")->rollBack();
+            throw $th;
+        }
+    }
+
+    public function sinkron_sipp($id)
+    {
+        $akta = BerkasAkta::findOrFail($id);
+        $arsipAkta = Eloquent::get_instance()->connection("sipp")
+            ->table("perkara_akta_cerai")
+            ->where("perkara_id", $akta->perkara_id)
+            ->first();
+
+        if (!$arsipAkta) {
+            throw new \Exception("Arsip perkara ini belum ada di SIPP", 1);
+        }
+
+        $akta->update([
+            "tanggal_arsip" => date("Y-m-d", strtotime($arsipAkta->diperbaharui_tanggal)),
+            "tanggal_diterima" => date("Y-m-d"),
+            "status" => 1, // 1 = sudah sinkron
+        ]);
+    }
+
+    public function hapus_sinkron_sipp($id)
+    {
+        $akta = BerkasAkta::findOrFail($id);
+
+        $akta->update([
+            "tanggal_arsip" => null,
+            "tanggal_diterima" => null,
+            "status" => 0, // 1 = sudah sinkron
+        ]);
     }
 }

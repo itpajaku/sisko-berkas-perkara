@@ -1,12 +1,17 @@
 <?php
 
+use App\Libraries\Eloquent;
+use App\Libraries\Hashid;
 use App\Libraries\MethodFilter;
+use App\Libraries\RequestBody;
 use App\Libraries\Templ;
+use App\Models\BerkasAkta;
 use App\Models\BerkasGugatan;
 use App\Models\Perkara;
 use App\Models\PosisiEkspedisi;
 use App\Traits\BerkasGugatanValidation;
 use App\Services\BerkasGugatanService;
+use Illuminate\Support\Facades\Request;
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
@@ -134,7 +139,7 @@ class BerkasGugatanController extends APP_Controller
 
 		try {
 			$this->validation($_POST, $this->form_validation);
-			BerkasGugatan::where("id", $this->hash->decode($id)[0])->update($_POST);
+			$this->berkasGugatanService->updateOne(Hashid::singleDecode($id));
 
 			$this->output->set_header("HX-Redirect:" . base_url("/berkas_gugatan/register"))->set_output("Berkas Gugatan berhasil diupdate");
 		} catch (\Throwable $th) {
@@ -248,5 +253,39 @@ class BerkasGugatanController extends APP_Controller
 		$this->output->set_output(
 			Templ::component("/berkas_gugatan/form_set_bht", ["berkas" => $berkas])
 		);
+	}
+
+	public function set_bht($hash_id)
+	{
+		MethodFilter::must("patch");
+		try {
+			$akta = BerkasGugatan::findOrFail($this->hash->decode($hash_id)[0]);
+			if (RequestBody::post("tanggal_bht") != null) {
+				Eloquent::get_instance()
+					->connection("sipp")
+					->table("perkara_putusan")
+					->where("perkara_id", $akta->perkara_id)
+					->update([
+						"tanggal_bht" => RequestBody::post("tanggal_bht"),
+					]);
+			}
+			$akta->tanggal_bht = RequestBody::post("tanggal_bht");
+			$akta->save();
+			$posisiArsip = PosisiEkspedisi::where("posisi", "Arsip")->first();
+			if ($posisiArsip) {
+				$akta->ekspedisi()->attach($posisiArsip->id, [
+					"save_time" => date("Y-m-d H:i:s"),
+					"created_by" => $this->userdata->username
+				]);
+			}
+			$this->session->set_flashdata("success_alert", $this->load->view("components/success_alert", ["message" => "BHT berhasil disimpan"], true));
+			$this->output
+				->set_header("HX-Redirect: /berkas_gugatan/register")
+				->set_output("BHT berhasil disimpan");
+		} catch (\Throwable $th) {
+			$this->output->set_output(
+				Templ::component("components/exception_alert", ["message" => $th->getMessage()])
+			);
+		}
 	}
 }

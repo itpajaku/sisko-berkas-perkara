@@ -29,6 +29,7 @@ $route['berkas_gugatan/(:any)']['GET'] = 'BerkasGugatanController/edit/$1';
 $route['berkas_gugatan/set_pbt']['POST'] = 'BerkasGugatanController/fetchFormPbt';
 $route['berkas_gugatan/(:any)']['PATCH'] = 'BerkasGugatanController/save/$1';
 $route['berkas_gugatan/(:any)']['DELETE'] = 'BerkasGugatanController/delete/$1';
+$route['berkas_gugatan/(:any)/sinkron_bht']['PATCH'] = 'BerkasGugatanController/set_bht/$1';
 $route['bht_hari_ini'] = "BerkasGugatanController/bht_page";
 
 $route['perkara/suggest'] = 'perkara/AutocompletePerkara';
@@ -60,6 +61,9 @@ $route['akta_cerai/create']['GET'] = 'AktaCeraiController/create_page';
 $route['akta_cerai/fetch_form']['POST'] = 'AktaCeraiController/fetch_form';
 $route['akta_cerai/(:any)']['GET'] = 'AktaCeraiController/detail_page/$1';
 $route['akta_cerai/(:any)']['DELETE'] = 'AktaCeraiController/delete/$1';
+$route['akta_cerai/(:any)']['PUT'] = 'AktaCeraiController/update/$1';
+$route['akta_cerai/(:any)/sinkron']['PATCH'] = 'AktaCeraiController/sinkron/$1';
+$route['akta_cerai/(:any)/unsinkron']['PATCH'] = 'AktaCeraiController/unsinkron/$1';
 
 
 /*

@@ -4,9 +4,12 @@ namespace App\Services;
 
 use App\Libraries\AuthData;
 use App\Libraries\Eloquent;
+use App\Libraries\Hashid;
+use App\Libraries\RequestBody;
 use App\Libraries\Templ;
 use App\Models\BerkasGugatan;
 use APP_Controller;
+use Illuminate\Support\Facades\Request;
 
 class BerkasGugatanService
 {
@@ -178,5 +181,23 @@ class BerkasGugatanService
       'recordsFiltered' => $filtered,
       'data' => $data->all()
     ];
+  }
+
+  public function updateOne($id)
+  {
+    $berkas = BerkasGugatan::findOrFail($id);
+    $berkas->update([
+      "nomor_perkara" => RequestBody::post("nomor_perkara", true),
+      "jenis_perkara" => RequestBody::post("jenis_perkara", true),
+      "para_pihak" => RequestBody::post("para_pihak", true),
+      "majelis_hakim" => RequestBody::post("majelis_hakim", true),
+      "panitera" => RequestBody::post("panitera", true),
+      "jurusita" => RequestBody::post("jurusita", true),
+      "keterangan" => RequestBody::post("keterangan", true),
+      "tanggal_putusan" => RequestBody::post("tanggal_putusan", true),
+      "tanggal_pendaftaran" => RequestBody::post("tanggal_pendaftaran", true),
+      "tanggal_pbt" => empty(RequestBody::post("tanggal_pbt")) ? null : RequestBody::post("tanggal_pbt", true),
+      "tanggal_bht" => empty(RequestBody::post("tanggal_bht")) ? null : RequestBody::post("tanggal_bht", true),
+    ]);
   }
 }
