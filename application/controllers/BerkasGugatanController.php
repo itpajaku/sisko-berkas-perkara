@@ -288,4 +288,28 @@ class BerkasGugatanController extends APP_Controller
 			);
 		}
 	}
+
+	public function laporan_page()
+	{
+		MethodFilter::must("get");
+		Templ::render("berkas_gugatan/laporan_berkas_gugatan_page")->layout("layouts/main_layout", [
+			"title" => "Laporan Berkas Gugatan"
+		]);
+	}
+
+	public function generate_laporan()
+	{
+		MethodFilter::must("post");
+
+		try {
+			if (strtotime(RequestBody::post("tanggal_awal")) > strtotime(RequestBody::post("tanggal_akhir"))) {
+				throw new Exception("Tanggal awal tidak boleh lebih besar dari tanggal akhir", 1);
+			}
+
+			$this->berkasGugatanService->generate_docs();
+		} catch (\Throwable $th) {
+			$this->session->set_flashdata("error_alert", Templ::component("components/exception_alert", ["message" => $th->getMessage()]));
+			redirect("/berkas_gugatan/laporan");
+		}
+	}
 }

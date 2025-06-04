@@ -20,7 +20,8 @@ class PerkaraController extends APP_Controller
 
       $berkas->update([
         "status" => false,
-        "tanggal_diterima" => null
+        "tanggal_diterima" => null,
+        "tanggal_arsip" => null
       ]);
 
       $successMessage = "Link arsip telah diputuskan.";
@@ -60,7 +61,8 @@ class PerkaraController extends APP_Controller
 
       $berkas->update([
         "status" => true,
-        "tanggal_diterima" => date("Y-m-d")
+        "tanggal_diterima" => date("Y-m-d"),
+        "tanggal_arsip" => $arsip->tanggal_masuk_arsip
       ]);
 
       $successMessage = "Berhasil menghubungkan dengan arsip digital SIPP. Anda akan diarahkan sebentar lagi.";

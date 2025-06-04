@@ -9,6 +9,9 @@ class Sysconf
 {
   public Eloquent $eloquent;
   protected static $sysObj;
+
+  protected static $sysArr;
+
   public function __construct(Eloquent $eloquent)
   {
     $this->eloquent = $eloquent;
@@ -38,5 +41,14 @@ class Sysconf
   {
     self::init();
     return self::$sysObj;
+  }
+
+  public static function getArr()
+  {
+    self::init();
+    if (!self::$sysArr) {
+      self::$sysArr = (array) self::$sysObj;
+    }
+    return self::$sysArr;
   }
 }

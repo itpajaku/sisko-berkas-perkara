@@ -3,13 +3,16 @@
 namespace App\Services;
 
 use App\Libraries\AuthData;
+use App\Libraries\DateHelper;
 use App\Libraries\Eloquent;
 use App\Libraries\Hashid;
 use App\Libraries\RequestBody;
+use App\Libraries\Sysconf;
 use App\Libraries\Templ;
 use App\Models\BerkasGugatan;
 use APP_Controller;
 use Illuminate\Support\Facades\Request;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class BerkasGugatanService
 {
@@ -36,20 +39,20 @@ class BerkasGugatanService
 
       $berkas = BerkasGugatan::create([
         "perkara_id" => $perkara_id,
-        "nomor_perkara" => $this->app->input->post("nomor_perkara", true),
-        "jenis_perkara" => $this->app->input->post("jenis_perkara", true),
-        "para_pihak" => $this->app->input->post("para_pihak", true),
-        "majelis_hakim" => $this->app->input->post("majelis_hakim", true),
-        "panitera" => $this->app->input->post("panitera", true),
-        "jurusita" => $this->app->input->post("jurusita", true),
-        "keterangan" => $this->app->input->post("keterangan", true),
-        "tanggal_putusan" => $this->app->input->post("tanggal_putusan", true),
-        "tanggal_pendaftaran" => $this->app->input->post("tanggal_pendaftaran", true),
-        "tanggal_pbt" => empty($this->app->input->post("tanggal_pbt")) ? null : $this->app->input->post("tanggal_pbt", true),
-        "tanggal_bht" => empty($this->app->input->post("tanggal_bht")) ? null : $this->app->input->post("tanggal_bht", true),
+        "nomor_perkara" => RequestBody::post("nomor_perkara"),
+        "jenis_perkara" => RequestBody::post("jenis_perkara"),
+        "para_pihak" => RequestBody::post("para_pihak"),
+        "majelis_hakim" => RequestBody::post("majelis_hakim"),
+        "panitera" => RequestBody::post("panitera"),
+        "jurusita" => RequestBody::post("jurusita"),
+        "keterangan" => RequestBody::post("keterangan"),
+        "tanggal_putusan" => RequestBody::post("tanggal_putusan"),
+        "tanggal_pendaftaran" => RequestBody::post("tanggal_pendaftaran"),
+        "tanggal_pbt" => empty(RequestBody::post("tanggal_pbt")) ? null : RequestBody::post("tanggal_pbt"),
+        "tanggal_bht" => empty(RequestBody::post("tanggal_bht")) ? null : RequestBody::post("tanggal_bht"),
       ]);
 
-      $berkas->ekspedisi()->attach($this->app->input->post("posisi_berkas", true), [
+      $berkas->ekspedisi()->attach(RequestBody::post("posisi_berkas"), [
         "save_time" => date("Y-m-d H:i:s"),
         "created_by" => AuthData::getUserData()->username
       ]);
@@ -187,7 +190,6 @@ class BerkasGugatanService
   {
     $berkas = BerkasGugatan::findOrFail($id);
     $berkas->update([
-      "nomor_perkara" => RequestBody::post("nomor_perkara", true),
       "jenis_perkara" => RequestBody::post("jenis_perkara", true),
       "para_pihak" => RequestBody::post("para_pihak", true),
       "majelis_hakim" => RequestBody::post("majelis_hakim", true),
@@ -199,5 +201,72 @@ class BerkasGugatanService
       "tanggal_pbt" => empty(RequestBody::post("tanggal_pbt")) ? null : RequestBody::post("tanggal_pbt", true),
       "tanggal_bht" => empty(RequestBody::post("tanggal_bht")) ? null : RequestBody::post("tanggal_bht", true),
     ]);
+  }
+
+  public function generate_docs()
+  {
+    $berdasarkan = $this->app->encryption->decrypt(RequestBody::post("berdasarkan"));
+
+    $berkasGugatan = BerkasGugatan::with("perkara")
+      ->whereDate($berdasarkan, ">=", RequestBody::post("tanggal_awal"))
+      ->whereDate($berdasarkan, "<=", RequestBody::post("tanggal_akhir"))
+      ->orderBy($berdasarkan, "asc")
+      ->get();
+
+    $docTemplate = new TemplateProcessor(
+      "../doc/template/template_laporan_berkas_gugatan.docx"
+    );
+
+    $docTemplate->setValue("NAMA_SATKER", Sysconf::getVar()->NamaPN);
+    $docTemplate->setValue("ALAMAT_SATKER", Sysconf::getVar()->AlamatPN);
+    $docTemplate->setValue("TANGGAL_AWAL", tanggal_indo(RequestBody::post("tanggal_awal")));
+    $docTemplate->setValue("TANGGAL_AKHIR", tanggal_indo(RequestBody::post("tanggal_akhir")));
+    $docTemplate->setValue("penandatangan", RequestBody::post("penandatangan"));
+    $docTemplate->setValue("nip_penandatangan", pejabat_to_nip(
+      RequestBody::post("penandatangan")
+    ));
+    $docTemplate->setValue("tgl_hari_laporan", tanggal_indo(date("Y-m-d")));
+    $docTemplate->setValue("pejabat", nama_to_jabatan(
+      RequestBody::post("penandatangan")
+    ));
+
+    $docTemplate->cloneRowAndSetValues("no", $berkasGugatan->map(function ($item, $index) {
+      return [
+        "no" => $index + 1,
+        "nomor_perkara" => $item->perkara->nomor_perkara,
+        "jenis_perkara" => $item->perkara->jenis_perkara_text,
+        "tgl_daftar" => tanggal_indo($item->tanggal_pendaftaran, false),
+        "tgl_putus" => tanggal_indo($item->tanggal_putusan, false),
+        "tgl_pip" => tanggal_indo($item->tanggal_pbt, false) ?? "Belum PIP",
+        "tgl_bht" => tanggal_indo($item->tanggal_bht, false),
+        "panitera" => $item->panitera,
+        "majelis" => explode('\n', $item->majelis_hakim)[0]  ?? null,
+
+        "selisih_1" => DateHelper::getDayInterval(
+          $item->tanggal_putusan,
+          $item->tanggal_pbt
+        ) . " Hari",
+        "selisih_2" => DateHelper::getDayInterval(
+          $item->tanggal_bht,
+          $item->tanggal_arsip
+        ) . " Hari",
+
+        "tgl_arsip" => $item->tanggal_arsip ?? "Belum Diarsipkan",
+      ];
+    })->all());
+
+    $total = $berkasGugatan->count();
+    $totalMasukBerkas = $berkasGugatan->whereNotNull("tanggal_arsip")->count();
+    $totalBelumMasukBerkas = $total - $totalMasukBerkas;
+
+    $docTemplate->setValue("TOTAL_DATA", $total);
+    $docTemplate->setValue("TOTAL_MASUK_BERKAS", strval($totalMasukBerkas));
+    $docTemplate->setValue("TOTAL_BELUM_ARSIP", strval($totalBelumMasukBerkas));
+
+    $fileName = "Laporan_Berkas_Gugatan_" . date("YmdHis") . ".docx";
+    $docTemplate->saveAs("../doc/output/" . $fileName);
+
+    force_download("../doc/output/" . $fileName, null);
+    unlink("../doc/output/" . $fileName);
   }
 }

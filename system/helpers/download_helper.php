@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CodeIgniter
  *
@@ -35,7 +36,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * CodeIgniter Download Helpers
@@ -49,8 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
-if ( ! function_exists('force_download'))
-{
+if (! function_exists('force_download')) {
 	/**
 	 * Force Download
 	 *
@@ -63,23 +63,17 @@ if ( ! function_exists('force_download'))
 	 */
 	function force_download($filename = '', $data = '', $set_mime = FALSE)
 	{
-		if ($filename === '' OR $data === '')
-		{
+		if ($filename === '' or $data === '') {
 			return;
-		}
-		elseif ($data === NULL)
-		{
-			if ( ! @is_file($filename) OR ($filesize = @filesize($filename)) === FALSE)
-			{
+		} elseif ($data === NULL) {
+			if (! @is_file($filename) or ($filesize = @filesize($filename)) === FALSE) {
 				return;
 			}
 
 			$filepath = $filename;
 			$filename = explode('/', str_replace(DIRECTORY_SEPARATOR, '/', $filename));
 			$filename = end($filename);
-		}
-		else
-		{
+		} else {
 			$filesize = strlen($data);
 		}
 
@@ -89,10 +83,8 @@ if ( ! function_exists('force_download'))
 		$x = explode('.', $filename);
 		$extension = end($x);
 
-		if ($set_mime === TRUE)
-		{
-			if (count($x) === 1 OR $extension === '')
-			{
+		if ($set_mime === TRUE) {
+			if (count($x) === 1 or $extension === '') {
 				/* If we're going to detect the MIME type,
 				 * we'll need a file extension.
 				 */
@@ -100,11 +92,10 @@ if ( ! function_exists('force_download'))
 			}
 
 			// Load the mime types
-			$mimes =& get_mimes();
+			$mimes = &get_mimes();
 
 			// Only change the default MIME if we can find one
-			if (isset($mimes[$extension]))
-			{
+			if (isset($mimes[$extension])) {
 				$mime = is_array($mimes[$extension]) ? $mimes[$extension][0] : $mimes[$extension];
 			}
 		}
@@ -115,44 +106,39 @@ if ( ! function_exists('force_download'))
 		 *
 		 * Reference: http://digiblog.de/2011/04/19/android-and-the-download-file-headers/
 		 */
-		if (count($x) !== 1 && isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Android\s(1|2\.[01])/', $_SERVER['HTTP_USER_AGENT']))
-		{
+		if (count($x) !== 1 && isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Android\s(1|2\.[01])/', $_SERVER['HTTP_USER_AGENT'])) {
 			$x[count($x) - 1] = strtoupper($extension);
 			$filename = implode('.', $x);
 		}
 
-		if ($data === NULL && ($fp = @fopen($filepath, 'rb')) === FALSE)
-		{
+		if ($data === NULL && ($fp = @fopen($filepath, 'rb')) === FALSE) {
 			return;
 		}
 
 		// Clean output buffer
-		if (ob_get_level() !== 0 && @ob_end_clean() === FALSE)
-		{
+		if (ob_get_level() !== 0 && @ob_end_clean() === FALSE) {
 			@ob_clean();
 		}
 
 		// Generate the server headers
-		header('Content-Type: '.$mime);
-		header('Content-Disposition: attachment; filename="'.$filename.'"');
+		header('Content-Type: ' . $mime);
+		header('Content-Disposition: attachment; filename="' . $filename . '"');
 		header('Expires: 0');
 		header('Content-Transfer-Encoding: binary');
-		header('Content-Length: '.$filesize);
+		header('Content-Length: ' . $filesize);
 		header('Cache-Control: private, no-transform, no-store, must-revalidate');
 
 		// If we have raw data - just dump it
-		if ($data !== NULL)
-		{
+		if ($data !== NULL) {
 			exit($data);
 		}
 
 		// Flush 1MB chunks of data
-		while ( ! feof($fp) && ($data = fread($fp, 1048576)) !== FALSE)
-		{
+		while (! feof($fp) && ($data = fread($fp, 1048576)) !== FALSE) {
 			echo $data;
 		}
 
 		fclose($fp);
-		exit;
+		// exit;
 	}
 }

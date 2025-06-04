@@ -33,6 +33,7 @@ final class CreateTableBerkasGugatan extends AbstractMigration
             ->addColumn('tanggal_bht', 'date', ["null" => true])
             ->addColumn('status', 'integer', ['limit' => 1, 'default' => 0])
             ->addColumn('tanggal_terima', 'date', ['null' => true])
+            ->addColumn('tanggal_arsip', 'date', ['null' => true])
             ->addColumn('keterangan', 'text')
             ->addTimestamps()
             ->create();

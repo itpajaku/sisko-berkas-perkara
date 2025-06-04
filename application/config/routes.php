@@ -25,13 +25,16 @@ $route['berkas_gugatan/(:any)/ekspedisi']['POST'] = 'EkspedisiBerkasController/a
 $route['berkas_gugatan/(:any)/ekspedisi']['DELETE'] = 'EkspedisiBerkasController/detach_from_berkas/$1';
 $route['berkas_gugatan/ekspedisi/(:any)']['GET'] = 'BerkasGugatanController/ekspedisi_berkas/$1';
 $route['berkas_gugatan/sinkron/(:any)']['POST'] = 'BerkasGugatanController/sinkron_berkas_sipp/$1';
+$route['berkas_gugatan/laporan']['GET'] = 'BerkasGugatanController/laporan_page/$1';
+$route['berkas_gugatan/laporan']['POST'] = 'BerkasGugatanController/generate_laporan/$1';
 $route['berkas_gugatan/(:any)']['GET'] = 'BerkasGugatanController/edit/$1';
 $route['berkas_gugatan/set_pbt']['POST'] = 'BerkasGugatanController/fetchFormPbt';
 $route['berkas_gugatan/(:any)']['PATCH'] = 'BerkasGugatanController/save/$1';
 $route['berkas_gugatan/(:any)']['DELETE'] = 'BerkasGugatanController/delete/$1';
 $route['berkas_gugatan/(:any)/sinkron_bht']['PATCH'] = 'BerkasGugatanController/set_bht/$1';
-$route['bht_hari_ini'] = "BerkasGugatanController/bht_page";
 
+
+$route['bht_hari_ini'] = "BerkasGugatanController/bht_page";
 $route['perkara/suggest'] = 'perkara/AutocompletePerkara';
 
 $route['berkas_permohonan']['GET'] = "BerkasPermohonanController/register_page";

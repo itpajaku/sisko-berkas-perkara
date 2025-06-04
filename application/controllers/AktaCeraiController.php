@@ -12,6 +12,7 @@ use App\Models\PosisiEkspedisi;
 use App\Services\AktaCeraiService;
 use App\Traits\AktaCeraiValidation;
 use Cake\Utility\Hash;
+use Symfony\Component\Config\Builder\Method;
 
 class AktaCeraiController extends APP_Controller
 {
@@ -254,5 +255,16 @@ class AktaCeraiController extends APP_Controller
           Templ::component("components/exception_alert", ["message" => $th->getMessage() . "<br>" . $th->getTraceAsString()])
         );
     }
+  }
+
+  public function laporan_page()
+  {
+    MethodFilter::must("get");
+    Templ::render("akta_cerai/laporan_akta_page", [
+      "akta" => BerkasAkta::all(),
+      "posisi_berkas" => PosisiEkspedisi::where("status", 1)->get()
+    ])->layout("layouts/main_layout", [
+      "title" => "Laporan Akta Cerai"
+    ]);
   }
 }

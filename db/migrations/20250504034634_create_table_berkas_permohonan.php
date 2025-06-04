@@ -33,6 +33,7 @@ final class CreateTableBerkasPermohonan extends AbstractMigration
         $table->addColumn("keterangan", "text");
         $table->addColumn("status", "boolean", ["default" => false]);
         $table->addColumn("tanggal_diterima", "date", ["null" => true]);
+        $table->addColumn("tanggal_arsip", "date", ["null" => true]);
         $table->addTimestamps();
         $table->create();
     }

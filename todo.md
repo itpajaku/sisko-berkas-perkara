@@ -22,6 +22,9 @@ What to do
 - [&check;] Delete Berkas
     - [&check;] Detach Ekspedisi
 - [] Report
+    - [&check;] Report Template
+    - [&check;] Generate docx
+    - [] Generate xlsx
 ---
 2. Menu BHT Hari Ini
 - [$check;] List Datatable
@@ -47,6 +50,9 @@ What to do
     - [&check;] Detach Ekspedisi
     - [&check;] Action Delete
 - [] Report
+    - [] Report Template
+    - [] Generate docx
+    - [] Generate xlsx
 ---
 4. Menu Berkas Upaya Hukum
 - [] Page list perkara upaya hukum
@@ -80,8 +86,14 @@ What to do
     - [&check;] Auto increment no series
     - [&check;] Auto increment no akta
 - [] Report
+    - [] Report Template
+    - [] Generate docx
+    - [] Generate xlsx
+---
 8. Assets
 - [&check;] Change Icon
 - [&check;] Create manifest
 - [&check;] Create favico
 - [&check;] Set icon at env 
+---
+- [&check;] Fix bug majelis field contain br
