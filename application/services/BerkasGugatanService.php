@@ -207,8 +207,7 @@ class BerkasGugatanService
   {
     $berdasarkan = $this->app->encryption->decrypt(RequestBody::post("berdasarkan"));
 
-    $berkasGugatan = BerkasGugatan::with("perkara")
-      ->whereDate($berdasarkan, ">=", RequestBody::post("tanggal_awal"))
+    $berkasGugatan = BerkasGugatan::whereDate($berdasarkan, ">=", RequestBody::post("tanggal_awal"))
       ->whereDate($berdasarkan, "<=", RequestBody::post("tanggal_akhir"))
       ->orderBy($berdasarkan, "asc")
       ->get();
@@ -233,8 +232,8 @@ class BerkasGugatanService
     $docTemplate->cloneRowAndSetValues("no", $berkasGugatan->map(function ($item, $index) {
       return [
         "no" => $index + 1,
-        "nomor_perkara" => $item->perkara->nomor_perkara,
-        "jenis_perkara" => $item->perkara->jenis_perkara_text,
+        "nomor_perkara" => $item->nomor_perkara,
+        "jenis_perkara" => $item->jenis_perkara_text,
         "tgl_daftar" => tanggal_indo($item->tanggal_pendaftaran, false),
         "tgl_putus" => tanggal_indo($item->tanggal_putusan, false),
         "tgl_pip" => tanggal_indo($item->tanggal_pbt, false) ?? "Belum PIP",
@@ -251,7 +250,7 @@ class BerkasGugatanService
           $item->tanggal_arsip
         ) . " Hari",
 
-        "tgl_arsip" => $item->tanggal_arsip ?? "Belum Diarsipkan",
+        "tgl_arsip" => $item->tanggal_arsip ?? "Masih Berjalan",
       ];
     })->all());
 

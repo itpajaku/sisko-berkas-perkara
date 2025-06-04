@@ -37,3 +37,5 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.crt
 *.cert
 *.key
+
+/doc/template/~$*.docx

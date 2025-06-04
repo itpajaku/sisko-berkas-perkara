@@ -165,4 +165,29 @@ class BerkasPermohonanController extends APP_Controller
       );
     }
   }
+
+  public function laporan_page()
+  {
+    MethodFilter::must("get");
+    Templ::render("berkas_permohonan/laporan_berkas_permohonan")
+      ->layout("layouts/main_layout", [
+        "title" => "Laporan Berkas Permohonan"
+      ]);
+  }
+
+  public function generate_laporan()
+  {
+    MethodFilter::must("post");
+    try {
+      if (strtotime(RequestBody::post("tanggal_awal")) > strtotime(RequestBody::post("tanggal_akhir"))) {
+        throw new \Exception("Tanggal periode awal tidak boleh lebih dari tanggal periode akhir");
+      }
+
+      $this->berkasPermohonanService->generate_doc();
+    } catch (\Throwable $th) {
+      $this->output->set_output(
+        Templ::component("components/exception_alert", ["message" => $th->getMessage()])
+      );
+    }
+  }
 }

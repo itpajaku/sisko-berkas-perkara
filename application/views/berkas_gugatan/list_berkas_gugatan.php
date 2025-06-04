@@ -1,4 +1,4 @@
-<div class="container-fluid" style="max-width: max-content;">
+<div class="container-lg" style="max-width: max-content;">
   <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
     <div class="card-body px-4 py-3">
       <div class="row align-items-center">

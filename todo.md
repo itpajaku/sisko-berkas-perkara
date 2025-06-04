@@ -49,9 +49,9 @@ What to do
     - [&check;] Warning prevent
     - [&check;] Detach Ekspedisi
     - [&check;] Action Delete
-- [] Report
-    - [] Report Template
-    - [] Generate docx
+- [&check;] Report
+    - [&check;] Report Template
+    - [&check;] Generate docx
     - [] Generate xlsx
 ---
 4. Menu Berkas Upaya Hukum
@@ -86,7 +86,7 @@ What to do
     - [&check;] Auto increment no series
     - [&check;] Auto increment no akta
 - [] Report
-    - [] Report Template
+    - [&check;] Report Template
     - [] Generate docx
     - [] Generate xlsx
 ---
@@ -96,4 +96,11 @@ What to do
 - [&check;] Create favico
 - [&check;] Set icon at env 
 ---
+9. Dashboard
+---
+FIX BUG
 - [&check;] Fix bug majelis field contain br
+---
+RFACTOR
+- [] Refactor Eloquent instance
+- [] Refactor Hash instance

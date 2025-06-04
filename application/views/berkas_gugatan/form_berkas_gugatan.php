@@ -73,7 +73,7 @@
        <label for="inputKetuaMajelis" class="col-sm-3 text-end  col-form-label">Majelis Hakim</label>
        <div class="col-sm-9">
          <div class="input-group">
-           <input type="text" name="majelis_hakim" class="form-control" id="inputKetuaMajelis" placeholder="Isi disini" value="<?= str_replace("</br>", "\n", $penetapan->majelis_hakim_nama)  ?? null ?>" />
+           <input type="text" name="majelis_hakim" class="form-control" id="inputKetuaMajelis" placeholder="Isi disini" value="<?= str_replace("</br>", '\n', $penetapan->majelis_hakim_nama)  ?? null ?>" />
            <div class="input-group-text">
              <i class="ti ti-user"></i>
            </div>

@@ -3,10 +3,13 @@
 namespace App\Services;
 
 use App\Libraries\AuthData;
+use App\Libraries\DateHelper;
 use App\Libraries\Eloquent;
 use App\Libraries\RequestBody;
+use App\Libraries\Sysconf;
 use App\Libraries\Templ;
 use App\Models\BerkasPermohonan;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class BerkasPermohonanService
 {
@@ -134,5 +137,72 @@ class BerkasPermohonanService
       "tanggal_diterima" => RequestBody::post("tanggal_diterima") ?: null,
       "status" => RequestBody::post("status")
     ]);
+  }
+
+  public function generate_doc()
+  {
+    $berdasarkan = $this->app->encryption->decrypt(RequestBody::post("berdasarkan"));
+
+    $tanggal_awal = RequestBody::post("tanggal_awal");
+    $tanggal_akhir = RequestBody::post("tanggal_akhir");
+    $penandatangan = RequestBody::post("penandatangan");
+
+    $berkas = BerkasPermohonan::whereDate($berdasarkan, ">=", $tanggal_awal)
+      ->whereDate($berdasarkan, "<=", $tanggal_akhir)
+      ->orderBy($berdasarkan, "asc")
+      ->get();
+
+    if (!$berkas) {
+      throw new \Exception("Tidak ada data berkas permohonan yang ditemukan pada rentang tanggal tersebut.");
+    }
+
+    $docTemplate = new TemplateProcessor(
+      "../doc/template/template_laporan_berkas_permohonan.docx"
+    );
+
+    $total = $berkas->count();
+    $totalMasukBerkas = $berkas->whereNotNull("tanggal_arsip")->count() ?? 0;
+    $totalBelumMasukBerkas = $total - $totalMasukBerkas ?? 0;
+
+
+    $docTemplate->setValue("NAMA_SATKER", Sysconf::getVar()->NamaPN);
+    $docTemplate->setValue("ALAMAT_SATKER", Sysconf::getVar()->AlamatPN);
+    $docTemplate->setValue("TANGGAL_AWAL", tanggal_indo(RequestBody::post("tanggal_awal")));
+    $docTemplate->setValue("TANGGAL_AKHIR", tanggal_indo(RequestBody::post("tanggal_akhir")));
+    $docTemplate->setValue("TOTAL_DATA", $total);
+    $docTemplate->setValue("TOTAL_MASUK_BERKAS", strval($totalMasukBerkas));
+    $docTemplate->setValue("TOTAL_BELUM_ARSIP", strval($totalBelumMasukBerkas));
+
+    $docTemplate->setValue("penandatangan", RequestBody::post("penandatangan"));
+    $docTemplate->setValue("nip_penandatangan", pejabat_to_nip(
+      RequestBody::post("penandatangan")
+    ));
+    $docTemplate->setValue("tgl_hari_laporan", tanggal_indo(date("Y-m-d")));
+    $docTemplate->setValue("pejabat", nama_to_jabatan(
+      RequestBody::post("penandatangan")
+    ));
+
+
+    $docTemplate->cloneRowAndSetValues("no", $berkas->map(function ($item, $index) {
+      return [
+        "no" => $index + 1,
+        "nomor_perkara" => $item->nomor_perkara,
+        "jenis_perkara" => $item->jenis_perkara,
+        "majelis" =>  explode('\n', $item->majelis_hakim)[0],
+        "panitera" => $item->panitera,
+        "tgl_putus" => tanggal_indo($item->tanggal_putusan, false),
+        "tgl_daftar" => tanggal_indo($item->tanggal_pendaftaran, false),
+        "tgl_arsip" => tanggal_indo($item->tanggal_arsip, false) ?? "Masih Berjalan",
+        "tgl_diterima" => $item->tanggal_diterima ? tanggal_indo($item->tanggal_diterima, false) : "-",
+
+        "selisih" => DateHelper::getDayInterval($item->tanggal_putusan, $item->tanggal_arsip) . " Hari",
+      ];
+    })->all());
+
+    $fileName = "Laporan_Berkas_Permohonan_" . date("YmdHis") . ".docx";
+    $docTemplate->saveAs("../doc/output/" . $fileName);
+
+    force_download("../doc/output/" . $fileName, null);
+    unlink("../doc/output/" . $fileName);
   }
 }

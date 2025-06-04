@@ -143,7 +143,7 @@
               <div class="form-group row">
                 <label class="form-label text-end col-md-4">Tanggal Arsip :</label>
                 <div class="col-md-8">
-                  <?= $berkas->status ? tanggal_indo($arsip->tanggal_masuk_arsip, false)  : null ?>
+                  <?= $berkas->status ? tanggal_indo($berkas->tanggal_arsip, false)  : null ?>
                 </div>
               </div>
             </div>
