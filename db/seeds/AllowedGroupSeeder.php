@@ -19,26 +19,31 @@ class AllowedGroupSeeder extends AbstractSeed
         $table->insert([
             [
                 'group_id' => 1, // Admin group
+                'group_name' => 'Admin',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'group_id' => 1003, // Meja 3 Gugatan
+                'group_name' => 'Meja 3 Gugatan',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
-                'group_id' => 430, // Meja 3 Gugatan
+                'group_id' => 430, // Panmud Hukum
+                'group_name' => 'Panmud Hukum',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
-                'group_id' => 1000, // Meja 3 Gugatan
+                'group_id' => 1000, // Panmud Gugatan
+                'group_name' => 'Panmud Gugatan',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
-                'group_id' => 1010, // Meja 3 Gugatan
+                'group_id' => 1010, // Panmud Permohonan
+                'group_name' => 'Panmud Permohonan',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]

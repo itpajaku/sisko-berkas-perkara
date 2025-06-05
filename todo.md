@@ -25,6 +25,7 @@ What to do
     - [&check;] Report Template
     - [&check;] Generate docx
     - [] Generate xlsx
+- [] Sinkron PIP to SIPP
 ---
 2. Menu BHT Hari Ini
 - [$check;] List Datatable
@@ -68,11 +69,13 @@ What to do
 - [] Profile Access Menu
 ---
 6. Menu Management
-- [] Manage by role 
+- [&check] Manage by group 
     - [] Set Menu to role
+    - [] detach menu from role
 - [] Attach sub menu 
 - [] Detach sub menu 
 - [&check;] Allowed group list
+- [&check;] Delete allowed group
 ---
 7. Menu Akta Cerai
 - [&check;] List Akta Cerai

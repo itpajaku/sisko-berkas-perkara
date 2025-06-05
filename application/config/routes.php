@@ -75,6 +75,7 @@ $route['akta_cerai/(:any)/unsinkron']['PATCH'] = 'AktaCeraiController/unsinkron/
 
 $route['pengaturan/akun']['GET'] = 'PengaturanController/akun_page';
 $route['pengaturan/akun/(:any)']['GET'] = 'PengaturanController/detail_akun/$1';
+$route['pengaturan/akun/(:any)']['DELETE'] = 'PengaturanController/delete_akun/$1';
 
 
 /*

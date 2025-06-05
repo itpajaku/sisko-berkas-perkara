@@ -1,9 +1,11 @@
 <?php
 
 use App\Libraries\AuthData;
+use App\Libraries\Hashid;
 use App\Libraries\MethodFilter;
 use App\Libraries\Templ;
 use App\Models\AllowedGroup;
+use Cake\Utility\Hash;
 
 class PengaturanController extends APP_Controller
 
@@ -36,15 +38,51 @@ class PengaturanController extends APP_Controller
       ]);
   }
 
-  public function detail_akun($id)
+  public function detail_akun($hash_id)
   {
     MethodFilter::must('get');
+    $id = Hashid::singleDecode($hash_id);
+    $userGroup = AllowedGroup::with(['group', 'access_menu_section.menu_section.menu.access_menu' => function ($query) use ($id) {
+      $query->where('group_id', $id);
+    }])
+      ->where('id', $id)
+      ->first();
 
-    if ($this->input->request_headers()['Hx-Request-Component']) {
+    if (isset($this->input->request_headers()['Hx-Request-Component'])) {
+      return $this->output->set_output(
+        Templ::component('pengaturan/detail_akun', [
+          'allowed' => $userGroup
+        ])
+      );
     }
 
     Templ::render('pengaturan/detail_akun', [
       'user_group' => []
     ])->layout('layouts/modal_layout');
+  }
+
+  public function delete_akun($hash_id)
+  {
+    MethodFilter::must('delete');
+    try {
+      $id = Hashid::singleDecode($hash_id);
+      $allowedGroup = AllowedGroup::findOrFail($id);
+      if ($allowedGroup->group_id == 1) {
+        throw new \Exception("Tidak dapat menghapus grup admin.");
+      }
+      $allowedGroup->access_menu_section()->delete();
+      $allowedGroup->menu()->delete();
+
+      $allowedGroup->delete();
+    } catch (\Throwable $th) {
+      $this->output
+        ->set_header('HX-Trigger: ' . json_encode([
+          'htmx:toastr' => [
+            'message' => $th->getMessage(),
+            'level' => 'error'
+          ]
+        ]))
+        ->set_output($th->getMessage());
+    }
   }
 }

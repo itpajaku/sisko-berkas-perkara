@@ -24,6 +24,10 @@ final class CreateTableAllowedGroup extends AbstractMigration
             'null' => false,
             'comment' => 'grup yang diizinkan untuk mengakses fitur tertentu'
         ]);
+        $table->addColumn('group_name', 'string', [
+            'null' => false,
+            'comment' => 'grup name yang diizinkan untuk mengakses fitur tertentu'
+        ]);
         $table->addTimestamps();
         $table->create();
     }
