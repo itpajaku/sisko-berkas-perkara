@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class CreateTableMenu extends AbstractMigration
+final class CreateTableAccessMenuSection extends AbstractMigration
 {
     /**
      * Change Method.
@@ -19,12 +19,9 @@ final class CreateTableMenu extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table("menus");
-        $table->addColumn("section_id", "integer");
-        $table->addColumn("title", "string");
-        $table->addColumn("is_sub", "boolean");
-        $table->addColumn("link", "string");
-        $table->addColumn("icon", "string");
+        $table = $this->table("access_menu_section");
+        $table->addColumn("group_id", "integer");
+        $table->addColumn("menu_section_id", "integer");
         $table->addTimestamps();
         $table->create();
     }

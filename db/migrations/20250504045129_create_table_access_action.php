@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
@@ -18,7 +19,7 @@ final class CreateTableAccessAction extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table("access_acction");
+        $table = $this->table("access_action");
         $table->addColumn("group_id", "integer");
         $table->addColumn("model", "string");
         $table->addColumn("action", "string");

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class CreateTableMenu extends AbstractMigration
+final class CreateTableAllowedGroup extends AbstractMigration
 {
     /**
      * Change Method.
@@ -19,12 +19,11 @@ final class CreateTableMenu extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table("menus");
-        $table->addColumn("section_id", "integer");
-        $table->addColumn("title", "string");
-        $table->addColumn("is_sub", "boolean");
-        $table->addColumn("link", "string");
-        $table->addColumn("icon", "string");
+        $table = $this->table('allowed_group');
+        $table->addColumn('group_id', 'integer', [
+            'null' => false,
+            'comment' => 'grup yang diizinkan untuk mengakses fitur tertentu'
+        ]);
         $table->addTimestamps();
         $table->create();
     }

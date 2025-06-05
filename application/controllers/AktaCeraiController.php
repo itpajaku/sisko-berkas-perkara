@@ -267,4 +267,18 @@ class AktaCeraiController extends APP_Controller
       "title" => "Laporan Akta Cerai"
     ]);
   }
+
+  public function generate_laporan()
+  {
+    MethodFilter::must("post");
+    try {
+      if (strtotime(RequestBody::post("tanggal_awal")) > strtotime(RequestBody::post("tanggal_akhir"))) {
+        throw new Exception("Tanggal awal tidak boleh lebih besar dari tanggal akhir", 1);
+      }
+      $this->aktaCeraiService->generate_doc();
+    } catch (\Throwable $th) {
+      $this->session->set_flashdata("error_alert", Templ::component("components/exception_alert", ["message" => $th->getMessage()]));
+      redirect("/akta_cerai/laporan");
+    }
+  }
 }

@@ -20,8 +20,7 @@ final class CreateTableBerkasAkta extends AbstractMigration
     public function change(): void
     {
         $table = $this->table("berkas_akta");
-        $table->addColumn("hash_id", "string", ["null" => false, "limit" => 20])
-            ->addIndex(["hash_id"], ["unique" => true]);
+        $table->addColumn("hash_id", "string", ["null" => true, "limit" => 20]);
         $table->addColumn("perkara_id", "integer", ["null" => false]);
         $table->addColumn("nomor_perkara", "string", ["null" => false]);
         $table->addColumn("tanggal_pendaftaran", "date", ["null" => false]);

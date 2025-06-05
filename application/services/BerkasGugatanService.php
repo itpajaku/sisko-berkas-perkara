@@ -37,6 +37,13 @@ class BerkasGugatanService
     try {
       $this->eloquent->capsule->connection("default")->beginTransaction();
 
+      $existedBerkas = BerkasGugatan::where("perkara_id", $perkara_id)
+        ->first();
+
+      if ($existedBerkas) {
+        throw new \Exception("Berkas untuk perkara ini sudah ada", 1);
+      }
+
       $berkas = BerkasGugatan::create([
         "perkara_id" => $perkara_id,
         "nomor_perkara" => RequestBody::post("nomor_perkara"),

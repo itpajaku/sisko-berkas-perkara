@@ -27,4 +27,6 @@ class AuthService
 
     return $profile;
   }
+
+  public static function getRoleMenu() {}
 }

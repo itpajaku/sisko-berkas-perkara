@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class CreateKonfigurasiAKtaTable extends AbstractMigration
+final class CreateKonfigurasiAktaTable extends AbstractMigration
 {
     /**
      * Change Method.

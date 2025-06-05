@@ -64,11 +64,17 @@ $route['akta_cerai/konfigurasi']['GET'] = 'AktaCeraiController/konfigurasi_page'
 $route['akta_cerai/konfigurasi']['POST'] = 'AktaCeraiController/update_konfigurasi';
 $route['akta_cerai/create']['GET'] = 'AktaCeraiController/create_page';
 $route['akta_cerai/fetch_form']['POST'] = 'AktaCeraiController/fetch_form';
+$route['akta_cerai/laporan']['GET'] = 'AktaCeraiController/laporan_page';
+$route['akta_cerai/laporan']['POST'] = 'AktaCeraiController/generate_laporan';
 $route['akta_cerai/(:any)']['GET'] = 'AktaCeraiController/detail_page/$1';
 $route['akta_cerai/(:any)']['DELETE'] = 'AktaCeraiController/delete/$1';
 $route['akta_cerai/(:any)']['PUT'] = 'AktaCeraiController/update/$1';
 $route['akta_cerai/(:any)/sinkron']['PATCH'] = 'AktaCeraiController/sinkron/$1';
 $route['akta_cerai/(:any)/unsinkron']['PATCH'] = 'AktaCeraiController/unsinkron/$1';
+
+
+$route['pengaturan/akun']['GET'] = 'PengaturanController/akun_page';
+$route['pengaturan/akun/(:any)']['GET'] = 'PengaturanController/detail_akun/$1';
 
 
 /*

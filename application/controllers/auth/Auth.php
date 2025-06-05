@@ -60,6 +60,10 @@ class Auth extends CI_Controller
         throw new Exception("Username tidak ditemukan");
       }
 
+      if ($user->block == 1) {
+        throw new Exception("User Tidak Aktif");
+      }
+
       $storedKey = SippLogin::validate(
         array($user->code_activation, $this->input->post("password", true)),
       );

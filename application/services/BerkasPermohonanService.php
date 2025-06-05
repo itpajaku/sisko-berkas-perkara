@@ -94,6 +94,13 @@ class BerkasPermohonanService
     try {
       $this->eloquent->connection("default")->beginTransaction();
 
+      $existedBerkas = BerkasPermohonan::where("perkara_id", $perkara_id)
+        ->first();
+
+      if ($existedBerkas) {
+        throw new \Exception("Berkas permohonan untuk perkara ini sudah ada.");
+      }
+
       $berkas = BerkasPermohonan::create([
         "perkara_id" => $perkara_id,
         "nomor_perkara" => RequestBody::post("nomor_perkara"),
@@ -163,7 +170,6 @@ class BerkasPermohonanService
     $total = $berkas->count();
     $totalMasukBerkas = $berkas->whereNotNull("tanggal_arsip")->count() ?? 0;
     $totalBelumMasukBerkas = $total - $totalMasukBerkas ?? 0;
-
 
     $docTemplate->setValue("NAMA_SATKER", Sysconf::getVar()->NamaPN);
     $docTemplate->setValue("ALAMAT_SATKER", Sysconf::getVar()->AlamatPN);

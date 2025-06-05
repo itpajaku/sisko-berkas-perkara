@@ -21,6 +21,12 @@ class BerkasAkta extends Model
         static::created(function ($model) {
             $model->hash_id = Hashid::encode($model->id);
             $model->save();
+
+            $konf = KonfigurasiAkta::findOrFail(1);
+            $konf->update([
+                "nomor_akta_terakhir" => $konf->nomor_akta_terakhir + 1,
+                "nomor_seri_terakhir" => $konf->nomor_seri_terakhir + 1,
+            ]);
         });
     }
 

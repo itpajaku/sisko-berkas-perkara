@@ -72,6 +72,7 @@ What to do
     - [] Set Menu to role
 - [] Attach sub menu 
 - [] Detach sub menu 
+- [&check;] Allowed group list
 ---
 7. Menu Akta Cerai
 - [&check;] List Akta Cerai
@@ -85,9 +86,9 @@ What to do
     - [&check;] Update action config
     - [&check;] Auto increment no series
     - [&check;] Auto increment no akta
-- [] Report
+- [&check;] Report
     - [&check;] Report Template
-    - [] Generate docx
+    - [&check;] Generate docx
     - [] Generate xlsx
 ---
 8. Assets
@@ -97,9 +98,13 @@ What to do
 - [&check;] Set icon at env 
 ---
 9. Dashboard
+- [] Chart Berkas BHT belum turun di sipp
+- [] Chart Berkas perkara putus dan bht hari ini  
 ---
 FIX BUG
 - [&check;] Fix bug majelis field contain br
+- [&check;] Fix bug duplicate berkas
+- [&check;] Fix bug blocked user can login
 ---
 RFACTOR
 - [] Refactor Eloquent instance

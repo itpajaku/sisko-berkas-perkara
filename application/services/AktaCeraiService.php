@@ -3,18 +3,25 @@
 namespace App\Services;
 
 use App\Libraries\AuthData;
+use App\Libraries\DateHelper;
 use App\Libraries\Eloquent;
 use App\Libraries\Hashid;
 use App\Libraries\RequestBody;
+use App\Libraries\Sysconf;
 use App\Libraries\Templ;
 use App\Models\BerkasAkta;
 use Illuminate\Support\Facades\Request;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class AktaCeraiService
 {
     private static $instances = [];
+    private $app;
 
-    protected function __construct() {}
+    protected function __construct()
+    {
+        $this->app = &get_instance();
+    }
 
     public static function getInstance(): AktaCeraiService
     {
@@ -29,11 +36,20 @@ class AktaCeraiService
     public function insertOne()
     {
         try {
+            $perkaraId = Hashid::singleDecode(RequestBody::post("perkara_id"));
             $eloquent = Eloquent::get_instance();
             $eloquent->connection("default")->beginTransaction();
+
+            $existedBerkas = BerkasAkta::where("perkara_id", $perkaraId)
+                ->first();
+
+            if ($existedBerkas) {
+                throw new \Exception("Berkas dengan nomor perkara " . RequestBody::post("nomor_perkara") . " sudah ada", 1);
+            }
+
             $akta = BerkasAkta::create([
                 "nomor_perkara" => RequestBody::post("nomor_perkara"),
-                "perkara_id" => Hashid::singleDecode(RequestBody::post("perkara_id")),
+                "perkara_id" => $perkaraId,
                 "jenis_perkara" => RequestBody::post("jenis_perkara"),
                 "tanggal_pendaftaran" => RequestBody::post("tanggal_pendaftaran"),
                 "para_pihak" => RequestBody::post("para_pihak"),
@@ -99,8 +115,15 @@ class AktaCeraiService
 
         $data->transform(function ($item, $n) {
             $item->no = ++$n;
+            $item->nomor_perkara = Templ::component("components/kolom_nomor_perkara", ["berkas" => $item]);
             $item->tanggal_pendaftaran = tanggal_indo($item->tanggal_pendaftaran, false);
             $item->tanggal_putusan = tanggal_indo($item->tanggal_putus, false);
+            $item->majelis = str_replace('\n', "<br>", $item->majelis);
+            $item->para_pihak = str_replace('Melawan', "<br>Melawan<br>", $item->para_pihak);
+            $item->tanggal_pbt = tanggal_indo($item->tanggal_pbt, false);
+            $item->tanggal_bht = tanggal_indo($item->tanggal_bht, false);
+            $item->nomor_akta = $item->nomor_akta_cerai;
+            $item->tanggal_akta = tanggal_indo($item->tanggal_akta, false);
 
 
             $item->action = Templ::component("akta_cerai/kolom_aksi", [
@@ -176,5 +199,66 @@ class AktaCeraiService
             "tanggal_diterima" => null,
             "status" => 0, // 1 = sudah sinkron
         ]);
+    }
+
+    public function generate_doc()
+    {
+        $berdasarkan = $this->app->encryption->decrypt(RequestBody::post("berdasarkan"));
+
+        $tanggalAwal = RequestBody::post("tanggal_awal");
+        $tanggalAkhir = RequestBody::post("tanggal_akhir");
+        $penandatangan = RequestBody::post("penandatangan");
+
+        $berkas = BerkasAkta::whereDate($berdasarkan, ">=", $tanggalAwal)
+            ->whereDate($berdasarkan, "<=", $tanggalAkhir)
+            ->orderBy($berdasarkan, "asc")
+            ->get();
+
+        $docTemplate = new TemplateProcessor("../doc/template/template_laporan_akta.docx");
+
+        $total = $berkas->count();
+        $totalMasukBerkas = $berkas->whereNotNull("tanggal_arsip")->count() ?? 0;
+        $totalBelumMasukBerkas = $total - $totalMasukBerkas ?? 0;
+
+        $docTemplate->setValue("NAMA_SATKER", Sysconf::getVar()->NamaPN);
+        $docTemplate->setValue("ALAMAT_SATKER", Sysconf::getVar()->AlamatPN);
+        $docTemplate->setValue("TANGGAL_AWAL", tanggal_indo(RequestBody::post("tanggal_awal")));
+        $docTemplate->setValue("TANGGAL_AKHIR", tanggal_indo(RequestBody::post("tanggal_akhir")));
+        $docTemplate->setValue("TOTAL_DATA", $total);
+        $docTemplate->setValue("TOTAL_MASUK_BERKAS", strval($totalMasukBerkas));
+        $docTemplate->setValue("TOTAL_BELUM_ARSIP", strval($totalBelumMasukBerkas));
+
+        $docTemplate->setValue("penandatangan", RequestBody::post("penandatangan"));
+        $docTemplate->setValue("nip_penandatangan", pejabat_to_nip(
+            RequestBody::post("penandatangan")
+        ));
+        $docTemplate->setValue("tgl_hari_laporan", tanggal_indo(date("Y-m-d")));
+        $docTemplate->setValue("pejabat", nama_to_jabatan(
+            RequestBody::post("penandatangan")
+        ));
+
+        $docTemplate->cloneRowAndSetValues("no", $berkas->map(function ($item, $n) {
+            return [
+                "no" => ++$n,
+                "nomor_perkara" => $item->nomor_perkara,
+                "jenis_perkara" => $item->jenis_perkara,
+                "tgl_putus" => tanggal_indo($item->tanggal_putus, false),
+                "tgl_pip" => tanggal_indo($item->tanggal_pbt, false),
+                "tgl_bht" => tanggal_indo($item->tanggal_bht, false),
+                "majelis" => explode('\n', $item->majelis)[0],
+                "nomor_akta" => $item->nomor_akta,
+                "nomor_seri" => $item->nomor_seri,
+                "tgl_akta" => tanggal_indo($item->tanggal_akta, false),
+                "panitera" => $item->panitera,
+                "selisih" => DateHelper::getDayInterval($item->tanggal_bht, $item->tanggal_arsip) . " Hari",
+                "masuk" => $item->tanggal_arsip ?? "Masih Berjalan",
+            ];
+        })->all());
+
+        $fileName = "Laporan_Akta_Cerai_" . date("YmdHis") . ".docx";
+        $docTemplate->saveAs("../doc/output/" . $fileName);
+
+        force_download("../doc/output/" . $fileName, null);
+        unlink("../doc/output/" . $fileName);
     }
 }

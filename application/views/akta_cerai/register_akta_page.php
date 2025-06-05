@@ -1,4 +1,4 @@
-<div class="container-lg">
+<div class="container-lg" style="max-width: max-content;">
   <?= App\Libraries\Templ::component("layouts/page_header", [
     "page_name" => "Register Akta Cerai",
     "breadcrumbs" => [
@@ -11,7 +11,7 @@
       <p class="card-subtitle mb-2">
         Tampilkan berdasarkan tanggal
       </p>
-      <form action="<?= base_url("/berkas_permohonan") ?>">
+      <form action="<?= base_url("/akta_cerai") ?>">
         <div class="input-daterange input-group" id="date-range">
           <input type="hidden" name="filter" value="created_at">
           <input type="hidden" name="type" value="range">
@@ -23,7 +23,7 @@
             Cari
           </button>
           <?php if (isset($_GET["filter"])) { ?>
-            <a href="<?= base_url("/berkas_permohonan") ?>" class="btn btn-danger">
+            <a href="<?= base_url("/akta_cerai") ?>" class="btn btn-danger">
               <i class="ti ti-reload"></i>
               Reset
             </a>
@@ -78,7 +78,7 @@
       serverSide: true,
       ordering: false,
       ajax: {
-        url: "<?= base_url("akta_cerai/datatable") ?>",
+        url: "<?= base_url("akta_cerai/datatable?") . $_SERVER['QUERY_STRING'] ?>",
         method: "POST"
       },
       columns: [{
