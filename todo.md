@@ -65,8 +65,8 @@ What to do
 - [] ~~Create Profile~~
 - [] ~~Update Profile~~
 - [] ~~Delete Profile~~
-- [] Profile Access Action 
-- [] Profile Access Menu
+- [&check;] Profile Access Action 
+- [&check;] Profile Access Menu
 ---
 6. Menu Management
 - [&check] Manage by group 

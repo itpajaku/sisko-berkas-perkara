@@ -1,6 +1,7 @@
 <div class="card">
   <div class="card-header text-bg-primary">
     <h5 class="mb-0 text-white">Form with view only</h5>
+    <input type="hidden" id="hidden-selected-akun-id" name="selected_akun_id" value="<?= App\Libraries\Hashid::encode($allowed->group_id) ?>">
   </div>
   <div class="form-horizontal">
     <div class="form-body">
@@ -54,7 +55,15 @@
                 <tr>
                   <th colspan="3"> Tabel Akses Group Menu</th>
                   <th class="text-end">
-                    <button class="btn btn-primary btn-sm" hx-get="<?= site_url('pengaturan/akses_menu_page') ?>" hx-target="#modal-body" hx-swap="innerHTML">
+                    <button
+                      class="btn btn-primary btn-sm"
+                      hx-get="<?= site_url("pengaturan/akun/" . App\Libraries\Hashid::encode($allowed->group_id) . "/form") ?>"
+                      hx-target="#modalTambahAkses>.modal-dialog>.modal-content>.modal-body"
+                      hx-swap="innerHTML"
+                      hx-headers='{"Hx-Request-Component":true}'
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalTambahAkses">
+
                       <i class="ti ti-plus"></i>
                       Tambah Akses
                     </button>

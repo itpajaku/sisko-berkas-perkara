@@ -14,7 +14,7 @@ class AllowedGroup extends Model
 
   public function menu()
   {
-    return $this->hasManyThrough(Menu::class, AccessMenu::class, 'group_id', 'group_id');
+    return $this->belongsToMany(Menu::class, AccessMenu::class, 'group_id', 'menu_id', 'group_id');
   }
 
   public function access_menu_section()

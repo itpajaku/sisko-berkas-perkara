@@ -11,7 +11,7 @@ class Hashid
     protected static function init()
     {
         if (!self::$hash) {
-            self::$hash = new Hashids($_ENV["APP_SALT"]);
+            self::$hash = new Hashids($_ENV["APP_SALT"], 6);
         }
     }
 
