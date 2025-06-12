@@ -44,7 +44,7 @@
                 <td><?= $user->group->description ?></td>
                 <td>
                   <button
-                    hx-get="<?= base_url("/pengaturan/akun/" . Hashid::encode($user->id)) ?>"
+                    hx-get="<?= base_url("/pengaturan/akun/" . Hashid::encode($user->group_id)) ?>"
                     hx-headers='{"HX-Request-Component": true}'
                     hx-target="#detail-content"
                     hx-trigger="htmx:refresh, click"
@@ -187,6 +187,38 @@
       <div class="modal-header">
         <h5 class="modal-title" id="modalTitleId">
           Tambah Akses
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-target="#modalId"
+          data-bs-toggle="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5>Mohon Tunggu ...</h5>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="modalAddAccessMenu"
+  tabindex="-1"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true">
+  <div
+    class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+    role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">
+          Tambah Akses ke Menu
         </h5>
         <button
           type="button"

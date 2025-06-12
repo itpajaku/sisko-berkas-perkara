@@ -1,7 +1,14 @@
+<?php
+
+use App\Libraries\Hashid;
+use App\Libraries\AuthData;
+
+$group_id = Hashid::encode($selected_group->group_id);
+?>
 <div class="card">
   <div class="card-header text-bg-primary">
     <h5 class="mb-0 text-white">Form with view only</h5>
-    <input type="hidden" id="hidden-selected-akun-id" name="selected_akun_id" value="<?= App\Libraries\Hashid::encode($allowed->group_id) ?>">
+    <input type="hidden" id="hidden-selected-akun-id" name="selected_akun_id" value="<?= Hashid::encode($selected_group->group_id) ?>">
   </div>
   <div class="form-horizontal">
     <div class="form-body">
@@ -15,7 +22,7 @@
             <div class="form-group row">
               <label class="form-label text-end col-md-4">User Group :</label>
               <div class="col-md-8">
-                <p><?= $allowed->group->name ?></p>
+                <p><?= $selected_group->group->name ?></p>
               </div>
             </div>
           </div>
@@ -24,7 +31,7 @@
             <div class="form-group row">
               <label class="form-label text-end col-md-4">Description :</label>
               <div class="col-md-8">
-                <p><?= $allowed->group->description ?></p>
+                <p><?= $selected_group->group->description ?></p>
               </div>
             </div>
           </div>
@@ -34,7 +41,7 @@
             <div class="form-group row">
               <label class="form-label text-end col-md-4">Total Akun :</label>
               <div class="col-md-8">
-                <p><?= $allowed->group->users->count() . " " ?> Akun</p>
+                <p><?= $selected_group->group->users->count() . " " ?> Akun</p>
               </div>
             </div>
           </div>
@@ -43,7 +50,7 @@
             <div class="form-group row">
               <label class="form-label text-end col-md-4">Atasan :</label>
               <div class="col-md-8">
-                <p><?= $allowed->group->parentGroup->name ?></p>
+                <p><?= $selected_group->group->parentGroup->name ?></p>
               </div>
             </div>
           </div>
@@ -57,7 +64,7 @@
                   <th class="text-end">
                     <button
                       class="btn btn-primary btn-sm"
-                      hx-get="<?= site_url("pengaturan/akun/" . App\Libraries\Hashid::encode($allowed->group_id) . "/form") ?>"
+                      hx-get="<?= site_url("pengaturan/akun/" . Hashid::encode($selected_group->group_id) . "/form") ?>"
                       hx-target="#modalTambahAkses>.modal-dialog>.modal-content>.modal-body"
                       hx-swap="innerHTML"
                       hx-headers='{"Hx-Request-Component":true}'
@@ -67,37 +74,46 @@
                       <i class="ti ti-plus"></i>
                       Tambah Akses
                     </button>
+                    <button
+                      hx-get="<?= base_url('/pengaturan/akun/' . $group_id . '/form_menu') ?>"
+                      hx-target="#modalAddAccessMenu>.modal-dialog>.modal-content>.modal-body"
+                      hx-headers='{"Hx-Request-Component":true}'
+                      data-bs-toggle="modal"
+                      data-bs-target="#modalAddAccessMenu"
+                      class="btn btn-success btn-sm">
+                      <i class="ti ti-plus"></i>
+                      Tambah Akses Menu
+                    </button>
                   </th>
                 </tr>
                 <tr class="bg-info-subtle text-center">
                   <th>No</th>
                   <th>Nama Section</th>
-                  <th>total Menu</th>
+                  <th>Total Menu</th>
                   <th>Nama Aksi</th>
                 </tr>
               </thead>
               <tbody>
                 <?php
-
-                use App\Libraries\Hashid;
-
-                foreach ($allowed->access_menu_section as $n => $access_section) { ?>
+                foreach ($selected_group->access_menu_section as $n => $access_section) {
+                ?>
                   <tr>
                     <td><?= ++$n ?></td>
                     <td><?= $access_section->menu_section->header ?></td>
                     <td>
                       <ol>
-                        <?php foreach ($access_section->menu_section->menu as $menu) { ?>
+                        <?php foreach ($allowed_menu->where('menu.section_id', $access_section->menu_section_id)->all() as $item) { ?>
                           <li>
-                            <i class="<?= $menu->icon ?>"></i>
-                            <?= $menu->title ?>
+                            <i class="<?= $item->menu->icon ?>"></i>
+                            <?= $item->menu->title ?>
                           </li>
                         <?php } ?>
                       </ol>
                     </td>
                     <td>
-                      <button class="btn btn-danger btn-sm"
-                        hx-delete="<?= site_url('pengaturan/akses_menu/' . $access_section->id) ?>"
+                      <button
+                        class="btn btn-danger btn-sm"
+                        hx-delete="<?= site_url('pengaturan/akun/' . Hashid::encode($selected_group->group_id) . '/menu_section/' . Hashid::encode($access_section->menu_section_id)) ?>"
                         hx-swap="none"
                         hx-confirm="Apakah anda yakin ingin menghapus akses ini?">
                         <i class="ti ti-x"></i>
@@ -115,12 +131,17 @@
         <div class="card-body">
           <div class="row">
             <div class="col-md-offset-3 d-flex justify-content-start">
-              <button type="submit" class="btn btn-primary">
+              <button
+                data-bs-toggle="popover"
+                data-bs-title="Popover title"
+                type="button"
+                disabled
+                class="btn btn-primary">
                 <i class="ti ti-edit fs-5"></i>
                 Edit
               </button>
               <button
-                hx-delete="<?= site_url('pengaturan/akun/' . Hashid::encode($allowed->id)) ?>"
+                hx-delete="<?= site_url('pengaturan/akun/' . Hashid::encode($selected_group->id)) ?>"
                 hx-swap="none"
                 hx-confirm="Apakah anda yakin ingin menghapus akun ini?"
                 type="button"

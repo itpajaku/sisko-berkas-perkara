@@ -5,6 +5,8 @@ use App\Libraries\Hashid;
 use App\Libraries\MethodFilter;
 use App\Libraries\RequestBody;
 use App\Libraries\Templ;
+use App\Models\AccessMenu;
+use App\Models\AccessMenuSection;
 use App\Models\AllowedGroup;
 use App\Models\Menu;
 use App\Models\MenuSection;
@@ -48,17 +50,18 @@ class PengaturanController extends APP_Controller
   {
     MethodFilter::must('get');
     $id = Hashid::singleDecode($hash_id);
-    $userGroup = AllowedGroup::with(['group', 'access_menu_section.menu_section.menu.access_menu' => function ($query) use ($id) {
-      $query->where('group_id', $id);
-    }])
-      ->where('id', $id)
+    $data['selected_group'] = AllowedGroup::with(['group', 'access_menu_section'])
+      ->where('group_id', $id)
       ->first();
 
+    $data['allowed_menu'] = AccessMenu::where('group_id', $id)
+      ->with('menu.menu_section')
+      ->get();
+
+    // printdie($data['allowed_menu']->toArray());
     if (isset($this->input->request_headers()['Hx-Request-Component'])) {
       return $this->output->set_output(
-        Templ::component('pengaturan/detail_akun', [
-          'allowed' => $userGroup
-        ])
+        Templ::component('pengaturan/detail_akun', $data)
       );
     }
 
@@ -112,8 +115,7 @@ class PengaturanController extends APP_Controller
     MethodFilter::mustHeader("Hx-Request-Component");
     try {
       $data['en_group_id'] = $hash_id;
-      $data['group'] = AllowedGroup::with("access_menu_section")->find(Hashid::singleDecode($hash_id));
-      $data['menu_section'] = MenuSection::all();
+      $data['menu_sections'] = MenuSection::all();
 
       $this->output->set_output(
         Templ::component("pengaturan/akun_access_form", $data)
@@ -132,18 +134,17 @@ class PengaturanController extends APP_Controller
     }
   }
 
-  public function fetch_menu_section_form($en_group_id, $enid)
+  public function fetch_menu_section_form($en_group_id, $en_section_id)
   {
     MethodFilter::must("get");
     MethodFilter::mustHeader("Hx-Request-Component");
     try {
-      if (!isset($_GET['section_id'])) {
-        return;
-      }
-      $id = Hashid::singleDecode($enid);
-      $data["menus"] = Menu::where("section_id", $id)->get();
-      $data["menu_section_id"] = $enid;
+
+      $section_id = Hashid::singleDecode($en_section_id);
+      $data["menus"] = Menu::where("section_id", $section_id)->get();
+      $data["menu_section_id"] = $en_section_id;
       $data["en_group_id"] = $en_group_id;
+      $data["allowed_menu"] = AccessMenu::where('group_id', Hashid::singleDecode($en_group_id))->get();
       $this->output->set_output(Templ::component("pengaturan/menu_access_form", $data));
     } catch (\Throwable $th) {
       $this->output
@@ -160,6 +161,38 @@ class PengaturanController extends APP_Controller
   }
 
   public function add_access_menu($en_group_id)
+  {
+    MethodFilter::must("post");
+    try {
+      AccessMenu::firstOrCreate([
+        'group_id' => Hashid::singleDecode($en_group_id),
+        'menu_id' => Hashid::singleDecode(RequestBody::post('menu_id'))
+      ]);
+      $this->output
+        ->set_header("HX-Trigger : " . json_encode([
+          "htmx:toastr" => [
+            "message" => "Berhasil menambah akses",
+            "level" => "success"
+          ],
+          "htmx:refresh" => true
+        ]))
+        ->set_output(
+          Templ::component("components/success_alert", ["message" => "Berhasil menambah akses"])
+        );
+    } catch (\Throwable $th) {
+      $this->output
+        ->set_header("HX-Trigger : " . json_encode([
+          "htmx:toastr" => [
+            "message" => $th->getMessage(),
+            "level" => "error"
+          ]
+        ]))
+        ->set_output(
+          Templ::component("components/exception_alert", ["message" => $th->getMessage()])
+        );
+    }
+  }
+  public function batch_add_access_menu($en_group_id)
   {
     MethodFilter::must("post");
     try {
@@ -183,6 +216,100 @@ class PengaturanController extends APP_Controller
             "level" => "error"
           ]
         ]))
+        ->set_output(
+          Templ::component("components/exception_alert", ["message" => $th->getMessage()])
+        );
+    }
+  }
+
+  public function delete_menu_section($en_group_id, $en_section_id)
+  {
+    MethodFilter::must("delete");
+    try {
+      $group_id = Hashid::singleDecode($en_group_id);
+      $section_id = Hashid::singleDecode($en_section_id);
+
+      $this->pengaturanService->detach_section($group_id, $section_id);
+      $message = "Berhasil menghapus akses ke session ini";
+      $this->output
+        ->set_header("HX-Trigger : " . json_encode([
+          "htmx:toastr" => [
+            "message" => $message,
+            "level" => "success"
+          ],
+          "htmx:refresh" => true
+        ]))
+        ->set_output($message);
+    } catch (\Throwable $th) {
+      $this->output
+        ->set_header("HX-Trigger : " . json_encode([
+          "htmx:toastr" => [
+            "message" => $th->getMessage(),
+            "level" => "error"
+          ]
+        ]))
+        ->set_output(
+          Templ::component("components/exception_alert", ["message" => $th->getMessage()])
+        );
+    }
+  }
+
+  public function add_menu_section($en_group_id)
+  {
+    MethodFilter::must('post');
+    try {
+      $id = Hashid::singleDecode($en_group_id);
+      $group = AllowedGroup::where("group_id", $id)->first();
+      if (!$group) {
+        throw new Exception("Tidak ada group ini", 1);
+      }
+
+      $existedSection = $group->access_menu_section()->where([
+        "menu_section_id" => RequestBody::post("section_id")
+      ])->first();
+
+      if ($existedSection) {
+        throw new Exception("Sudah mendapatkan akses pada section ini", 1);
+      }
+
+
+      $group->access_menu_section()->create([
+        "menu_section_id" => RequestBody::post("section_id")
+      ]);
+
+      $message = "Berhasil mendapat akses ke section ini";
+      $this->output
+        ->set_header("HX-Trigger : " . json_encode([
+          "htmx:toastr" => [
+            "message" => $message,
+            "level" => "success"
+          ],
+          "htmx:refresh" => true
+        ]))
+        ->set_output(
+          Templ::component("components/success_alert", ["message" => $message])
+        );
+    } catch (\Throwable $th) {
+      $this->output
+        ->set_output(
+          Templ::component("components/exception_alert", ["message" => $th->getMessage()])
+        );
+    }
+  }
+
+  public function fetch_menu_form($en_group_id)
+  {
+    MethodFilter::must("get");
+    MethodFilter::mustHeader("Hx-Request-Component");
+    try {
+      $group_id = Hashid::singleDecode($en_group_id);
+
+      $data['en_group_id'] = $en_group_id;
+      $data['allowed_section'] = AccessMenuSection::with('menu_section')->where('group_id', $group_id)->get();
+      $data['allowed_menu'] = AccessMenu::where("group_id", $group_id)->get();
+      $this->output->set_output(Templ::component('pengaturan/menu_form', $data));
+    } catch (\Throwable $th) {
+      $this->output
         ->set_output(
           Templ::component("components/exception_alert", ["message" => $th->getMessage()])
         );

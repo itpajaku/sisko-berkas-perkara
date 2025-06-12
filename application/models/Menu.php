@@ -12,4 +12,9 @@ class Menu extends Model
   {
     return $this->belongsTo(AccessMenu::class, 'id', 'menu_id');
   }
+
+  public function menu_section()
+  {
+    return $this->belongsTo(MenuSection::class, 'section_id', 'id');
+  }
 }

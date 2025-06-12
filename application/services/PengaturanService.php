@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Libraries\Hashid;
 use App\Libraries\RequestBody;
+use App\Models\AccessMenu;
 use App\Models\AllowedGroup;
+use App\Models\Menu;
 use App\Models\SysGroup;
 
 class PengaturanService
@@ -44,15 +46,16 @@ class PengaturanService
         if (!$group) {
             throw new \Exception("Selected Group Not Found", 1);
         }
-        if (empty(RequestBody::post("selected_menu"))) {
-            throw new \Exception("Silahkan pilih minimal satu menu", 1);
-        }
-        $group->access_menu_section()->create([
-            "menu_section_id" => Hashid::singleDecode(RequestBody::post("section_id"))
-        ]);
 
-        foreach (RequestBody::post("selected_menu") as $n => $selected_menu_id) {
-            $group->menu()->attach(Hashid::singleDecode($selected_menu_id));
-        }
+        $selected_menu_id = collect(RequestBody::post('selected_menu'));
+        $group->menu()->sync($selected_menu_id->transform(function ($item) {
+            return Hashid::singleDecode($item);
+        })->all());
+    }
+
+    public function detach_section($group_id, $section_id)
+    {
+        $group = AllowedGroup::where("group_id", $group_id)->first();
+        $group->access_menu_section()->where('menu_section_id', $section_id)->delete();
     }
 }

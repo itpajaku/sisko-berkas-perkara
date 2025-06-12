@@ -56,6 +56,10 @@ class AccessMenuSeeder extends AbstractSeed
             [
                 'group_id' => 1,
                 'menu_id' => 10,
+            ],
+            [
+                'group_id' => 1,
+                'menu_id' => 11,
             ]
         ];
 
@@ -99,7 +103,11 @@ class AccessMenuSeeder extends AbstractSeed
             [
                 "group_id" => 1003,
                 "menu_id" => 10,
-            ]
+            ],
+            [
+                "group_id" => 1003,
+                "menu_id" => 11,
+            ],
         ];
         $table->insert(array_merge(
             $aksesAdmin,

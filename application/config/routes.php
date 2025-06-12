@@ -79,8 +79,13 @@ $route['pengaturan/akun/(:any)']['GET'] = 'PengaturanController/detail_akun/$1';
 $route['pengaturan/akun/(:any)']['DELETE'] = 'PengaturanController/delete_akun/$1';
 $route['pengaturan/akun/(:any)/form']['GET'] = 'PengaturanController/akun_fetch_form_access/$1';
 $route['pengaturan/akun/(:any)/menu']['POST'] = 'PengaturanController/add_access_menu/$1';
-$route['pengaturan/akun/(:any)/menu_section_form/(:any)']['GET'] = 'PengaturanController/fetch_menu_section_form/$1/$2';
+$route['pengaturan/akun/(:any)/menu_batch']['POST'] = 'PengaturanController/batch_add_access_menu/$1';
+// $route['pengaturan/akun/(:any)/menu_section_form/(:any)']['GET'] = 'PengaturanController/fetch_menu_section_form/$1/$2';
 
+$route['pengaturan/akun/(:any)/menu_section']['POST'] = 'PengaturanController/add_menu_section/$1';
+$route['pengaturan/akun/(:any)/menu_section/(:any)']['DELETE'] = 'PengaturanController/delete_menu_section/$1/$2';
+$route['pengaturan/akun/(:any)/form_menu'] = 'PengaturanController/fetch_menu_form/$1';
+$route['pengaturan/akun/(:any)/menu_section/(:any)/form_menu'] = 'PengaturanController/fetch_menu_section_form/$1/$2';
 
 /*
 | -------------------------------------------------------------------------
