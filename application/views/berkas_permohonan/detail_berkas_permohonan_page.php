@@ -205,7 +205,7 @@
                           <a
                             class="text-danger"
                             href="javascript:void(0)"
-                            hx-delete="<?= base_url("/berkas_gugatan/" . $this->hash->encode($berkas->id) . "/ekspedisi") ?>"
+                            hx-delete="<?= base_url("/berkas_gugatan/" . App\Libraries\Hashid::encode($berkas->id) . "/ekspedisi") ?>"
                             hx-confirm="Data yang dihapus tidak bisa dikembalikan."
                             hx-vals='<?= json_encode([
                                         "save_point" => $ekspedisi->save_point,
@@ -264,7 +264,7 @@
             hx-on::before-request="$('#btn-submit').attr('disabled', true).html('<i class=\'ti ti-loader ti-pulse\'></i> Mohon Tunggu...')"
             hx-on::after-request="$('#btn-submit').attr('disabled', false).html('<i class=\'ti ti-device-floppy\'></i> Simpan')"
             class="form-horizontal r-separator">
-            <input type="hidden" name="perkara_id" value="<?= $this->hash->encode($berkas->perkara_id)  ?>" />
+            <input type="hidden" name="perkara_id" value="<?= App\Libraries\Hashid::encode($berkas->perkara_id)  ?>" />
             <input type="hidden" name="nomor_perkara" value="<?= $berkas->nomor_perkara ?>" />
             <div class="form-group p-3 ">
               <div class="row">
@@ -488,7 +488,7 @@
       </div>
       <div class="modal-body">
         <form
-          hx-post="<?= base_url("/berkas_permohonan/" . $this->hash->encode($berkas->id) . "/ekspedisi") ?>"
+          hx-post="<?= base_url("/berkas_permohonan/" . App\Libraries\Hashid::encode($berkas->id) . "/ekspedisi") ?>"
           hx-target="#post-result">
           <input type="hidden" name="berkas_type" value="<?= class_basename($berkas) ?>">
           <div class="modal-body">

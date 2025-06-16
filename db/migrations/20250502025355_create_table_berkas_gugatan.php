@@ -22,9 +22,9 @@ final class CreateTableBerkasGugatan extends AbstractMigration
         $table = $this->table('berkas_gugatan');
         $table->addColumn('perkara_id', 'integer', ['limit' => 11])
             ->addColumn('nomor_perkara', 'string', ['limit' => 32])
-            ->addColumn('para_pihak', 'string', ['limit' => 255])
+            ->addColumn('para_pihak', 'text')
             ->addColumn('tanggal_pendaftaran', 'date')
-            ->addColumn('jenis_perkara', 'string', ['limit' => 32])
+            ->addColumn('jenis_perkara', 'string')
             ->addColumn('majelis_hakim', 'string')
             ->addColumn('panitera', 'string')
             ->addColumn('jurusita', 'string')

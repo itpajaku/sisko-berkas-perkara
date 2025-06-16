@@ -4,7 +4,7 @@
     hx-on::before-request="$('#btn-submit').attr('disabled', true).html('<i class=\'ti ti-loader ti-pulse\'></i> Mohon Tunggu...')"
     hx-on::after-request="$('#btn-submit').attr('disabled', false).html('<i class=\'ti ti-device-floppy\'></i> Simpan')"
     class="form-horizontal r-separator">
-    <input type="hidden" name="perkara_id" value="<?= $this->hash->encode($berkas->perkara_id)  ?>" />
+    <input type="hidden" name="perkara_id" value="<?= App\Libraries\Hashid::encode($berkas->perkara_id)  ?>" />
     <input type="hidden" name="nomor_perkara" value="<?= $berkas->nomor_perkara ?>" />
     <div class="form-group p-3 ">
         <div class="row">

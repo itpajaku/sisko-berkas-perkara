@@ -104,11 +104,19 @@ What to do
 - [] Chart Berkas BHT belum turun di sipp
 - [] Chart Berkas perkara putus dan bht hari ini  
 ---
+10. Transfer Data
+- [&check;] Transfer data berkas gugatan
+- [&check;] Transfer data berkas permohonan
+- [] Transfer data berkas akta
+- [] SSE Log
+- [] SSE Progress
+- [] Actiob log
+---
 FIX BUG
 - [&check;] Fix bug majelis field contain br
 - [&check;] Fix bug duplicate berkas
 - [&check;] Fix bug blocked user can login
 ---
 RFACTOR
-- [] Refactor Eloquent instance
-- [] Refactor Hash instance
+- [&check;] Refactor Eloquent instance
+- [&check;] Refactor Hash instance

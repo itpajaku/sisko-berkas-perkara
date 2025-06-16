@@ -14,7 +14,6 @@ class MenuService
   public static function getMenu()
   {
     if (!empty(self::$menu)) {
-      echo "1";
       return self::$menu;
     }
 

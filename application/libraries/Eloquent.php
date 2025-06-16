@@ -37,9 +37,10 @@ class Eloquent
       'prefix' => '',
     ]);
 
-    $capsule->setEventDispatcher(new Dispatcher(new Container));
-
-    $capsule->setAsGlobal();
+    if (php_sapi_name() !== 'cli') {
+      $capsule->setEventDispatcher(new Dispatcher(new Container));
+      $capsule->setAsGlobal();
+    }
 
     $capsule->bootEloquent();
 

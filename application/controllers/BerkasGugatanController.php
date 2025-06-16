@@ -64,7 +64,7 @@ class BerkasGugatanController extends APP_Controller
 	public function fetchFormPbt()
 	{
 		MethodFilter::must("post");
-		$berkas = BerkasGugatan::find($this->hash->decode($this->input->post("id"))[0]);
+		$berkas = BerkasGugatan::find(Hashid::singleDecode($this->input->post("id")));
 		if ($berkas) {
 			$this->load->view("berkas_gugatan/form_set_pbt", ["berkas" => $berkas]);
 		} else {
@@ -121,7 +121,7 @@ class BerkasGugatanController extends APP_Controller
 		MethodFilter::must("post");
 		try {
 			$this->validation($this->input->post(), $this->form_validation);
-			$this->berkasGugatanService->insertOne($this->hash->decode($this->input->post("perkara_id"))[0]);
+			$this->berkasGugatanService->insertOne(Hashid::singleDecode($this->input->post("perkara_id")));
 
 			$this->session->set_flashdata("success_alert", $this->load->view("components/success_alert", ["message" => "Berkas berhasil disimpan"], true));
 			header("HX-Redirect: /berkas_gugatan/register");
@@ -151,7 +151,7 @@ class BerkasGugatanController extends APP_Controller
 	{
 		MethodFilter::must("delete");
 		try {
-			$this->berkasGugatanService->remove($this->hash->decode($id)[0]);
+			$this->berkasGugatanService->remove(Hashid::singleDecode($id));
 			$this->output->set_header("HX-Refresh: true")->set_output("Berkas berhasil dihapus");
 		} catch (\Throwable $th) {
 			$this->load->view("components/exception_alert", ["message" => $th->getMessage()]);
@@ -162,7 +162,7 @@ class BerkasGugatanController extends APP_Controller
 	{
 		MethodFilter::must("get");
 
-		$berkas = BerkasGugatan::findOrFail($this->hash->decode($id)[0]);
+		$berkas = BerkasGugatan::findOrFail(Hashid::singleDecode($id));
 		Templ::render("berkas_gugatan/edit_berkas_gugatan", [
 			"berkas" => $berkas,
 		])
@@ -178,7 +178,7 @@ class BerkasGugatanController extends APP_Controller
 		try {
 			$input = file_get_contents("php://input");
 			parse_str($input, $_POST);
-			$updatedBerkas = $this->berkasGugatanService->toggle_status($this->hash->decode($id)[0], $_POST["status"]);
+			$updatedBerkas = $this->berkasGugatanService->toggle_status(Hashid::singleDecode($id), $_POST["status"]);
 
 			$this->output->set_header("HX-Trigger: " . json_encode([
 				"htmx:toastr" => [
@@ -199,7 +199,7 @@ class BerkasGugatanController extends APP_Controller
 	public function ekspedisi_berkas($id = null)
 	{
 		MethodFilter::must("get");
-		$berkas = BerkasGugatan::findOrFail($this->hash->decode($id)[0]);
+		$berkas = BerkasGugatan::findOrFail(Hashid::singleDecode($id));
 		Templ::render("berkas_gugatan/ekspedisi_berkas_gugatan", [
 			"berkas" => $berkas,
 			"posisi_berkas" => PosisiEkspedisi::where("status", 1)->get()
@@ -214,7 +214,7 @@ class BerkasGugatanController extends APP_Controller
 	{
 		MethodFilter::must("post");
 		try {
-			$berkasId = $this->hash->decode($berkas_id)[0];
+			$berkasId = Hashid::singleDecode($berkas_id);
 
 			$berkas = BerkasGugatan::findOrFail($berkasId);
 			$berkas->ekspedisi()->attach($this->input->post("posisi_ekspedisi"), [
@@ -248,7 +248,7 @@ class BerkasGugatanController extends APP_Controller
 
 	public function fetch_form_bht($enid = null)
 	{
-		$id = $this->hash->decode($enid)[0];
+		$id = Hashid::singleDecode($enid);
 		$berkas = BerkasGugatan::findOrFail($id);
 		$this->output->set_output(
 			Templ::component("/berkas_gugatan/form_set_bht", ["berkas" => $berkas])
@@ -259,7 +259,7 @@ class BerkasGugatanController extends APP_Controller
 	{
 		MethodFilter::must("patch");
 		try {
-			$akta = BerkasGugatan::findOrFail($this->hash->decode($hash_id)[0]);
+			$akta = BerkasGugatan::findOrFail(Hashid::singleDecode($hash_id));
 			if (RequestBody::post("tanggal_bht") != null) {
 				Eloquent::get_instance()
 					->connection("sipp")

@@ -1,6 +1,7 @@
 <?php
 defined("BASEPATH") or exit("Cannot Pass");
 
+use App\Libraries\Hashid;
 use App\Libraries\MethodFilter;
 use App\Libraries\RequestBody;
 use App\Libraries\Templ;
@@ -81,7 +82,7 @@ class BerkasPermohonanController extends APP_Controller
     try {
       $this->validation($this->input->post(), $this->form_validation);
       $this->berkasPermohonanService->insertOne(
-        $this->hash->decode($this->input->post("perkara_id"))[0]
+        Hashid::singleDecode($this->input->post("perkara_id"))
       );
       $this->session
         ->set_flashdata(
@@ -105,8 +106,8 @@ class BerkasPermohonanController extends APP_Controller
   public function detail_page($hash_id = null)
   {
     MethodFilter::must("get");
-    $id = $this->hash->decode($hash_id);
-    $berkas = BerkasPermohonan::findOrFail($id[0]);
+    $id = Hashid::singleDecode($hash_id);
+    $berkas = BerkasPermohonan::findOrFail($id);
 
     Templ::render("berkas_permohonan/detail_berkas_permohonan_page", [
       "berkas" => $berkas,
@@ -122,7 +123,7 @@ class BerkasPermohonanController extends APP_Controller
     MethodFilter::must("patch");
     try {
       $this->validation(RequestBody::post()->toArray(), $this->form_validation);
-      $this->berkasPermohonanService->update($this->hash->decode($id)[0], $this->hash->decode(RequestBody::post("perkara_id"))[0]);
+      $this->berkasPermohonanService->update(Hashid::singleDecode($id), Hashid::singleDecode(RequestBody::post("perkara_id")));
       $this->session->set_flashdata("alert_error", Templ::component("components/success_alert", ["message" => "Berhasil mengupdate berkas"]));
       $this->output
         ->set_header("HX-Refresh: true")
@@ -144,8 +145,8 @@ class BerkasPermohonanController extends APP_Controller
   {
     MethodFilter::must("delete");
     try {
-      $id = $this->hash->decode($hash_id);
-      $berkas = BerkasPermohonan::findOrFail($id[0]);
+      $id = Hashid::singleDecode($hash_id);
+      $berkas = BerkasPermohonan::findOrFail($id);
 
       $berkas->ekspedisi()->detach();
       $berkas->delete();

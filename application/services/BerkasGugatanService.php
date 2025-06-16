@@ -21,7 +21,6 @@ class BerkasGugatanService
 
   public function __construct(Eloquent $eloquent, APP_Controller $app)
   {
-    $this->eloquent = $eloquent;
     $this->app = $app;
   }
 
@@ -35,7 +34,7 @@ class BerkasGugatanService
   public function insertOne($perkara_id): BerkasGugatan
   {
     try {
-      $this->eloquent->capsule->connection("default")->beginTransaction();
+      Eloquent::get_instance()->connection("default")->beginTransaction();
 
       $existedBerkas = BerkasGugatan::where("perkara_id", $perkara_id)
         ->first();
@@ -64,10 +63,10 @@ class BerkasGugatanService
         "created_by" => AuthData::getUserData()->username
       ]);
 
-      $this->eloquent->capsule->connection("default")->commit();
+      Eloquent::get_instance()->connection("default")->commit();
       return $berkas;
     } catch (\Throwable $th) {
-      $this->eloquent->capsule->connection("default")->rollback();
+      Eloquent::get_instance()->connection("default")->rollback();
       throw $th;
     }
   }

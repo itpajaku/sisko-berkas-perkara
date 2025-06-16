@@ -5,7 +5,7 @@ if ($berkas->tanggal_pbt) {
   <form
     hx-post="<?= base_url("/berkas_gugatan/set_pbt") ?>"
     hx-target="#pbt-picker-result">
-    <input type="hidden" name="id" value="<?= $this->hash->encode($berkas->id) ?>">
+    <input type="hidden" name="id" value="<?= App\Libraries\Hashid::encode($berkas->id) ?>">
     <button
       data-bs-toggle="modal"
       data-bs-target="#modalSetPbt"

@@ -1,6 +1,7 @@
 <?php
 
 use App\Libraries\AuthData;
+use App\Libraries\Hashid;
 use App\Libraries\MethodFilter;
 use App\Libraries\Templ;
 use App\Models\BerkasEkspedisi;
@@ -16,7 +17,7 @@ class EkspedisiBerkasController extends APP_Controller
     public function attach_to_berkas($berkas_id)
     {
         MethodFilter::must("post");
-        $berkasId = $this->hash->decode($berkas_id)[0];
+        $berkasId = Hashid::singleDecode($berkas_id);
         $berkasType = $this->input->post("berkas_type", true);
         try {
             BerkasEkspedisi::create([
@@ -46,7 +47,7 @@ class EkspedisiBerkasController extends APP_Controller
     public function detach_from_berkas($berkas_id)
     {
         MethodFilter::must("delete");
-        $berkasId = $this->hash->decode($berkas_id)[0];
+        $berkasId = Hashid::singleDecode($berkas_id);
         $berkasType = $this->input->get("berkas_type");
 
         try {

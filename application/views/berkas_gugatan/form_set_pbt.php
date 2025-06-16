@@ -1,5 +1,5 @@
 <form
-  hx-patch="<?= base_url("/berkas_gugatan/" . $this->hash->encode($berkas->id)) ?>"
+  hx-patch="<?= base_url("/berkas_gugatan/" . App\Libraries\Hashid::encode($berkas->id)) ?>"
   hx-target="#pbt-picker-result"
   hx-on::before-request="$('#buttonSimpanPBT').attr('disabled', true).html('Menyimpan...')"
   hx-on::after-request="$('#buttonSimpanPBT').attr('disabled', false).html('Simpan')">

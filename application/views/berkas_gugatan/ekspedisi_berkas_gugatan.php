@@ -34,7 +34,7 @@
                                     <a
                                         class="text-danger"
                                         href="javascript:void(0)"
-                                        hx-delete="<?= base_url("/berkas_gugatan/" . $this->hash->encode($berkas->id) . "/ekspedisi") ?>"
+                                        hx-delete="<?= base_url("/berkas_gugatan/" . App\Libraries\Hashid::encode($berkas->id) . "/ekspedisi") ?>"
                                         hx-confirm="Data yang dihapus tidak bisa dikembalikan."
                                         hx-vals='<?= json_encode([
                                                         "save_point" => $ekspedisi->save_point,
@@ -73,7 +73,7 @@
                     aria-label="Close"></button>
             </div>
             <form
-                hx-post="<?= base_url("/berkas_gugatan/" . $this->hash->encode($berkas->id) . "/ekspedisi") ?>"
+                hx-post="<?= base_url("/berkas_gugatan/" . App\Libraries\Hashid::encode($berkas->id) . "/ekspedisi") ?>"
                 hx-target="#post-result">
                 <input type="hidden" name="berkas_type" value="<?= class_basename($berkas) ?>">
                 <div class="modal-body">

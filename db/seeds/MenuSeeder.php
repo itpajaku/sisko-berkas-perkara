@@ -104,7 +104,23 @@ class MenuSeeder extends AbstractSeed
                 "is_sub" => false,
                 "link" => "/pengaturan/akun",
                 "icon" => "ti ti-user"
-            ]
+            ],
+            [
+                "id" => 12,
+                'title' => 'Sinkron Berkas',
+                "section_id" => 5,
+                "is_sub" => false,
+                "link" => "/sinkron/berkas",
+                "icon" => "ti ti-cloud-download"
+            ],
+            [
+                "id" => 14,
+                'title' => 'Sinkron Akta',
+                "section_id" => 5,
+                "is_sub" => false,
+                "link" => "/sinkron/akta",
+                "icon" => "ti ti-cloud-download"
+            ],
         ])->saveData();
     }
 }

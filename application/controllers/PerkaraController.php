@@ -1,5 +1,6 @@
 <?php
 
+use App\Libraries\Hashid;
 use App\Libraries\MethodFilter;
 use App\Libraries\RequestBody;
 use App\Models\Arsip;
@@ -16,7 +17,7 @@ class PerkaraController extends APP_Controller
     try {
       $berkasClass = $this->modelNamespace . $this->encryption->decrypt(RequestBody::post("en_class_name"));
 
-      $berkas = $berkasClass::findOrFail($this->hash->decode($hash_id)[0]);
+      $berkas = $berkasClass::findOrFail(Hashid::singleDecode($hash_id));
 
       $berkas->update([
         "status" => false,
@@ -53,7 +54,7 @@ class PerkaraController extends APP_Controller
     try {
       $berkasClass = $this->modelNamespace . $this->encryption->decrypt(RequestBody::post("en_class_name"));
 
-      $berkas = $berkasClass::findOrFail($this->hash->decode($hash_id)[0]);
+      $berkas = $berkasClass::findOrFail(Hashid::singleDecode($hash_id));
       $arsip = Arsip::where("perkara_id", $berkas->perkara_id)->first();
       if (!$arsip) {
         throw new Exception("Data arsip digital tidak ditemukan di sipp", 1);

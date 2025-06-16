@@ -117,7 +117,11 @@
                                 <div class="col-md-8">
                                     <p>
                                         <?= $akta->status ? "Diarsipkan" : "Belum Diarsipkan" ?> |
-                                        <?php if ($akta->status) {
+                                        <?php
+
+                                        use App\Libraries\Hashid;
+
+                                        if ($akta->status) {
                                             echo App\Libraries\Templ::component("akta_cerai/unlink_akta_ke_sipp", [
                                                 "berkas" => $akta,
                                             ]);
@@ -205,7 +209,7 @@
                                                     <a
                                                         class="text-danger"
                                                         href="javascript:void(0)"
-                                                        hx-delete="<?= base_url("/berkas_gugatan/" . $this->hash->encode($akta->id) . "/ekspedisi") ?>"
+                                                        hx-delete="<?= base_url("/berkas_gugatan/" . Hashid::encode($akta->id) . "/ekspedisi") ?>"
                                                         hx-confirm="Data yang dihapus tidak bisa dikembalikan."
                                                         hx-vals='<?= json_encode([
                                                                         "save_point" => $ekspedisi->save_point,
@@ -552,7 +556,7 @@
             </div>
             <div class="modal-body">
                 <form
-                    hx-post="<?= base_url("/berkas_permohonan/" . $this->hash->encode($akta->id) . "/ekspedisi") ?>"
+                    hx-post="<?= base_url("/berkas_permohonan/" . App\Libraries\Hashid::encode($akta->id) . "/ekspedisi") ?>"
                     hx-target="#post-result">
                     <input type="hidden" name="berkas_type" value="<?= class_basename($akta) ?>">
                     <div class="modal-body">

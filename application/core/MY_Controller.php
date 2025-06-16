@@ -20,7 +20,6 @@ class APP_Controller extends CI_Controller
 {
 	public Eloquent $eloquent;
 	public Sysconf $sysconf;
-	public Hashids $hash;
 	public MY_Loader $load;
 	public CI_Input $input;
 	public CI_Form_validation $form_validation;
@@ -39,8 +38,6 @@ class APP_Controller extends CI_Controller
 
 		\Carbon\Carbon::setLocale("id");
 
-
-		$this->hash = new Hashids();
 		AuthData::authenticatedPass();
 		$this->userdata = AuthData::getUserData();
 	}

@@ -29,7 +29,7 @@ final class CreateTableBerkasPermohonan extends AbstractMigration
         $table->addColumn("majelis_hakim", "string");
         $table->addColumn("panitera", "string");
         $table->addColumn("jurusita", "string");
-        $table->addColumn("tanggal_putusan", "string");
+        $table->addColumn("tanggal_putusan", "date");
         $table->addColumn("keterangan", "text");
         $table->addColumn("status", "boolean", ["default" => false]);
         $table->addColumn("tanggal_diterima", "date", ["null" => true]);

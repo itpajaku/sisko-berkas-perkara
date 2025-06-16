@@ -29,4 +29,9 @@ class Perkara extends Model
   {
     return $this->hasOne(Arsip::class, "perkara_id", "perkara_id");
   }
+
+  public function perkara_akta_cerai()
+  {
+    return $this->hasOne(PerkaraAktaCerai::class, "perkara_id", "perkara_id");
+  }
 }

@@ -22,6 +22,7 @@ use App\Libraries\AuthData;
   <link rel="stylesheet" href="/assets/libs/material_datepicker/material.datepicker.css" />
 
   <script src="/assets/js/htmx.min.js"></script>
+  <script src="/assets/js/htmx.sse.js"></script>
 </head>
 
 <body>
@@ -174,6 +175,18 @@ use App\Libraries\AuthData;
         console.error("Kesalahan pada toast : ", error);
       }
     })
+
+    let sseSource;
+
+    document.addEventListener("sse:connect", function(evt) {
+      sseSource = evt.detail.source;
+    });
+
+    window.addEventListener("beforeunload", () => {
+      if (sseSource) {
+        sseSource.close();
+      }
+    });
   </script>
 </body>
 

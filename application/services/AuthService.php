@@ -6,16 +6,9 @@ use App\Libraries\Eloquent;
 
 class AuthService
 {
-  private Eloquent $eloquent;
-
-  public function __construct(Eloquent $eloquent)
-  {
-    $this->eloquent = $eloquent;
-  }
-
   public function getProfileData($user): object
   {
-    $sipp =  $this->eloquent->capsule->connection("sipp");
+    $sipp =  Eloquent::get_instance()->connection("sipp");
     $profile = $sipp->table('sys_users')
       ->leftJoin('sys_user_group', 'sys_users.userid', '=', 'sys_user_group.userid',)
       ->leftJoin('sys_groups', 'sys_user_group.groupid', '=', 'sys_groups.groupid')

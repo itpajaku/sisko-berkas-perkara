@@ -13,6 +13,8 @@ $route['meja_3'] = 'meja_3/Dashboard/index';
 $route['meja_3/dashboard'] = 'meja_3/Dashboard/index';
 $route['meja_3/berkas_gugatan/register'] = 'meja_3/Berkas_gugatan/index';
 
+$route['admin'] = 'admin/Dashboard/index';
+
 $route['berkas_gugatan'] = 'BerkasGugatanController/index';
 $route['berkas_gugatan/register'] = 'BerkasGugatanController/daftar_register';
 $route['berkas_gugatan/create'] = 'BerkasGugatanController/add';
@@ -87,6 +89,14 @@ $route['pengaturan/akun/(:any)/menu_section/(:any)']['DELETE'] = 'PengaturanCont
 $route['pengaturan/akun/(:any)/form_menu'] = 'PengaturanController/fetch_menu_form/$1';
 $route['pengaturan/akun/(:any)/menu_section/(:any)/form_menu'] = 'PengaturanController/fetch_menu_section_form/$1/$2';
 
+$route['sinkron'] = 'SinkronController/berkas_gugatan_page';
+$route['sinkron/berkas']['GET'] = 'SinkronController/berkas_page';
+$route['sinkron/berkas']['POST'] = 'SinkronController/berkas_action';
+$route['sinkron/migrate_berkas_gugatan'] = 'SinkronController/migrate_berkas_gugatan';
+$route['sinkron/permohonan'] = 'SinkronController/berkas_permohonan_page';
+$route['sinkron/akta']['GET'] = 'SinkronController/akta_page';
+$route['sinkron/akta']['POST'] = 'SinkronController/akta_action';
+$route['sinkron/stream_log'] = 'SinkronController/stream_log';
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes
