@@ -1,9 +1,10 @@
 <?php
 
 use App\Libraries\AuthData;
+use App\Libraries\Templ;
 ?>
 <div class="container-fluid">
-  <?= App\Libraries\Templ::component("layouts/page_header", [
+  <?= Templ::component("layouts/page_header", [
     "page_name" => "Dashboard",
     "breadcrumbs" => [
       [
@@ -12,73 +13,10 @@ use App\Libraries\AuthData;
       ],
     ]
   ]) ?>
-  <div class="row">
-    <div class="col-lg-2 col-md-4 col-sm-6">
-      <div class="card text-start">
-        <img src="/assets/iamges/icons/coaching.png" alt="Title" />
-        <div class="card-body">
-          <h4 class="card-title">Title</h4>
-          <p class="card-text">Body</p>
-        </div>
-      </div>
-
-    </div>
-  </div>
+  <?= Templ::component("meja_3/info_persentase", $infolist) ?>
   <div class="row">
     <div class="col-lg-8 d-flex align-items-stretch">
-      <div class="card w-100">
-        <div class="card-body">
-          <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-            <div class="mb-3 mb-sm-0">
-              <h4 class="card-title fw-semibold">Revenue Updates</h4>
-              <p class="card-subtitle mb-0">Overview of Profit</p>
-            </div>
-            <select class="form-select w-auto">
-              <option value="1">March 2024</option>
-              <option value="2">April 2024</option>
-              <option value="3">May 2024</option>
-              <option value="4">June 2024</option>
-            </select>
-          </div>
-          <div class="row align-items-center">
-            <div class="col-md-8">
-              <div id="chart" class="mx-n6"></div>
-            </div>
-            <div class="col-md-4">
-              <div class="hstack mb-4 pb-1">
-                <div class="p-8 bg-primary-subtle rounded-1 me-3 d-flex align-items-center justify-content-center">
-                  <i class="ti ti-grid-dots text-primary fs-6"></i>
-                </div>
-                <div>
-                  <h4 class="mb-0 fs-7 fw-semibold">$63,489.50</h4>
-                  <p class="fs-3 mb-0">Total Earnings</p>
-                </div>
-              </div>
-              <div>
-                <div class="d-flex align-items-baseline mb-4">
-                  <span class="round-8 text-bg-primary rounded-circle me-6"></span>
-                  <div>
-                    <p class="fs-3 mb-1">Earnings this month</p>
-                    <h6 class="fs-5 fw-semibold mb-0">$48,820</h6>
-                  </div>
-                </div>
-                <div class="d-flex align-items-baseline mb-4 pb-1">
-                  <span class="round-8 text-bg-secondary rounded-circle me-6"></span>
-                  <div>
-                    <p class="fs-3 mb-1">Expense this month</p>
-                    <h6 class="fs-5 fw-semibold mb-0">$26,498</h6>
-                  </div>
-                </div>
-                <div>
-                  <button class="btn btn-primary w-100">
-                    View Full Report
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <?= Templ::component("components/berkas_bar") ?>
     </div>
     <div class="col-lg-4 d-flex align-items-stretch flex-column">
       <!-- Yearly Breakup -->
@@ -87,7 +25,7 @@ use App\Libraries\AuthData;
           <div class="row align-items-center">
             <div class="col-8">
               <h4 class="card-title mb-9 fw-semibold">
-                Yearly Breakup
+                Akta Belum Diambil Pihak
               </h4>
               <h4 class="fw-semibold mb-3">$36,358</h4>
               <div class="d-flex align-items-center mb-3">
@@ -121,10 +59,10 @@ use App\Libraries\AuthData;
         <div class="card-body">
           <div class="row align-items-start">
             <div class="col-8">
-              <h4 class="card-title mb-9 fw-semibold">
-                Monthly Earnings
+              <h4 class="card-title fw-semibold">
+                Putus Hari Ini
               </h4>
-              <h4 class="fw-semibold mb-3">$6,820</h4>
+              <h4 class="fw-semibold text-success">$6,820</h4>
               <div class="d-flex align-items-center pb-1">
                 <span class="me-2 rounded-circle bg-danger-subtle round-20 d-flex align-items-center justify-content-center">
                   <i class="ti ti-arrow-down-right text-danger"></i>
@@ -135,8 +73,8 @@ use App\Libraries\AuthData;
             </div>
             <div class="col-4">
               <div class="d-flex justify-content-end">
-                <div class="text-white text-bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
-                  <i class="ti ti-currency-dollar fs-6"></i>
+                <div class="text-white text-bg-success rounded-circle p-6 d-flex align-items-center justify-content-center">
+                  <i class="ti ti-hammer fs-6"></i>
                 </div>
               </div>
             </div>
@@ -146,41 +84,7 @@ use App\Libraries\AuthData;
       </div>
     </div>
     <div class="col-lg-4 d-flex align-items-stretch">
-      <div class="card w-100">
-        <div class="card-body">
-          <div>
-            <h4 class="card-title fw-semibold mb-1">
-              Employee Salary
-            </h4>
-            <p class="card-subtitle">Every month</p>
-            <div id="salary" class="mb-7 pb-8 mx-n4"></div>
-            <div class="d-flex align-items-center justify-content-between">
-              <div class="d-flex align-items-center">
-                <div class="bg-primary-subtle rounded me-8 p-8 d-flex align-items-center justify-content-center">
-                  <i class="ti ti-grid-dots text-primary fs-6"></i>
-                </div>
-                <div>
-                  <p class="fs-3 mb-0 fw-normal">Salary</p>
-                  <h6 class="fw-semibold text-dark fs-4 mb-0">
-                    $36,358
-                  </h6>
-                </div>
-              </div>
-              <div class="d-flex align-items-center">
-                <div class="text-bg-light rounded me-8 p-8 d-flex align-items-center justify-content-center">
-                  <i class="ti ti-grid-dots text-muted fs-6"></i>
-                </div>
-                <div>
-                  <p class="fs-3 mb-0 fw-normal">Profit</p>
-                  <h6 class="fw-semibold text-dark fs-4 mb-0">
-                    $5,296
-                  </h6>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <?= Templ::component("components/arsip_bar") ?>
     </div>
     <div class="col-lg-4 d-flex align-items-stretch flex-column">
       <div class="row">
@@ -516,5 +420,4 @@ use App\Libraries\AuthData;
       </div>
     </div>
   </div>
-</div>
 </div>

@@ -111,6 +111,7 @@ use App\Libraries\AuthData;
   <script src="/assets/libs/material_datepicker/material.datepicker.js"></script>
   <script src="/assets/libs/swal2/swal2.js"></script>
   <script src="/assets/libs/toastr/toastr.js"></script>
+  <script src="/assets/libs/apexcharts/dist/apexcharts.min.js"></script>
 
   <script>
     $(document).on("htmx:confirm", function(e) {

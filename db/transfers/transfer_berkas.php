@@ -91,7 +91,7 @@ function import_berkas_gugatan($perkara)
     "panitera" => str_replace("Panitera Pengganti: ", "", $perkara->perkara_penetapan->panitera_pengganti_text),
     "jurusita" => appendJurusita($perkara),
     "tanggal_putusan" => $perkara->perkara_putusan->tanggal_putusan,
-    "tanggal_bht" => $perkara->tanggal_bht,
+    "tanggal_bht" => $perkara->perkara_putusan->tanggal_bht,
     "status" => $perkara->arsip ? 1 : 0,
     "tanggal_terima" => $perkara->arsip ? date("Y-m-d") : null,
     "tanggal_arsip" => $perkara->arsip ? $perkara->arsip->tanggal_masuk_arsip : null,

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BerkasPermohonan extends Model
 {
+  protected $connection = "default";
   protected $table = "berkas_permohonan";
   protected $guarded = [];
 

@@ -14,6 +14,7 @@ $route['meja_3/dashboard'] = 'meja_3/DashboardController/index';
 $route['meja_3/berkas_gugatan/register'] = 'meja_3/Berkas_gugatan/index';
 
 $route['admin'] = 'admin/Dashboard/index';
+$route['dashboard'] = 'meja_3/DashboardController/index';
 
 $route['berkas_gugatan'] = 'BerkasGugatanController/index';
 $route['berkas_gugatan/register'] = 'BerkasGugatanController/daftar_register';
