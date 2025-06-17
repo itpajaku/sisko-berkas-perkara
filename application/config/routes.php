@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
+$route['assets'] = "assets";
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = TRUE;
@@ -9,8 +9,8 @@ $route['auth'] = 'auth/Auth/index';
 $route['login'] = 'auth/Auth/login';
 $route['logout'] = 'auth/Auth/logout';
 
-$route['meja_3'] = 'meja_3/Dashboard/index';
-$route['meja_3/dashboard'] = 'meja_3/Dashboard/index';
+$route['meja_3'] = 'meja_3/DashboardController/index';
+$route['meja_3/dashboard'] = 'meja_3/DashboardController/index';
 $route['meja_3/berkas_gugatan/register'] = 'meja_3/Berkas_gugatan/index';
 
 $route['admin'] = 'admin/Dashboard/index';

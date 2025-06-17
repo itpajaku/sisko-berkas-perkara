@@ -107,10 +107,10 @@ What to do
 10. Transfer Data
 - [&check;] Transfer data berkas gugatan
 - [&check;] Transfer data berkas permohonan
-- [] Transfer data berkas akta
-- [] SSE Log
-- [] SSE Progress
-- [] Actiob log
+- [&checkl;] Transfer data berkas akta
+- [&check;] SSE Log
+- [&check;] SSE Progress
+- [&check;] Action log
 ---
 FIX BUG
 - [&check;] Fix bug majelis field contain br
