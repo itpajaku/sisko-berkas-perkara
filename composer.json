@@ -28,7 +28,7 @@
 			"App\\Libraries\\": "application/libraries",
 			"App\\Traits\\": "application/traits",
 			"App\\Services\\": "application/services",
-			"App\\Models\\": "application/Models"
+			"App\\Models\\": "application/models"
 		}
 	},
 	"config": {
