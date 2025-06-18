@@ -18,16 +18,28 @@ class PosisiEkspedisiSeeder extends AbstractSeed
         $table = $this->table("posisi_ekspedisi");
         $table->insert([
             [
-                "posisi" => "Meja 3",
+                "posisi" => "Meja 3 Gugatan",
                 "keterangan" => "Meja 3 Gugatan"
             ],
             [
-                "posisi" => "Meja 2",
+                "posisi" => "Meja 2 Gugatan",
                 "keterangan" => "Meja 2 Gugatan"
             ],
             [
-                "posisi" => "Meja 1",
+                "posisi" => "Meja 1 Gugatan",
                 "keterangan" => "Meja 1 Gugatan"
+            ],
+            [
+                "posisi" => "Panmud Gugatan",
+                "keterangan" => "Panitera Muda Gugatan"
+            ],
+            [
+                "posisi" => "Panmud Permohonan",
+                "keterangan" => "Panitera Muda Permohonan"
+            ],
+            [
+                "posisi" => "Panmud Hukum",
+                "keterangan" => "Panitera Muda Hukum"
             ],
             [
                 "posisi" => "Panitera Pengganti",

@@ -1,4 +1,7 @@
 <?php
+
+use App\Libraries\RequestBody;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class BerkasGugatanDataTable extends CI_Model
@@ -21,10 +24,15 @@ class BerkasGugatanDataTable extends CI_Model
     );
     $this->db->from($this->table);
     if (isset($_GET["filter"])) {
-      if (isset($_GET["type"])) {
+      if ($_GET["type"] == "range") {
         $start = $_GET["start"];
         $end = $_GET["end"];
         $this->db->where("created_at >= '$start' AND created_at <= '$end'");
+      }
+
+      if ($_GET["type"] == "year") {
+        $year = RequestBody::get()->year;
+        $this->db->where("YEAR(created_at) = '$year'");
       }
     }
 

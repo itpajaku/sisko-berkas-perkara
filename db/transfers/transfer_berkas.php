@@ -35,6 +35,7 @@ use App\Models\BerkasEkspedisi;
 use App\Models\BerkasGugatan;
 use App\Models\BerkasPermohonan;
 use App\Models\Perkara;
+use App\Models\PosisiEkspedisi;
 use Illuminate\Support\Str;
 
 
@@ -44,6 +45,8 @@ $eloquent->boot();
 BerkasGugatan::truncate();
 BerkasPermohonan::truncate();
 BerkasEkspedisi::truncate();
+
+$ekspedisiArsip = PosisiEkspedisi::where("posisi", "Arsip")->first();
 
 $perkaralist = Perkara::with(['arsip', 'perkara_penetapan', 'perkara_jurusita'])
   ->whereHas('perkara_putusan', function ($q) use ($parsed) {
@@ -61,9 +64,9 @@ $perkaralist = Perkara::with(['arsip', 'perkara_penetapan', 'perkara_jurusita'])
 foreach ($perkaralist as $i => $perkara) {
   try {
     if (Str::contains($perkara->nomor_perkara, "Pdt.G")) {
-      $nomor_perkara = import_berkas_gugatan($perkara);
+      $nomor_perkara = import_berkas_gugatan($perkara, $ekspedisiArsip);
     } else if (Str::contains($perkara->nomor_perkara, "Pdt.P")) {
-      $nomor_perkara = import_berkas_permohonan($perkara, $i);
+      $nomor_perkara = import_berkas_permohonan($perkara, $ekspedisiArsip);
     } else {
       $nomor_perkara = null;
     }
@@ -79,7 +82,7 @@ foreach ($perkaralist as $i => $perkara) {
 }
 appendLog("[SELESAI] Import selesai dengan jumlah total " . $perkaralist->count() . " data");
 
-function import_berkas_gugatan($perkara)
+function import_berkas_gugatan($perkara, $ekspedisiArsip)
 {
   $berkas = BerkasGugatan::create([
     "perkara_id" => $perkara->perkara_id,
@@ -96,23 +99,27 @@ function import_berkas_gugatan($perkara)
     "tanggal_terima" => $perkara->arsip ? date("Y-m-d") : null,
     "tanggal_arsip" => $perkara->arsip ? $perkara->arsip->tanggal_masuk_arsip : null,
     "keterangan" => "Imported by System",
+    "created_at" => date("Y-m-d H:i:s", strtotime($perkara->perkara_putusan->tanggal_putusan))
   ]);
 
   $berkas->ekspedisi()->attach(1, [
     "save_time" => date("Y-m-d H:i:s"),
-    "created_by" => "System"
+    "created_by" => "System",
+    "status" => $perkara->arsip ? false : true
   ]);
 
   if ($perkara->arsip) {
-    $berkas->ekspedisi()->attach(6, [
+
+    $berkas->ekspedisi()->attach($ekspedisiArsip->id, [
       "save_time" => date("Y-m-d H:i:s"),
-      "created_by" => "System"
+      "created_by" => "System",
+      "status" => true
     ]);
   }
   return $perkara->nomor_perkara;
 }
 
-function import_berkas_permohonan($perkara, $index)
+function import_berkas_permohonan($perkara, $ekspedisiArsip)
 {
   $berkas = BerkasPermohonan::create([
     "perkara_id" => $perkara->perkara_id,
@@ -128,17 +135,21 @@ function import_berkas_permohonan($perkara, $index)
     "tanggal_diterima" => $perkara->arsip ? date("Y-m-d") : null,
     "tanggal_arsip" => $perkara->arsip ? $perkara->arsip->tanggal_masuk_arsip : null,
     "keterangan" => "Imported by System",
+    "created_at" => date("Y-m-d H:i:s", strtotime($perkara->perkara_putusan->tanggal_putusan))
   ]);
 
   $berkas->ekspedisi()->attach(1, [
     "save_time" => date("Y-m-d H:i:s"),
-    "created_by" => "System"
+    "created_by" => "System",
+    "status" => $perkara->arsip ? false : true
   ]);
 
   if ($perkara->arsip) {
-    $berkas->ekspedisi()->attach(6, [
+
+    $berkas->ekspedisi()->attach($ekspedisiArsip->id, [
       "save_time" => date("Y-m-d H:i:s"),
-      "created_by" => "System"
+      "created_by" => "System",
+      "status" => true
     ]);
   }
 

@@ -67,7 +67,8 @@ class AktaCeraiService
 
             $akta->ekspedisi()->attach(RequestBody::post("posisi_berkas"), [
                 "save_time" => date("Y-m-d H:i:s"),
-                "created_by" => AuthData::getUserData()->username
+                "created_by" => AuthData::getUserData()->username,
+                "status" => true
             ]);
 
             $eloquent->connection("default")->commit();

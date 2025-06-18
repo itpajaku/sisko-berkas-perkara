@@ -217,9 +217,13 @@ class BerkasGugatanController extends APP_Controller
 			$berkasId = Hashid::singleDecode($berkas_id);
 
 			$berkas = BerkasGugatan::findOrFail($berkasId);
+			if ($berkas->ekspedisi) {
+				$berkas->ekspedisi()->update(["status" => false]);
+			}
 			$berkas->ekspedisi()->attach($this->input->post("posisi_ekspedisi"), [
 				"save_time" => date("Y-m-d H:i:s"),
-				"created_by" => $this->userdata->username
+				"created_by" => $this->userdata->username,
+				"status" => true
 			]);
 			$this->output->set_header("HX-Refresh: true")->set_output("Berhasil menambahkan ekspedisi");
 		} catch (\Throwable $th) {
@@ -271,13 +275,14 @@ class BerkasGugatanController extends APP_Controller
 			}
 			$akta->tanggal_bht = RequestBody::post("tanggal_bht");
 			$akta->save();
-			$posisiArsip = PosisiEkspedisi::where("posisi", "Arsip")->first();
-			if ($posisiArsip) {
-				$akta->ekspedisi()->attach($posisiArsip->id, [
-					"save_time" => date("Y-m-d H:i:s"),
-					"created_by" => $this->userdata->username
-				]);
-			}
+			// $posisiArsip = PosisiEkspedisi::where("posisi", "Arsip")->first();
+			// if ($posisiArsip) {
+			// 	$akta->ekspedisi()->attach($posisiArsip->id, [
+			// 		"save_time" => date("Y-m-d H:i:s"),
+			// 		"created_by" => $this->userdata->username,
+			// 		"status" => true
+			// 	]);
+			// }
 			$this->session->set_flashdata("success_alert", $this->load->view("components/success_alert", ["message" => "BHT berhasil disimpan"], true));
 			$this->output
 				->set_header("HX-Redirect: /berkas_gugatan/register")

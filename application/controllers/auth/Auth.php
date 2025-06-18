@@ -83,9 +83,9 @@ class Auth extends CI_Controller
         throw new Exception("Akun anda tidak ditemukan");
       }
 
-      if (!isset($this->redirectPage[$profile->groupid])) {
-        throw new Exception("Akun anda tidak bisa digunakan");
-      }
+      // if (!isset($this->redirectPage[$profile->groupid])) {
+      //   throw new Exception("Akun anda tidak bisa digunakan");
+      // }
 
       $this->session->set_userdata("app_user_data", $profile);
 
@@ -98,7 +98,8 @@ class Auth extends CI_Controller
 
       $this->session->unset_userdata("http_auth_redirect");
       $this->output
-        ->set_header("HX-Redirect: " . $redirectUrl)
+        // ->set_header("HX-Redirect: " . $redirectUrl)
+        ->set_header("HX-Redirect: " . "/dashboard")
         ->set_content_type("text/html")
         ->set_output(Templ::component("auth/auth_alert", [
           "message" => "Login Berhasil, Anda akan diarahkan sebentar lagi."

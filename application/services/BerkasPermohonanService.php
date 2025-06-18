@@ -50,6 +50,11 @@ class BerkasPermohonanService
         $query->whereDate($filter, ">=", RequestBody::get()->start);
         $query->whereDate($filter, "<=", RequestBody::get()->end);
       }
+
+      if (RequestBody::get()->type == "year") {
+        $year = RequestBody::get()->year;
+        $query->whereYear("created_at", $year);
+      }
     }
 
     $total = BerkasPermohonan::selectRaw("COUNT(*) as total")->first()->total;

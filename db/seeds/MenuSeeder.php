@@ -91,7 +91,7 @@ class MenuSeeder extends AbstractSeed
             ],
             [
                 "id" => 10,
-                'title' => 'Akses Menu',
+                'title' => 'Pengaturan Ekspedisi',
                 "section_id" => 5,
                 "is_sub" => false,
                 "link" => "/pengaturan/akses_menu",

@@ -33,6 +33,7 @@ use App\Libraries\Eloquent;
 use App\Libraries\Hashid;
 use App\Models\BerkasAkta;
 use App\Models\Perkara;
+use App\Models\PosisiEkspedisi;
 use Illuminate\Support\Str;
 
 
@@ -41,6 +42,7 @@ $eloquent->boot();
 
 BerkasAkta::truncate();
 // BerkasEkspedisi::truncate();
+$ekspedisiArsip = PosisiEkspedisi::where("posisi", "Arsip")->first();
 
 $perkaralist = Perkara::with(['perkara_putusan', 'perkara_penetapan', 'arsip'])->whereHas('perkara_akta_cerai', function ($q) use ($parsed) {
   if ($parsed['opsi'] == 1) {
@@ -52,7 +54,7 @@ $perkaralist = Perkara::with(['perkara_putusan', 'perkara_penetapan', 'arsip'])-
 
 foreach ($perkaralist as $i => $perkara) {
   try {
-    $nomor_perkara = import_akta($perkara);
+    $nomor_perkara = import_akta($perkara, $ekspedisiArsip);
 
     appendLog("[SUKSES] Perkara Nomor $nomor_perkara berhasil diimport");
   } catch (\Throwable $th) {
@@ -61,7 +63,7 @@ foreach ($perkaralist as $i => $perkara) {
 }
 appendLog("[SELESAI] Import selesai dengan jumlah total " . $perkaralist->count() . " data");
 
-function import_akta($perkara)
+function import_akta($perkara, $ekspedisiArsip)
 {
   $berkas = BerkasAkta::create([
     "nomor_perkara" => $perkara->nomor_perkara,
@@ -78,17 +80,21 @@ function import_akta($perkara)
     "tanggal_bht" => $perkara->perkara_putusan->tanggal_bht,
     "tanggal_akta" => $perkara->perkara_akta_cerai->tgl_akta_cerai,
     "keterangan" => "Imported by System",
+    "created_at" => date("Y-m-d H:i:s", strtotime($perkara->perkara_putusan->tanggal_putusan))
   ]);
 
   $berkas->ekspedisi()->attach(1, [
     "save_time" => date("Y-m-d H:i:s"),
-    "created_by" => "System"
+    "created_by" => "System",
+    "status" => $perkara->arsip ? false : true
   ]);
 
   if ($perkara->arsip) {
-    $berkas->ekspedisi()->attach(6, [
+
+    $berkas->ekspedisi()->attach($ekspedisiArsip->id, [
       "save_time" => date("Y-m-d H:i:s"),
-      "created_by" => "System"
+      "created_by" => "System",
+      "status" => true
     ]);
   }
 

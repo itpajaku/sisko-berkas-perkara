@@ -122,6 +122,67 @@ class AccessMenuSeeder extends AbstractSeed
                 "menu_id" => 11,
             ],
         ];
+
+        $aksesPanmudHukum = [
+            [
+                'group_id' => 430,
+                "menu_id" => 1,
+            ],
+            [
+                'group_id' => 430,
+                "menu_id" => 2,
+            ],
+            [
+                'group_id' => 430,
+                "menu_id" => 3,
+            ],
+            [
+                'group_id' => 430,
+                "menu_id" => 4,
+            ],
+            [
+                'group_id' => 430,
+                "menu_id" => 5,
+            ],
+            [
+                'group_id' => 430,
+                "menu_id" => 5,
+            ],
+            [
+                'group_id' => 430,
+                "menu_id" => 6,
+            ],
+            [
+                'group_id' => 430,
+                "menu_id" => 10,
+            ],
+        ];
+
+        $aksesPanmudGugatan = [
+            [
+                'group_id' => 1000,
+                'menu_id' => 1
+            ],
+            [
+                'group_id' => 1000,
+                'menu_id' => 7
+            ],
+            [
+                'group_id' => 1000,
+                'menu_id' => 8
+            ],
+            [
+                'group_id' => 1000,
+                'menu_id' => 9
+            ],
+        ];
+
+        $aksesPanmudPermohonan = [
+            [
+                'group_id' => 10110,
+                'menu_id' => 1
+            ]
+        ];
         $table->insert(array_merge(
             $aksesAdmin,
             $aksesMeja3Gugatan

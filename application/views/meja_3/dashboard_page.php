@@ -20,40 +20,7 @@ use App\Libraries\Templ;
     </div>
     <div class="col-lg-4 d-flex align-items-stretch flex-column">
       <!-- Yearly Breakup -->
-      <div class="card w-100">
-        <div class="card-body">
-          <div class="row align-items-center">
-            <div class="col-8">
-              <h4 class="card-title mb-9 fw-semibold">
-                Akta Belum Diambil Pihak
-              </h4>
-              <h4 class="fw-semibold mb-3">$36,358</h4>
-              <div class="d-flex align-items-center mb-3">
-                <span class="me-1 rounded-circle bg-success-subtle round-20 d-flex align-items-center justify-content-center">
-                  <i class="ti ti-arrow-up-left text-success"></i>
-                </span>
-                <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                <p class="fs-3 mb-0">last year</p>
-              </div>
-              <div class="d-flex align-items-center">
-                <div class="me-4">
-                  <span class="round-8 text-bg-primary rounded-circle me-2 d-inline-block"></span>
-                  <span class="fs-2">2024</span>
-                </div>
-                <div>
-                  <span class="round-8 bg-primary-subtle rounded-circle me-2 d-inline-block"></span>
-                  <span class="fs-2">2024</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="d-flex justify-content-center">
-                <div id="breakup"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <?= Templ::component("components/akta_belum_ambil") ?>
       <!-- Monthly Earnings -->
       <div class="card w-100">
         <div class="card-body">

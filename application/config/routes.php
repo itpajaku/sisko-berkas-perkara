@@ -9,12 +9,7 @@ $route['auth'] = 'auth/Auth/index';
 $route['login'] = 'auth/Auth/login';
 $route['logout'] = 'auth/Auth/logout';
 
-$route['meja_3'] = 'meja_3/DashboardController/index';
-$route['meja_3/dashboard'] = 'meja_3/DashboardController/index';
-$route['meja_3/berkas_gugatan/register'] = 'meja_3/Berkas_gugatan/index';
-
-$route['admin'] = 'admin/Dashboard/index';
-$route['dashboard'] = 'meja_3/DashboardController/index';
+$route['dashboard'] = 'DashboardController/index';
 
 $route['berkas_gugatan'] = 'BerkasGugatanController/index';
 $route['berkas_gugatan/register'] = 'BerkasGugatanController/daftar_register';
@@ -98,6 +93,8 @@ $route['sinkron/permohonan'] = 'SinkronController/berkas_permohonan_page';
 $route['sinkron/akta']['GET'] = 'SinkronController/akta_page';
 $route['sinkron/akta']['POST'] = 'SinkronController/akta_action';
 $route['sinkron/stream_log'] = 'SinkronController/stream_log';
+
+$route['widget/(:any)'] = "WidgetController/$1";
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes

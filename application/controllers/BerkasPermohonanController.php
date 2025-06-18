@@ -31,7 +31,7 @@ class BerkasPermohonanController extends APP_Controller
   {
     MethodFilter::must("get");
     $filter = RequestBody::get()->filter ?? null;
-    if ($filter) {
+    if ($filter && RequestBody::get()->type == "range") {
       if (RequestBody::get()->end < RequestBody::get()->start) {
         $this->session->set_flashdata(
           "error_alert",

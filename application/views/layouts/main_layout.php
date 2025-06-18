@@ -14,15 +14,16 @@ use App\Libraries\AuthData;
   <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('favicon/favicon-16x16.png') ?>">
   <link rel="manifest" href="<?= base_url('favicon/site.webmanifest') ?>">
 
-  <link rel="stylesheet" href="/assets/css/styles.min.css" />
-  <link rel="stylesheet" href="/assets/libs/datatable/datatable.bs5.css" />
-  <link rel="stylesheet" href="/assets/css/bs.datepicker.css" />
-  <link rel="stylesheet" href="/assets/css/addons.css?v=2" />
-  <link rel="stylesheet" href="/assets/libs/swal2/swal2.css" />
-  <link rel="stylesheet" href="/assets/libs/material_datepicker/material.datepicker.css" />
+  <link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.min.css" />
+  <link rel="stylesheet" href="<?= base_url() ?>assets/libs/datatable/datatable.bs5.css" />
+  <link rel="stylesheet" href="<?= base_url() ?>assets/css/bs.datepicker.css" />
+  <link rel="stylesheet" href="<?= base_url() ?>assets/css/addons.css?v=2" />
+  <link rel="stylesheet" href="<?= base_url() ?>assets/libs/swal2/swal2.css" />
+  <link rel="stylesheet" href="<?= base_url() ?>assets/libs/material_datepicker/material.datepicker.css" />
 
-  <script src="/assets/js/htmx.min.js"></script>
-  <script src="/assets/js/htmx.sse.js"></script>
+  <script src="<?= base_url() ?>assets/js/htmx.min.js"></script>
+  <script src="<?= base_url() ?>assets/js/htmx.sse.js"></script>
+  <script src="<?= base_url() ?>assets/libs/apexcharts/dist/apexcharts.min.js"></script>
 </head>
 
 <body>
@@ -97,98 +98,24 @@ use App\Libraries\AuthData;
       <?= $page_content ?>
     </div>
   </div>
-  <script src="/assets/libs/jquery/dist/jquery.min.js"></script>
-  <script src="/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/assets/js/sidebarmenu.js"></script>
-  <script src="/assets/js/app.min.js"></script>
-  <script src="/assets/libs/simplebar/dist/simplebar.js"></script>
-  <script src="/assets/libs/datatable/datatable.js"></script>
-  <script src="/assets/libs/datatable/datatable.bs5.js"></script>
-  <script src="/assets/js/bloodhound.min.js"></script>
-  <script src="/assets/js/typeahead.jquery.js"></script>
-  <script src="/assets/js/moment.min.js"></script>
-  <script src="/assets/js/bs.datepicker.min.js"></script>
-  <script src="/assets/libs/material_datepicker/material.datepicker.js"></script>
-  <script src="/assets/libs/swal2/swal2.js"></script>
-  <script src="/assets/libs/toastr/toastr.js"></script>
-  <script src="/assets/libs/apexcharts/dist/apexcharts.min.js"></script>
-
-  <script>
-    $(document).on("htmx:confirm", function(e) {
-      if (!e.detail.question) return
-      e.preventDefault()
-
-      Swal.fire({
-        title: "Apa anda yakin?",
-        text: e.detail.question,
-        showCancelButton: true,
-        icon: "warning",
-        confirmButtonText: "Ya, Saya mengerti"
-      }).then(function(result) {
-        if (result.isConfirmed) {
-          e.detail.issueRequest(true);
-        }
-      })
-    })
-
-    $(document).ready(function() {
-      $(".datepicker").datepicker({
-        format: "yyyy-mm-dd",
-        autoclose: true,
-        todayHighlight: true,
-      });
-
-      $(".mt-datepicker").bootstrapMaterialDatePicker({
-        weekStart: 0,
-        time: false,
-        format: "YYYY-MM-DD"
-      });
-
-      htmx.on("htmx:beforeRequest", function() {
-        Swal.fire({
-          title: "Mohon Tunggu ... ",
-          didOpen: () => Swal.showLoading(),
-          allowOutsideClick: false,
-          showConfirmButton: false
-        })
-      })
-
-      htmx.on("htmx:afterRequest", function() {
-        Swal.close();
-      })
-    })
-
-    $(document).on("htmx:toastr", (evt) => {
-      const notifFunc = {
-        "info": toastr.info,
-        "error": toastr.error,
-        "success": toastr.success
-      }
-
-      try {
-        toast = notifFunc[evt.detail.level]
-        toast(evt.detail.message,
-          "Notifikasi", {
-            positionClass: "toastr toast-bottom-left",
-            containerId: "toast-bottom-left",
-          })
-      } catch (error) {
-        console.error("Kesalahan pada toast : ", error);
-      }
-    })
-
-    let sseSource;
-
-    document.addEventListener("sse:connect", function(evt) {
-      sseSource = evt.detail.source;
-    });
-
-    window.addEventListener("beforeunload", () => {
-      if (sseSource) {
-        sseSource.close();
-      }
-    });
-  </script>
+  <script src="<?= base_url() ?>assets/libs/jquery/dist/jquery.min.js"></script>
+  <script src="<?= base_url() ?>assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="<?= base_url() ?>assets/js/sidebarmenu.js"></script>
+  <script src="<?= base_url() ?>assets/js/app.min.js"></script>
+  <script src="<?= base_url() ?>assets/libs/simplebar/dist/simplebar.js"></script>
+  <script src="<?= base_url() ?>assets/libs/datatable/datatable.js"></script>
+  <script src="<?= base_url() ?>assets/libs/datatable/datatable.bs5.js"></script>
+  <script src="<?= base_url() ?>assets/js/bloodhound.min.js"></script>
+  <script src="<?= base_url() ?>assets/js/typeahead.jquery.js"></script>
+  <script src="<?= base_url() ?>assets/js/moment.min.js"></script>
+  <script src="<?= base_url() ?>assets/js/bs.datepicker.min.js"></script>
+  <script src="<?= base_url() ?>assets/libs/material_datepicker/material.datepicker.js"></script>
+  <script src="<?= base_url() ?>assets/libs/swal2/swal2.js"></script>
+  <script src="<?= base_url() ?>assets/libs/toastr/toastr.js"></script>
+  <?php if ($this->uri->segment(1) != "dashboard") { ?>
+    <script src="<?= base_url('assets/js/main.js') ?>"></script>
+  <?php } ?>
+  <script src="<?= base_url('assets/js/chart.init.js') ?>"></script>
 </body>
 
 </html>
