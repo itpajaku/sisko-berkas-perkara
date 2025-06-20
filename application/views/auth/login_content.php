@@ -29,6 +29,6 @@
   <button id="button_login" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign In</button>
   <div class="d-flex align-items-center justify-content-center">
     <p class="fs-3 mb-0 fw-bold">Copyrights to </p>
-    <a class="text-primary fw-bold ms-2" href="https://pa-jakartautara.go.id"><?= $this->sysconf->NamaPN ?></a>
+    <a class="text-primary fw-bold ms-2" href="javascript:void(0)"><?= $this->sysconf->NamaPN ?></a>
   </div>
 </form>
