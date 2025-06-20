@@ -22,6 +22,7 @@ RUN mkdir -p /var/www/html/application/logs \
 
 # Salin seluruh source code ke dalam container
 COPY . /var/www/html
+COPY .env /var/www/html/.env
 
 # Set permission
 RUN chown -R www-data:www-data /var/www/html \
