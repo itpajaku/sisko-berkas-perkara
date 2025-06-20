@@ -50,6 +50,8 @@ use App\Libraries\Templ;
         <div id="earning"></div>
       </div>
     </div>
+    <hr>
+    <div class="text-center">Featured Soon</div>
     <div class="col-lg-4 d-flex align-items-stretch">
       <?= Templ::component("components/arsip_bar") ?>
     </div>

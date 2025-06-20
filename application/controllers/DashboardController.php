@@ -23,42 +23,42 @@ class DashboardController extends APP_Controller
     MethodFilter::must("get");
     $data['infolist'] = [
       new MiniCard(
-        "Belum Pemberkasan",
+        "Berkas Perkasa Belum Diregis",
         "primary",
         $this->kelengkapan_berkas(),
         "goal.png",
         "/widget/detail_belum_berkas"
       ),
       new MiniCard(
-        "Berkas Belum PBT",
+        "Berkas Belum ada Tanggal PBT",
         "warning",
         $this->total_belum_pbt(),
         "coaching.png",
         "/widget/detail_belum_pbt"
       ),
       new MiniCard(
-        "Akta Belum Regis",
+        "Akta Belum Diregis",
         "danger",
         $this->total_belum_akta(),
         "homework.png",
         "/widget/detail_belum_akta"
       ),
       new MiniCard(
-        "Berkas Belum Arsip",
+        "Berkas Belum Masuk Arsip",
         "info",
         $this->total_belum_arsip(),
         "list.png",
         "/widget/detail_belum_arsip"
       ),
       new MiniCard(
-        "Berkas Belum BHT",
+        "Berkas Belum ada Tanggal BHT",
         "primary",
         $this->total_belum_bht(),
         "puzzle.png",
         "/widget/detail_belum_bht"
       ),
       new MiniCard(
-        "Akta Sudah Siap Terbit",
+        "BHT Namun belum terbit akta",
         "success",
         $this->total_akta_siap_terbit(),
         "growth.png",
@@ -105,13 +105,13 @@ class DashboardController extends APP_Controller
   private function total_belum_arsip()
   {
     return Arsip::whereYear('tanggal_masuk_arsip', date('Y'))
-      ->whereNotIn("perkara_id", BerkasGugatan::select("perkara_id")->whereYear('tanggal_pendaftaran', date('Y'))->get()->toArray())
-      ->whereNotIn("perkara_id", BerkasPermohonan::select("perkara_id")->whereYear('tanggal_pendaftaran', date('Y'))->get()->toArray())
+      ->whereNotIn("perkara_id", BerkasGugatan::select("perkara_id")->whereYear('tanggal_arsip', date('Y'))->get()->toArray())
+      ->whereNotIn("perkara_id", BerkasPermohonan::select("perkara_id")->whereYear('tanggal_arsip', date('Y'))->get()->toArray())
       ->count();
   }
 
   private function total_akta_siap_terbit()
   {
-    return BerkasGugatan::whereNotNull('tanggal_bht')->doesntHave('berkas_akta')->count();
+    return BerkasGugatan::where('jenis_perkara', 'Cerai Gugat')->whereNotNull('tanggal_bht')->doesntHave('berkas_akta')->count();
   }
 }

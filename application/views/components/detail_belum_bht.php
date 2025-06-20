@@ -1,5 +1,6 @@
 <?php
 
+use App\Libraries\DateHelper;
 use App\Libraries\Hashid;
 
 $tableid = Hashid::encode(time());
@@ -15,7 +16,6 @@ $tableid = Hashid::encode(time());
         <th>Pendaftaran</th>
         <th>Putusan</th>
         <th>PBT</th>
-        <th>BHT</th>
         <th>Selisih</th>
         <th>Majelis</th>
         <th>Panitera</th>
@@ -30,8 +30,7 @@ $tableid = Hashid::encode(time());
           <td><?= tanggal_indo($r->tanggal_pendaftaran, false) ?></td>
           <td><?= tanggal_indo($r->tanggal_putusan, false) ?></td>
           <td><?= tanggal_indo($r->tanggal_pbt, false) ?></td>
-          <td><?= $r->bht ?></td>
-          <td><?= $r->selisih ?> Hari Setelah Putus</td>
+          <td><?= DateHelper::getDayInterval($r->tanggal_putusan) ?> Hari Setelah Putus</td>
           <td><?= $r->majelis_hakim ?></td>
           <td><?= $r->panitera ?></td>
           <td><?= $r->jurusita ?></td>
