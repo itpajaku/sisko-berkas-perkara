@@ -51,15 +51,14 @@
             <tr>
               <th>No</th>
               <th>Perkara</th>
-              <th>Pihak</th>
-              <th>Majelis</th>
-              <th>Putus</th>
-              <th>PBT</th>
-              <th>BHT</th>
               <th>Nomor Akta</th>
-              <th>Nomor Seri</th>
               <th>Tanggal Akta</th>
-              <th>Aksi</th>
+              <th>Nomor Seri</th>
+              <th>Tanggal PBT</th>
+              <th>Tanggal BHT</th>
+              <th>Para Pihak</th>
+              <th>Majelis</th>
+              <th>Action</th>
             </tr>
           </thead>
         </table>
@@ -86,21 +85,19 @@
       }, {
         "data": "nomor_perkara"
       }, {
-        data: "para_pihak"
+        data: "nomor_akta"
       }, {
-        data: "majelis"
+        data: "tanggal_akta"
       }, {
-        data: "tanggal_putusan"
+        data: "nomor_seri"
       }, {
         data: "tanggal_pbt"
       }, {
         data: "tanggal_bht"
       }, {
-        data: "nomor_akta"
+        data: "para_pihak"
       }, {
-        data: "nomor_seri"
-      }, {
-        data: "tanggal_akta"
+        data: "majelis"
       }, {
         data: "action"
       }],

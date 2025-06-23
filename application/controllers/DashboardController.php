@@ -24,7 +24,7 @@ class DashboardController extends APP_Controller
     MethodFilter::must("get");
     $data['infolist'] = [
       new MiniCard(
-        "Berkas Perkara Belum Diregis",
+        "Sudah BHT Belum Diregister",
         "primary",
         $this->kelengkapan_berkas(),
         "goal.png",

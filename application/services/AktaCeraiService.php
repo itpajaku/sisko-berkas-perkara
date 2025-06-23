@@ -93,7 +93,7 @@ class AktaCeraiService
             $query->where(function ($q) use ($search) {
                 $q
                     ->where("nomor_perkara", "like", "$search%")
-                    ->orWhere("majelis_hakim", "like", "$search%")
+                    ->orWhere("majelis", "like", "$search%")
                     ->orWhere("para_pihak", "like", "$search%")
                     ->orWhere("panitera", "like", "$search%")
                     ->orWhere("jurusita", "like", "$search%")
@@ -112,19 +112,19 @@ class AktaCeraiService
 
         $total = BerkasAkta::selectRaw("COUNT(*) as total")->first()->total;
         $filtered = $query->count();
-        $data = $query->orderBy("created_at", "desc")->offset($start)->limit($length)->get();
+        $data = $query->orderBy("nomor_akta", "desc")->offset($start)->limit($length)->get();
 
         $data->transform(function ($item, $n) {
             $item->no = ++$n;
+            $item->nomor_akta = $item->nomor_akta_cerai;
+            $item->tanggal_akta = tanggal_indo($item->tanggal_akta, false);
+            $item->tanggal_pbt = tanggal_indo($item->tanggal_pbt, false);
+            $item->tanggal_bht = tanggal_indo($item->tanggal_bht, false);
             $item->nomor_perkara = Templ::component("components/kolom_nomor_perkara", ["berkas" => $item]);
             $item->tanggal_pendaftaran = tanggal_indo($item->tanggal_pendaftaran, false);
             $item->tanggal_putusan = tanggal_indo($item->tanggal_putus, false);
             $item->majelis = str_replace('\n', "<br>", $item->majelis);
             $item->para_pihak = str_replace('Melawan', "<br>Melawan<br>", $item->para_pihak);
-            $item->tanggal_pbt = tanggal_indo($item->tanggal_pbt, false);
-            $item->tanggal_bht = tanggal_indo($item->tanggal_bht, false);
-            $item->nomor_akta = $item->nomor_akta_cerai;
-            $item->tanggal_akta = tanggal_indo($item->tanggal_akta, false);
 
 
             $item->action = Templ::component("akta_cerai/kolom_aksi", [
