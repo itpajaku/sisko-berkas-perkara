@@ -195,18 +195,7 @@ class BerkasGugatanService
   public function updateOne($id)
   {
     $berkas = BerkasGugatan::findOrFail($id);
-    $berkas->update([
-      "jenis_perkara" => RequestBody::post("jenis_perkara", true),
-      "para_pihak" => RequestBody::post("para_pihak", true),
-      "majelis_hakim" => RequestBody::post("majelis_hakim", true),
-      "panitera" => RequestBody::post("panitera", true),
-      "jurusita" => RequestBody::post("jurusita", true),
-      "keterangan" => RequestBody::post("keterangan", true),
-      "tanggal_putusan" => RequestBody::post("tanggal_putusan", true),
-      "tanggal_pendaftaran" => RequestBody::post("tanggal_pendaftaran", true),
-      "tanggal_pbt" => empty(RequestBody::post("tanggal_pbt")) ? null : RequestBody::post("tanggal_pbt", true),
-      "tanggal_bht" => empty(RequestBody::post("tanggal_bht")) ? null : RequestBody::post("tanggal_bht", true),
-    ]);
+    $berkas->update(RequestBody::post()->toArray());
   }
 
   public function generate_docs()
