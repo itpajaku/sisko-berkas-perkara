@@ -76,7 +76,7 @@ function import_akta($perkara, $ekspedisiArsip)
     "jurusita" => appendJurusita($perkara),
     "tanggal_putus" => $perkara->perkara_putusan->tanggal_putusan,
     "nomor_akta" => explode("/AC", $perkara->perkara_akta_cerai->nomor_akta_cerai)[0] ?? $perkara->perkara_akta_cerai->nomor_akta_cerai,
-    "nomor_seri" => explode(" ", $perkara->perkara_akta_cerai->no_seri_akta_cerai)[1] ?? $perkara->perkara_akta_cerai->no_seri_akta_cerai,
+    "nomor_seri" => $perkara->perkara_akta_cerai->no_seri_akta_cerai,
     "tanggal_bht" => $perkara->perkara_putusan->tanggal_bht,
     "tanggal_akta" => $perkara->perkara_akta_cerai->tgl_akta_cerai,
     "keterangan" => "Imported by System",

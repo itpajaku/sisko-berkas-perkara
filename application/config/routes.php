@@ -34,6 +34,8 @@ $route['berkas_gugatan/(:any)/sinkron_bht']['PATCH'] = 'BerkasGugatanController/
 
 $route['bht_hari_ini'] = "BerkasGugatanController/bht_page";
 $route['perkara/suggest'] = 'perkara/AutocompletePerkara';
+$route['berkas/(:any)/ekspedisi']['POST'] = "EkspedisiBerkasController/attach_to_berkas/$1";
+$route['berkas/(:any)/ekspedisi']['DELETE'] = 'EkspedisiBerkasController/detach_from_berkas/$1';
 
 $route['berkas_permohonan']['GET'] = "BerkasPermohonanController/register_page";
 $route['berkas_permohonan/register'] = "BerkasPermohonanController/register_page";
@@ -45,8 +47,6 @@ $route['berkas_permohonan/laporan']['GET'] = "BerkasPermohonanController/laporan
 $route['berkas_permohonan/laporan']['POST'] = "BerkasPermohonanController/generate_laporan";
 $route['berkas_permohonan/(:any)']['GET'] = "BerkasPermohonanController/detail_page/$1";
 $route['berkas_permohonan/(:any)']['PATCH'] = "BerkasPermohonanController/update/$1";
-$route['berkas_permohonan/(:any)/ekspedisi']['POST'] = "EkspedisiBerkasController/attach_to_berkas/$1";
-$route['berkas_permohonan/(:any)/ekspedisi']['DELETE'] = 'EkspedisiBerkasController/detach_from_berkas/$1';
 $route['berkas_permohonan/(:any)/sinkron']['PATCH'] = 'PerkaraController/sinkron_berkas/$1';
 $route['berkas_permohonan/(:any)/unsinkron']['PATCH'] = 'PerkaraController/unsinkron_berkas/$1';
 $route['berkas_permohonan/(:any)']['DELETE'] = 'BerkasPermohonanController/delete/$1';
@@ -69,6 +69,8 @@ $route['akta_cerai/(:any)']['DELETE'] = 'AktaCeraiController/delete/$1';
 $route['akta_cerai/(:any)']['PUT'] = 'AktaCeraiController/update/$1';
 $route['akta_cerai/(:any)/sinkron']['PATCH'] = 'AktaCeraiController/sinkron/$1';
 $route['akta_cerai/(:any)/unsinkron']['PATCH'] = 'AktaCeraiController/unsinkron/$1';
+$route['akta_cerai/(:any)/ekspedisi']['POST'] = 'AktaCeraiController/tambah_ekspedisi/$1';
+$route['akta_cerai/(:any)/ekspedisi']['DELETE'] = 'AktaCeraiController/hapus_ekspedisi/$1';
 
 
 $route['pengaturan/akun']['GET'] = 'PengaturanController/akun_page';

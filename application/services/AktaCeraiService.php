@@ -10,6 +10,7 @@ use App\Libraries\RequestBody;
 use App\Libraries\Sysconf;
 use App\Libraries\Templ;
 use App\Models\BerkasAkta;
+use App\Models\KonfigurasiAkta;
 use Illuminate\Support\Facades\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
 
@@ -116,7 +117,7 @@ class AktaCeraiService
 
         $data->transform(function ($item, $n) {
             $item->no = ++$n;
-            $item->nomor_akta = $item->nomor_akta_cerai;
+            $item->nomor_akta = "<strong class='text-primary'>" . $item->nomor_akta_cerai . "</strong>";
             $item->tanggal_akta = tanggal_indo($item->tanggal_akta, false);
             $item->tanggal_pbt = tanggal_indo($item->tanggal_pbt, false);
             $item->tanggal_bht = tanggal_indo($item->tanggal_bht, false);
@@ -125,6 +126,7 @@ class AktaCeraiService
             $item->tanggal_putusan = tanggal_indo($item->tanggal_putus, false);
             $item->majelis = str_replace('\n', "<br>", $item->majelis);
             $item->para_pihak = str_replace('Melawan', "<br>Melawan<br>", $item->para_pihak);
+            $item->nomor_seri_akta = $item->nomor_seri_akta;
 
 
             $item->action = Templ::component("akta_cerai/kolom_aksi", [

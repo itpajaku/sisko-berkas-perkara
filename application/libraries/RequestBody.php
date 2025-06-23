@@ -72,13 +72,17 @@ class RequestBody
     return self::$inputCollection;
   }
 
-  public static function get()
+  public static function get($par = null)
   {
     self::init();
     self::initQueryObj();
-    foreach (self::$ci->input->get() as $key => $value) {
-      self::$queryObj->{$key} = $value;
+    if ($par) {
+      return htmlspecialchars(self::$ci->input->get($par));
+    } else {
+      foreach (self::$ci->input->get() as $key => $value) {
+        self::$queryObj->{$key} = htmlspecialchars($value);
+      }
+      return self::$queryObj;
     }
-    return self::$queryObj;
   }
 }

@@ -161,6 +161,7 @@ class AktaCeraiController extends APP_Controller
   {
     MethodFilter::must("get");
     $data["akta"] = BerkasAkta::find(Hashid::singleDecode($hash_id));
+    $data["posisi_berkas"] = PosisiEkspedisi::where("status", 1)->get();
     Templ::render("akta_cerai/detail_akta_page", $data)->layout("layouts/main_layout");
   }
 
@@ -279,6 +280,24 @@ class AktaCeraiController extends APP_Controller
     } catch (\Throwable $th) {
       $this->session->set_flashdata("error_alert", Templ::component("components/exception_alert", ["message" => $th->getMessage()]));
       redirect("/akta_cerai/laporan");
+    }
+  }
+
+  public function tambah_ekspedisi($hashid)
+  {
+    try {
+      $akta = BerkasAkta::findOrFail(Hashid::singleDecode($hashid));
+      printdie($akta);
+    } catch (\Throwable $th) {
+      $this->output
+        ->set_header("HX-Trigger: " . json_encode([
+          "htmx:toastr" => [
+            "level" => "error",
+            "message" => $th->getMessage()
+          ]
+        ]))->set_output(
+          Templ::component("components/exception_alert", ["message" => $th->getMessage() . "<br>" . $th->getTraceAsString()])
+        );
     }
   }
 }

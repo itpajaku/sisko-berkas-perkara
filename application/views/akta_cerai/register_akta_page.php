@@ -50,8 +50,8 @@
           <thead class="bg-info-subtle">
             <tr>
               <th>No</th>
-              <th>Perkara</th>
               <th>Nomor Akta</th>
+              <th>Perkara</th>
               <th>Tanggal Akta</th>
               <th>Nomor Seri</th>
               <th>Tanggal PBT</th>
@@ -83,13 +83,13 @@
       columns: [{
         "data": "no"
       }, {
-        "data": "nomor_perkara"
+        "data": "nomor_akta"
       }, {
-        data: "nomor_akta"
+        data: "nomor_perkara"
       }, {
         data: "tanggal_akta"
       }, {
-        data: "nomor_seri"
+        data: "nomor_seri_akta"
       }, {
         data: "tanggal_pbt"
       }, {

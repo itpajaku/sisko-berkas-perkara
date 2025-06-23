@@ -196,7 +196,23 @@
                   <li class="timeline-item">
                     <div class="timeline-body">
                       <div class="timeline-meta">
-                        <span><?= $ekspedisi->save_time->diffForHumans() . " oleh : " . $ekspedisi->created_by ?></span>
+                        <div class="d-flex flex-column">
+                          <div class="d-flex">
+                            <?php if ($ekspedisi->status) { ?>
+                              <span class="badge bg-success me-2">
+                                <i class="ti ti-map-pin"></i>
+                                Posisi Sekarang
+                              </span>
+                            <?php } else { ?>
+                              <span class="badge bg-warning me-2">
+                                <i class="ti ti-flag"></i>
+                                Posisi Lalu
+                              </span>
+                            <?php } ?>
+                            <span><?= $ekspedisi->save_time->diffForHumans()   ?></span>
+                          </div>
+                          <span class="text-end">Oleh :<?= $ekspedisi->created_by ?></span>
+                        </div>
                       </div>
                       <div class="timeline-content timeline-indicator">
                         <h5 class="mb-1">Diterima oleh : <?= $ekspedisi->posisi_ekspedisi->posisi ?>.</h5>
@@ -205,7 +221,7 @@
                           <a
                             class="text-danger"
                             href="javascript:void(0)"
-                            hx-delete="<?= base_url("/berkas_gugatan/" . App\Libraries\Hashid::encode($berkas->id) . "/ekspedisi") ?>"
+                            hx-delete="<?= base_url("/berkas/" . App\Libraries\Hashid::encode($berkas->id) . "/ekspedisi") ?>"
                             hx-confirm="Data yang dihapus tidak bisa dikembalikan."
                             hx-vals='<?= json_encode([
                                         "save_point" => $ekspedisi->save_point,
@@ -488,7 +504,7 @@
       </div>
       <div class="modal-body">
         <form
-          hx-post="<?= base_url("/berkas_permohonan/" . App\Libraries\Hashid::encode($berkas->id) . "/ekspedisi") ?>"
+          hx-post="<?= base_url("/berkas/" . App\Libraries\Hashid::encode($berkas->id) . "/ekspedisi") ?>"
           hx-target="#post-result">
           <input type="hidden" name="berkas_type" value="<?= class_basename($berkas) ?>">
           <div class="modal-body">

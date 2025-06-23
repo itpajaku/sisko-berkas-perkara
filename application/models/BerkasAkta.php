@@ -35,6 +35,12 @@ class BerkasAkta extends Model
         return "$this->nomor_akta/AC/" . date("Y") . "/" . Sysconf::getVar()->KodePN;
     }
 
+    public function getNomorSeriAktaAttribute()
+    {
+        return "$this->prefix $this->nomor_seri";
+    }
+
+
     public function ekspedisi()
     {
         return $this->morphToMany(PosisiEkspedisi::class, "berkas", "berkas_ekspedisi", "berkas_id", "save_point");

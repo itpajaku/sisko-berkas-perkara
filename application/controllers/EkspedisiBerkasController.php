@@ -3,6 +3,7 @@
 use App\Libraries\AuthData;
 use App\Libraries\Hashid;
 use App\Libraries\MethodFilter;
+use App\Libraries\RequestBody;
 use App\Libraries\Templ;
 use App\Models\BerkasEkspedisi;
 
@@ -39,7 +40,7 @@ class EkspedisiBerkasController extends APP_Controller
                 ->set_output("Berhasil menambahkan ekspedisi");
         } catch (\Throwable $th) {
             $this->output->set_output(
-                Templ::component("/component/exception_alert", ["messasge" => $th->getMessage()])
+                Templ::component("/components/exception_alert", ["message" => $th->getMessage()])
             );
         }
     }
@@ -48,12 +49,12 @@ class EkspedisiBerkasController extends APP_Controller
     {
         MethodFilter::must("delete");
         $berkasId = Hashid::singleDecode($berkas_id);
-        $berkasType = $this->input->get("berkas_type");
+        $berkasType = RequestBody::get("berkas_type");
 
         try {
             BerkasEkspedisi::where([
-                "save_point" => $this->input->get("save_point"),
-                "save_time" => $this->input->get("save_time"),
+                "save_point" => RequestBody::get("save_point"),
+                "save_time" => RequestBody::get("save_time"),
                 "berkas_id" => $berkasId,
                 "berkas_type" => "App\Models\\$berkasType"
             ])->delete();
@@ -68,7 +69,7 @@ class EkspedisiBerkasController extends APP_Controller
             $this->output
                 ->set_header("HX-Trigger: " . json_encode($alertData))
                 ->set_output(
-                    Templ::component("/component/exception_alert", ["messasge" => $th->getMessage()])
+                    Templ::component("/components/exception_alert", ["message" => $th->getMessage()])
                 );
         }
     }

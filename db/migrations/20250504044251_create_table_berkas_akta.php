@@ -30,7 +30,7 @@ final class CreateTableBerkasAkta extends AbstractMigration
         $table->addColumn("panitera", "string", ["null" => false]);
         $table->addColumn("jurusita", "string", ["null" => false]);
         $table->addColumn("nomor_akta", "string", ["null" => false]);
-        $table->addColumn("nomor_seri", "string", ["null" => false, "limit" => 12]);
+        $table->addColumn("nomor_seri", "string", ["null" => false, "limit" => 32]);
         $table->addColumn("tanggal_putus", "date", ["null" => false]);
         $table->addColumn("tanggal_bht", "date", ["null" => true]);
         $table->addColumn("tanggal_akta", "date", ["null" => true]);
