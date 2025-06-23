@@ -26,6 +26,8 @@ What to do
     - [&check;] Generate docx
     - [] Generate xlsx
 - [] Sinkron PIP to SIPP
+- [] Sinkron BHT to SIPP
+- [] Detail Page
 ---
 2. Menu BHT Hari Ini
 - [$check;] List Datatable
@@ -94,6 +96,9 @@ What to do
     - [&check;] Generate docx
     - [] Generate xlsx
 ---
+7.1 Ekspedisi 
+- [] Attach and Detach update position/status
+---
 8. Assets
 - [&check;] Change Icon
 - [&check;] Create manifest
@@ -101,8 +106,11 @@ What to do
 - [&check;] Set icon at env 
 ---
 9. Dashboard
-- [] Chart Berkas BHT belum turun di sipp
-- [] Chart Berkas perkara putus dan bht hari ini  
+- [&check;] Chart Berkas BHT belum turun di sipp
+- [&check;] Chart Berkas perkara putus dan bht hari ini  
+- [] Chart Berkas berdasarkan ekspedisi  
+- [] Chart Berkas berdasarkan arsip  
+- [] Chart Berkas berdasarkan jurusita belum pip  
 ---
 10. Transfer Data
 - [&check;] Transfer data berkas gugatan
