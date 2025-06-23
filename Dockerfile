@@ -4,7 +4,7 @@ FROM php:7.4-apache
 RUN apt-get update && apt-get install -y \
     libpng-dev libjpeg-dev libonig-dev libxml2-dev libzip-dev \
     zip unzip git curl \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd
+    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd mysqli pdo_mysql
 
 # Aktifkan mod_rewrite
 RUN a2enmod rewrite
