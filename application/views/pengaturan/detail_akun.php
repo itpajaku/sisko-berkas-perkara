@@ -67,7 +67,7 @@ $group_id = Hashid::encode($selected_group->group_id);
                       hx-get="<?= site_url("pengaturan/akun/" . Hashid::encode($selected_group->group_id) . "/form") ?>"
                       hx-target="#modalTambahAkses>.modal-dialog>.modal-content>.modal-body"
                       hx-swap="innerHTML"
-                      hx-headers='{"Hx-Request-Component":true}'
+                      hx-headers='{"HX-Request-Component":true}'
                       data-bs-toggle="modal"
                       data-bs-target="#modalTambahAkses">
 
@@ -77,7 +77,7 @@ $group_id = Hashid::encode($selected_group->group_id);
                     <button
                       hx-get="<?= base_url('/pengaturan/akun/' . $group_id . '/form_menu') ?>"
                       hx-target="#modalAddAccessMenu>.modal-dialog>.modal-content>.modal-body"
-                      hx-headers='{"Hx-Request-Component":true}'
+                      hx-headers='{"HX-Request-Component":true}'
                       data-bs-toggle="modal"
                       data-bs-target="#modalAddAccessMenu"
                       class="btn btn-success btn-sm">

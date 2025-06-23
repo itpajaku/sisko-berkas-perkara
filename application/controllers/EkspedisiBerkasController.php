@@ -11,7 +11,7 @@ class EkspedisiBerkasController extends APP_Controller
     public function __construct()
     {
         parent::__construct();
-        MethodFilter::mustHeader("Hx-Request");
+        MethodFilter::mustHeader("HX-Request");
     }
 
     public function attach_to_berkas($berkas_id)

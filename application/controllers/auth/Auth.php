@@ -114,7 +114,7 @@ class Auth extends CI_Controller
     MethodFilter::must("post");
     $this->session->unset_userdata("app_user_data");
     $this->session->sess_destroy();
-    if (isset($this->input->request_headers()['Hx-Request'])) {
+    if (MethodFilter::isHeader("Hx-Request")) {
       $this->output->set_header("HX-Redirect: /auth")->set_output("Logout Berhasil");
     } else {
       $this->session->set_flashdata("success_alert", "Logout Berhasil");

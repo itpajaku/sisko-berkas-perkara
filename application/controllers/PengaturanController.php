@@ -59,7 +59,7 @@ class PengaturanController extends APP_Controller
       ->get();
 
     // printdie($data['allowed_menu']->toArray());
-    if (isset($this->input->request_headers()['Hx-Request-Component'])) {
+    if (MethodFilter::isHeader("Hx-Request")) {
       return $this->output->set_output(
         Templ::component('pengaturan/detail_akun', $data)
       );
@@ -112,7 +112,7 @@ class PengaturanController extends APP_Controller
   public function akun_fetch_form_access($hash_id)
   {
     MethodFilter::must("get");
-    MethodFilter::mustHeader("Hx-Request-Component");
+    MethodFilter::mustHeader("HX-Request-Component");
     try {
       $data['en_group_id'] = $hash_id;
       $data['menu_sections'] = MenuSection::all();
@@ -137,7 +137,7 @@ class PengaturanController extends APP_Controller
   public function fetch_menu_section_form($en_group_id, $en_section_id)
   {
     MethodFilter::must("get");
-    MethodFilter::mustHeader("Hx-Request-Component");
+    MethodFilter::mustHeader("HX-Request-Component");
     try {
 
       $section_id = Hashid::singleDecode($en_section_id);
@@ -300,7 +300,7 @@ class PengaturanController extends APP_Controller
   public function fetch_menu_form($en_group_id)
   {
     MethodFilter::must("get");
-    MethodFilter::mustHeader("Hx-Request-Component");
+    MethodFilter::mustHeader("HX-Request-Component");
     try {
       $group_id = Hashid::singleDecode($en_group_id);
 
