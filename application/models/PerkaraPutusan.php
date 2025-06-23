@@ -13,4 +13,9 @@ class PerkaraPutusan extends Model
   {
     return $this->belongsTo(Perkara::class, "perkara_id", "perkara_id");
   }
+
+  public function arsip()
+  {
+    return $this->hasOne(Arsip::class, "perkara_id", "perkara_id");
+  }
 }

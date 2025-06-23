@@ -8,6 +8,7 @@ use App\Models\BerkasGugatan;
 use App\Models\BerkasPermohonan;
 use App\Models\Perkara;
 use App\Models\PerkaraAktaCerai;
+use App\Models\PerkaraPutusan;
 use Illuminate\Database\Capsule\Manager as DB;
 
 class WidgetController extends APP_Controller
@@ -60,15 +61,8 @@ class WidgetController extends APP_Controller
 
   public function detail_belum_arsip()
   {
-    $data =  Arsip::with('perkara.perkara_putusan')->whereYear('tanggal_masuk_arsip', date('Y'))
-      ->whereNotIn("perkara_id", BerkasGugatan::select("perkara_id")
-        ->whereYear('tanggal_arsip', date('Y'))
-        ->get()
-        ->toArray())
-      ->whereNotIn("perkara_id", BerkasPermohonan::select("perkara_id")
-        ->whereYear('tanggal_arsip', date('Y'))
-        ->get()
-        ->toArray())
+    $data =  PerkaraPutusan::whereYear('tanggal_bht', date('Y'))
+      ->doesntHave("arsip")
       ->get();
 
     $this->output->set_output(Templ::component("components/detail_arsip_belum_diregis", compact('data')));

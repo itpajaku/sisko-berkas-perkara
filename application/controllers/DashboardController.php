@@ -10,6 +10,7 @@ use App\Models\BerkasGugatan;
 use App\Models\BerkasPermohonan;
 use App\Models\Perkara;
 use App\Models\PerkaraAktaCerai;
+use App\Models\PerkaraPutusan;
 
 class DashboardController extends APP_Controller
 {
@@ -23,7 +24,7 @@ class DashboardController extends APP_Controller
     MethodFilter::must("get");
     $data['infolist'] = [
       new MiniCard(
-        "Berkas Perkasa Belum Diregis",
+        "Berkas Perkara Belum Diregis",
         "primary",
         $this->kelengkapan_berkas(),
         "goal.png",
@@ -37,14 +38,14 @@ class DashboardController extends APP_Controller
         "/widget/detail_belum_pbt"
       ),
       new MiniCard(
-        "Akta Belum Diregis",
+        "Akta Terbit Belum Diregister",
         "danger",
         $this->total_belum_akta(),
         "homework.png",
         "/widget/detail_belum_akta"
       ),
       new MiniCard(
-        "Berkas Belum Masuk Arsip",
+        "Sudah BHT Belum Masuk Arsip",
         "info",
         $this->total_belum_arsip(),
         "list.png",
@@ -104,9 +105,8 @@ class DashboardController extends APP_Controller
 
   private function total_belum_arsip()
   {
-    return Arsip::whereYear('tanggal_masuk_arsip', date('Y'))
-      ->whereNotIn("perkara_id", BerkasGugatan::select("perkara_id")->whereYear('tanggal_arsip', date('Y'))->get()->toArray())
-      ->whereNotIn("perkara_id", BerkasPermohonan::select("perkara_id")->whereYear('tanggal_arsip', date('Y'))->get()->toArray())
+    return PerkaraPutusan::whereYear('tanggal_bht', date('Y'))
+      ->doesntHave("arsip")
       ->count();
   }
 
