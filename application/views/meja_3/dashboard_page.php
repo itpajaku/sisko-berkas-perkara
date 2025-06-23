@@ -29,13 +29,13 @@ use App\Libraries\Templ;
               <h4 class="card-title fw-semibold">
                 Putus Hari Ini
               </h4>
-              <h4 class="fw-semibold text-success">$6,820</h4>
+              <h4 class="fw-semibold text-success"><?= $putus_hari_ini->count() ?></h4>
               <div class="d-flex align-items-center pb-1">
                 <span class="me-2 rounded-circle bg-danger-subtle round-20 d-flex align-items-center justify-content-center">
                   <i class="ti ti-arrow-down-right text-danger"></i>
                 </span>
-                <p class="text-dark me-1 fs-3 mb-0">+9%</p>
-                <p class="fs-3 mb-0">last year</p>
+                <p class="text-dark me-1 fs-3 mb-0"><?= $berkas_gugatan_masuk_putus->count() + $berkas_permohonan_masuk_putus->count()  ?></p>
+                <p class="fs-3 mb-0">Sudah Diregister</p>
               </div>
             </div>
             <div class="col-4">

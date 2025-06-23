@@ -22,6 +22,11 @@ class DashboardController extends APP_Controller
   public function index()
   {
     MethodFilter::must("get");
+    $data['putus_hari_ini'] = PerkaraPutusan::whereDate('tanggal_putusan', date("Y-m-d"))->get();
+    $data['berkas_gugatan_masuk_putus'] = BerkasGugatan::whereIn("perkara_id", $data['putus_hari_ini']->pluck("perkara_id")->toArray())->get();
+
+    $data['berkas_permohonan_masuk_putus'] = BerkasPermohonan::whereIn("perkara_id", $data['putus_hari_ini']->pluck("perkara_id")->toArray())->get();
+
     $data['infolist'] = [
       new MiniCard(
         "Sudah BHT Belum Diregister",
