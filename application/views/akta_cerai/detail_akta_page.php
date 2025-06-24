@@ -4,7 +4,7 @@
             ["name" => "Akta Cerai", "url" => "/akta_cerai"],
             ["name" => "Detail Akta Nomor $akta->nomor_akta_cerai", "url" => "/akta_cerai/$akta->hash_id"]
         ],
-        "page_name" => "Berkas Gugatan",
+        "page_name" => "Berkas Akta",
     ], true) ?>
     <div class="card shadow border widget-card bsb-timeline-8">
         <div class="card-header text-bg-primary">
@@ -97,6 +97,42 @@
                         </div>
                     </div>
 
+                </div>
+                <hr class="m-0" />
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="form-label text-end col-md-4">Nomor Akta :</label>
+                                <div class="col-md-8">
+                                    <p><?= $akta->nomor_akta_cerai ?></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="form-label text-end col-md-4">Nomor Seri :</label>
+                                <div class="col-md-8">
+                                    <?= $akta->nomor_seri_akta ?>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="form-label text-end col-md-4">Tanggal Akta :</label>
+                                <div class="col-md-8">
+                                    <p><?= tanggal_indo($akta->tanggal_akta, false)  ?></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
                 </div>
                 <hr class="m-0" />
                 <div class="card-body">

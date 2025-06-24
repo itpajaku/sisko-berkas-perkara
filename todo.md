@@ -97,7 +97,7 @@ What to do
     - [] Generate xlsx
 ---
 7.1 Ekspedisi 
-- [] Attach and Detach update position/status
+- [&check;] Attach and Detach update position/status
 ---
 8. Assets
 - [&check;] Change Icon
