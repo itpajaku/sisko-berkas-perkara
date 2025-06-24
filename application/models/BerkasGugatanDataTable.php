@@ -17,7 +17,7 @@ class BerkasGugatanDataTable extends CI_Model
     $this->db->select(
       [
         "*",
-        "(SELECT datediff(curdate(), tanggal_bht) as selisih) as selisih",
+        "datediff(curdate(), berkas_gugatan.tanggal_terima) as selisih",
         "(SELECT posisi_ekspedisi.posisi FROM berkas_ekspedisi JOIN posisi_ekspedisi ON berkas_ekspedisi.save_point = posisi_ekspedisi.id WHERE berkas_ekspedisi.berkas_id = berkas_gugatan.id ORDER BY save_point DESC LIMIT 1) as ekspedisi"
       ],
       false
