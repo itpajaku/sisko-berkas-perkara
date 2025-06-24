@@ -135,7 +135,7 @@ use App\Libraries\Hashid;
             <label for="inputTanggalPbt" class="col-sm-3 text-end  col-form-label">Tanggal Pemberitahuan</label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input required type="text" name="tanggal_pbt" class="form-control form-control-datepicker" id="inputTanggalPbt" placeholder="Isi disini" />
+                    <input type="text" name="tanggal_pbt" class="form-control form-control-datepicker" id="inputTanggalPbt" placeholder="Isi disini" />
                     <div class="input-group-text">
                         <i class="ti ti-calendar"></i>
                     </div>
@@ -165,7 +165,8 @@ use App\Libraries\Hashid;
             "label" => "Tanggal Akta Cerai",
             "placeholder" => "Tanggal Terbit Akta Cerai",
             "icon" => "<i class=\"ti ti-calendar\"></i>",
-            "aditional_class" => "form-control-datepicker"
+            "aditional_class" => "form-control-datepicker",
+            "value" => date("Y-m-d")
         ]
     ])
     ?>
