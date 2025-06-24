@@ -6,6 +6,7 @@ use App\Libraries\MethodFilter;
 use App\Libraries\RequestBody;
 use App\Libraries\Templ;
 use App\Models\BerkasEkspedisi;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class EkspedisiBerkasController extends APP_Controller
 {
@@ -21,13 +22,25 @@ class EkspedisiBerkasController extends APP_Controller
         $berkasId = Hashid::singleDecode($berkas_id);
         $berkasType = $this->input->post("berkas_type", true);
         try {
+            DB::connection("default")->beginTransaction();
+
+            BerkasEkspedisi::where([
+                "berkas_id" => $berkasId,
+                "berkas_type" => "App\Models\\$berkasType",
+            ])->update([
+                "status" => false,
+            ]);
+
             BerkasEkspedisi::create([
                 "save_point" => $this->input->post("posisi_ekspedisi"),
                 "save_time" => date("Y-m-d H:i:s"),
                 "berkas_id" => $berkasId,
                 "berkas_type" => "App\Models\\$berkasType",
-                "created_by" => $this->userdata->username
+                "created_by" => $this->userdata->username,
+                "status" => true
             ]);
+
+            DB::connection("default")->commit();
 
             $this->output
                 ->set_header("HX-Refresh: true")
@@ -39,6 +52,7 @@ class EkspedisiBerkasController extends APP_Controller
                 ]))
                 ->set_output("Berhasil menambahkan ekspedisi");
         } catch (\Throwable $th) {
+            DB::connection("default")->rollBack();
             $this->output->set_output(
                 Templ::component("/components/exception_alert", ["message" => $th->getMessage()])
             );
@@ -52,15 +66,31 @@ class EkspedisiBerkasController extends APP_Controller
         $berkasType = RequestBody::get("berkas_type");
 
         try {
-            BerkasEkspedisi::where([
+            DB::connection("default")->beginTransaction();
+            $berkas = BerkasEkspedisi::where([
                 "save_point" => RequestBody::get("save_point"),
                 "save_time" => RequestBody::get("save_time"),
                 "berkas_id" => $berkasId,
                 "berkas_type" => "App\Models\\$berkasType"
-            ])->delete();
+            ])->first();
+            $berkas->delete();
 
+            if ($berkas->status) {
+                $rest = BerkasEkspedisi::where([
+                    "berkas_id" => $berkasId,
+                    "berkas_type" => "App\Models\\$berkasType"
+                ])
+                    ->orderBy("id", "desc")
+                    ->first();
+                $rest->update([
+                    "status" => true
+                ]);
+            }
+
+            DB::connection("default")->commit();
             $this->output->set_header("HX-Refresh: true")->set_output("Berhasil menghapus ekspedisi");
         } catch (\Throwable $th) {
+            DB::connection("default")->rollBack();
             $alertData = ["htmx:toastr" => [
                 "level" => "success",
                 "message" => "Sinkronisasi berkas ke SIPP berhasil"
