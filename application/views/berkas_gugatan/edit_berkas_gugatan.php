@@ -216,6 +216,19 @@ use App\Libraries\Hashid;
             </div>
             <div class="form-group p-3">
                 <div class="row">
+                    <label for="inputTanggalTerima" class="col-sm-3 text-end  col-form-label">Tanggal Diterima Meja 3</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="text" name="tanggal_bht" class="form-control form-control-datepicker" id="inputTanggalTerima" placeholder="Isi disini" value="<?= $berkas->tanggal_terima  ?>" />
+                            <div class="input-group-text">
+                                <div class="ti ti-calendar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group p-3">
+                <div class="row">
                     <label for="inputKeterangan" class="col-sm-3 text-end  col-form-label">Keterangan</label>
                     <div class="col-sm-9">
                         <textarea type="text" name="keterangan" class="form-control form-control-datepicker" id="inputKeterangan" placeholder="Isi disini"><?= $berkas->keterangan ?></textarea>
