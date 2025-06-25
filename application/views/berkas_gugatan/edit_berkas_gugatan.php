@@ -193,7 +193,20 @@ use App\Libraries\Hashid;
                     <label for="inputTanggalBht" class="col-sm-3 text-end  col-form-label">Tanggal BHT</label>
                     <div class="col-sm-9">
                         <div class="input-group">
-                            <input type="text" name="tanggal_bht" class="form-control form-control-datepicker" id="inputTanggalBht" placeholder="Isi disini" value="<?= $berkas->tanggal_bht ?? null ?>" />
+                            <input type="text" name="tanggal_bht" class="form-control form-control-datepicker" id="inputTanggalBht" placeholder="Isi disini" />
+                            <div class="input-group-text">
+                                <div class="ti ti-calendar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group p-3">
+                <div class="row">
+                    <label for="inputTanggalTerima" class="col-sm-3 text-end  col-form-label">Tanggal Diterima Meja 3</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input type="text" required name="tanggal_terima" class="form-control form-control-datepicker" id="inputTanggalTerima" placeholder="Isi disini" value="<?= $berkas->tanggal_terima  ?? null ?>" />
                             <div class="input-group-text">
                                 <div class="ti ti-calendar"></div>
                             </div>

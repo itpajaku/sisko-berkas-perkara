@@ -70,10 +70,9 @@
               <th>PBT</th>
               <th>BHT</th>
               <th>Selisih</th>
+              <th>Diterima</th>
               <th>Ekspedisi</th>
-              <th>Majelis</th>
-              <th>Panitera</th>
-              <th>Jurusita</th>
+              <th>Penetapan</th>
               <th>Aksi</th>
             </tr>
           </thead>
@@ -157,16 +156,13 @@
           "data": "selisih"
         },
         {
+          "data": "tanggal_terima"
+        },
+        {
           "data": "ekspedisi"
         },
         {
           "data": "majelis"
-        },
-        {
-          "data": "panitera"
-        },
-        {
-          "data": "jurusita"
         },
         {
           "data": "aksi"

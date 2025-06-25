@@ -92,10 +92,9 @@ class BerkasGugatanService
       $row['tanggal_bht'] = tanggal_indo($r->tanggal_bht, false);
       $row['selisih'] = $this->app->load->view("berkas_gugatan/kolom_selisih", ["berkas" => $r], true);
       $row['ekspedisi'] = $this->app->load->view("berkas_gugatan/kolom_ekspedisi", ["berkas" => $r], true);
-      $row['majelis'] = $r->majelis_hakim;
-      $row['panitera'] = $r->panitera;
-      $row['jurusita'] = $r->jurusita;
+      $row['majelis'] = explode('\n', $r->majelis_hakim)[0] . "<br>" . $r->panitera . "<br>" . $r->jurusita;
       $row['aksi'] = $this->app->load->view("berkas_gugatan/kolom_aksi", ["berkas" => $r], true);
+      $row['tanggal_terima'] = tanggal_indo($r->tanggal_terima, false) ?? "Tanggal diterima belum diisi";
       $n++;
       $data[] = $row;
     }

@@ -11,6 +11,12 @@
             <h5 class="card-title widget-card-title mb-3">Ekspedisi Berkas Nomor <?= $berkas->nomor_perkara ?></h5>
             <div class="container">
                 <div class="row justify-content-end">
+                    <a
+                        href="<?= base_url("berkas_gugatan/register") ?>"
+                        class="btn btn-danger me-3 col-2">
+                        <i class="ti ti-arrow-left"></i>
+                        Kembali
+                    </a>
                     <button
                         data-bs-toggle="modal"
                         data-bs-target="#modalId"

@@ -57,14 +57,18 @@ class RequestBody
     }
 
     foreach (self::$input as $key => $value) {
-      $input[$key] = htmlspecialchars($value, ENT_QUOTES, "utf-8");
+      if ($value != null) {
+        $input[$key] = htmlspecialchars($value, ENT_QUOTES, "utf-8");
+      }
     }
 
     if (self::$inputCollection === null) {
       $container = [];
 
       foreach (self::$input as $key => $value) {
-        $container[$key] = htmlspecialchars($value, ENT_QUOTES, "utf-8");
+        if ($value) {
+          $container[$key] = htmlspecialchars($value, ENT_QUOTES, "utf-8");
+        }
       }
       self::$inputCollection = collect($container);
     }

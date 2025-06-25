@@ -134,11 +134,9 @@ class BerkasGugatanController extends APP_Controller
 	public function save($id = null)
 	{
 		MethodFilter::must("patch");
-		$data = file_get_contents('php://input');
-		parse_str($data, $_POST);
 
 		try {
-			$this->validation($_POST, $this->form_validation);
+			$this->validation(RequestBody::post()->toArray(), $this->form_validation);
 			$this->berkasGugatanService->updateOne(Hashid::singleDecode($id));
 
 			$this->output->set_header("HX-Redirect:" . base_url("/berkas_gugatan/register"))->set_output("Berkas Gugatan berhasil diupdate");
