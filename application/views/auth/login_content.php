@@ -6,9 +6,9 @@
 <form
   hx-post="<?= base_url("/login") ?>"
   hx-target="#login-alert"
-  hx-on::before-request="$('#button_login').attr('disabled', true).html('Mohon Tunggu ...')"
-  hx-on::after-request="$('#button_login').attr('disabled', false).html('Sign In')"
+  hx-on::before-request="$('#button_login').attr('disabled', true).html('Mohon Tunggu ...');$('#login-alert').html('')"
   autocomplete="off">
+  <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>" />
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Username</label>
     <input type="text" name="identifier" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
@@ -24,7 +24,6 @@
         Remeber this Device
       </label>
     </div>
-    <!-- <a class="text-primary fw-bold" href="./index.html">Forgot Password ?</a> -->
   </div>
   <button id="button_login" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign In</button>
   <div class="d-flex align-items-center justify-content-center">
@@ -32,3 +31,13 @@
     <a class="text-primary fw-bold ms-2" href="javascript:void(0)"><?= $this->sysconf->NamaPN ?></a>
   </div>
 </form>
+
+<script>
+  document.addEventListener("auth-event", (event) => {
+    if (event.detail.status == "login-success") {
+      $("#button_login").attr('disabled', true).html(event.detail.message);
+    } else {
+      $("#button_login").attr('disabled', false).html('Sign In');
+    }
+  });
+</script>

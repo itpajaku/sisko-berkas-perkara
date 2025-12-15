@@ -15,9 +15,17 @@ class WidgetController extends APP_Controller
 {
   public function berkas_bar_chart()
   {
-    $this->output->set_output(
-      Templ::component("components/berkas_bar", ["tahun" => RequestBody::post('tahun')])
-    );
+    try {
+      $this->output->set_output(
+        Templ::component("components/charts/berkas_bar_content", [
+          "tahun" => RequestBody::post('tahun'),
+          "rerender" => intval(RequestBody::post('rerender') + 1),
+          "chart_id" => RequestBody::post('chart_id'),
+        ])
+      );
+    } catch (\Throwable $th) {
+      $this->output->set_output("Terjadi kesalahan: " . $th->getMessage())->set_status_header(200);
+    }
   }
 
   public function detail_belum_berkas()

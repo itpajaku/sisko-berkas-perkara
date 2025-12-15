@@ -50,7 +50,7 @@ class Auth extends CI_Controller
   public function login()
   {
     MethodFilter::mustHeader("Hx-Request");
-
+    sleep(2);
     try {
       $user = $this->eloquent->capsule->connection("sipp")->table("sys_users")
         ->where("username", $this->input->post("identifier", true))
@@ -97,15 +97,31 @@ class Auth extends CI_Controller
       }
 
       $this->session->unset_userdata("http_auth_redirect");
+      $triggerEvent = [
+        "auth-event" => [
+          "status" => "login-success",
+          "message" => "Login Berhasil, mengalihkan ...",
+        ]
+      ];
+
       $this->output
         // ->set_header("HX-Redirect: " . $redirectUrl)
         ->set_header("HX-Redirect: " . "/dashboard")
-        ->set_content_type("text/html")
+        ->set_header("HX-Trigger: login-success")
+        // ->set_content_type("text/html")
         ->set_output(Templ::component("auth/auth_alert", [
           "message" => "Login Berhasil, Anda akan diarahkan sebentar lagi."
         ]));
     } catch (\Throwable $th) {
-      echo $this->load->view("auth/auth_alert", ["message" => $th->getMessage()], true);
+      $triggerEvent = [
+        "auth-event" => [
+          "status" => "login-failed",
+          "message" => "Login gagal, silahkan periksa kembali",
+        ]
+      ];
+      $this->output->set_header("HX-Trigger: " . json_encode($triggerEvent))->set_output(
+        $this->load->view("auth/auth_alert", ["message" => $th->getMessage()], true)
+      );
     }
   }
 

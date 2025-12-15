@@ -86,6 +86,9 @@ use App\Libraries\AuthData;
                     </a>
                     <button
                       hx-post="<?= base_url("/logout") ?>"
+                      hx-vals='<?= json_encode([
+                                  $this->security->get_csrf_token_name() => $this->security->get_csrf_hash()
+                                ]) ?>'
                       class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</button>
                   </div>
                 </div>

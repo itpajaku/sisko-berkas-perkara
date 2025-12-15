@@ -2,11 +2,11 @@
    <div class="card-body">
      <div>
        <h4 class="card-title fw-semibold mb-1">
-         Pengarsipan
+         Pengarsipan Tahun Ini
        </h4>
        <p class="card-subtitle">Bulan Ini</p>
-       <div id="salary" class="mb-7 pb-8 mx-n4"></div>
-       <div class="d-flex align-items-center justify-content-between">
+       <div id="salary" class="mb-2 pb-8 mx-n4"></div>
+       <!-- <div class="d-flex align-items-center justify-content-between">
          <div class="d-flex align-items-center">
            <div class="bg-primary-subtle rounded me-8 p-8 d-flex align-items-center justify-content-center">
              <i class="ti ti-grid-dots text-primary fs-6"></i>
@@ -29,7 +29,7 @@
              </h6>
            </div>
          </div>
-       </div>
+       </div> -->
      </div>
    </div>
  </div>
@@ -51,14 +51,6 @@
          fontFamily: "inherit",
          foreColor: "#adb0bb",
        },
-       colors: [
-         "var(--bs-primary-bg-subtle)",
-         "var(--bs-primary-bg-subtle)",
-         "var(--bs-primary)",
-         "var(--bs-primary-bg-subtle)",
-         "var(--bs-primary-bg-subtle)",
-         "var(--bs-primary-bg-subtle)",
-       ],
        plotOptions: {
          bar: {
            borderRadius: 4,
