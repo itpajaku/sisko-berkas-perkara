@@ -12,20 +12,35 @@ class MY_Controller extends CI_Controller
 	{
 		parent::__construct();
 
-		$this->load = new BaseLoader;
+		$this->load = new BaseLoader();
 	}
 }
 
 class APP_Controller extends CI_Controller
 {
-	public Eloquent $eloquent;
-	public Sysconf $sysconf;
-	public MY_Loader $load;
-	public CI_Input $input;
-	public CI_Form_validation $form_validation;
-	public CI_Output $output;
-	public CI_Session $session;
-	public stdClass  $userdata;
+	/** @var Eloquent */
+	public $eloquent;
+
+	/** @var Sysconf */
+	public $sysconf;
+
+	/** @var MY_Loader */
+	public $load; // <-- sudah tanpa type hint
+
+	/** @var CI_Input */
+	public $input;
+
+	/** @var CI_Form_validation */
+	public $form_validation;
+
+	/** @var CI_Output */
+	public $output;
+
+	/** @var CI_Session */
+	public $session;
+
+	/** @var stdClass */
+	public $userdata;
 
 	public function __construct()
 	{

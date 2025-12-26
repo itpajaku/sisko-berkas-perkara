@@ -1,5 +1,4 @@
 <?php
-
 /**
  * CodeIgniter
  *
@@ -7,7 +6,7 @@
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2014 - 2018, British Columbia Institute of Technology
+ * Copyright (c) 2019 - 2022, CodeIgniter Foundation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,13 +29,14 @@
  * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
- * @license	http://opensource.org/licenses/MIT	MIT License
+ * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
+ * @copyright	Copyright (c) 2019 - 2022, CodeIgniter Foundation (https://codeigniter.com/)
+ * @license	https://opensource.org/licenses/MIT	MIT License
  * @link	https://codeigniter.com
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') or exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * CodeIgniter Download Helpers
@@ -45,35 +45,62 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * @subpackage	Helpers
  * @category	Helpers
  * @author		EllisLab Dev Team
- * @link		https://codeigniter.com/user_guide/helpers/download_helper.html
+ * @link		https://codeigniter.com/userguide3/helpers/download_helper.html
  */
 
 // ------------------------------------------------------------------------
 
-if (! function_exists('force_download')) {
+if ( ! function_exists('force_download'))
+{
 	/**
 	 * Force Download
 	 *
 	 * Generates headers that force a download to happen
 	 *
-	 * @param	string	filename
+	 * @param	mixed	filename (or an array of local file path => destination filename)
 	 * @param	mixed	the data to be downloaded
 	 * @param	bool	whether to try and send the actual file MIME type
 	 * @return	void
 	 */
 	function force_download($filename = '', $data = '', $set_mime = FALSE)
 	{
-		if ($filename === '' or $data === '') {
+		if ($filename === '' OR $data === '')
+		{
 			return;
-		} elseif ($data === NULL) {
-			if (! @is_file($filename) or ($filesize = @filesize($filename)) === FALSE) {
-				return;
+		}
+		elseif ($data === NULL)
+		{
+			// Is $filename an array as ['local source path' => 'destination filename']?
+			if (is_array($filename))
+			{
+				if (count($filename) !== 1)
+				{
+					return;
+				}
+
+				reset($filename);
+				$filepath = key($filename);
+				$filename = current($filename);
+
+				if (is_int($filepath))
+				{
+					return;
+				}
+			}
+			else
+			{
+				$filepath = $filename;
+				$filename = explode('/', str_replace(DIRECTORY_SEPARATOR, '/', $filename));
+				$filename = end($filename);
 			}
 
-			$filepath = $filename;
-			$filename = explode('/', str_replace(DIRECTORY_SEPARATOR, '/', $filename));
-			$filename = end($filename);
-		} else {
+			if ( ! @is_file($filepath) OR ($filesize = @filesize($filepath)) === FALSE)
+			{
+				return;
+			}
+		}
+		else
+		{
 			$filesize = strlen($data);
 		}
 
@@ -83,8 +110,10 @@ if (! function_exists('force_download')) {
 		$x = explode('.', $filename);
 		$extension = end($x);
 
-		if ($set_mime === TRUE) {
-			if (count($x) === 1 or $extension === '') {
+		if ($set_mime === TRUE)
+		{
+			if (count($x) === 1 OR $extension === '')
+			{
 				/* If we're going to detect the MIME type,
 				 * we'll need a file extension.
 				 */
@@ -92,10 +121,11 @@ if (! function_exists('force_download')) {
 			}
 
 			// Load the mime types
-			$mimes = &get_mimes();
+			$mimes =& get_mimes();
 
 			// Only change the default MIME if we can find one
-			if (isset($mimes[$extension])) {
+			if (isset($mimes[$extension]))
+			{
 				$mime = is_array($mimes[$extension]) ? $mimes[$extension][0] : $mimes[$extension];
 			}
 		}
@@ -106,39 +136,46 @@ if (! function_exists('force_download')) {
 		 *
 		 * Reference: http://digiblog.de/2011/04/19/android-and-the-download-file-headers/
 		 */
-		if (count($x) !== 1 && isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Android\s(1|2\.[01])/', $_SERVER['HTTP_USER_AGENT'])) {
+		if (count($x) !== 1 && isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/Android\s(1|2\.[01])/', $_SERVER['HTTP_USER_AGENT']))
+		{
 			$x[count($x) - 1] = strtoupper($extension);
 			$filename = implode('.', $x);
 		}
 
-		if ($data === NULL && ($fp = @fopen($filepath, 'rb')) === FALSE) {
-			return;
-		}
-
 		// Clean output buffer
-		if (ob_get_level() !== 0 && @ob_end_clean() === FALSE) {
+		if (ob_get_level() !== 0 && @ob_end_clean() === FALSE)
+		{
 			@ob_clean();
 		}
 
+		// RFC 6266 allows for multibyte filenames, but only in UTF-8,
+		// so we have to make it conditional ...
+		$charset = strtoupper(config_item('charset'));
+		$utf8_filename = ($charset !== 'UTF-8')
+			? get_instance()->utf8->convert_to_utf8($filename, $charset)
+			: $filename;
+		isset($utf8_filename[0]) && $utf8_filename = " filename*=UTF-8''".rawurlencode($utf8_filename);
+
 		// Generate the server headers
-		header('Content-Type: ' . $mime);
-		header('Content-Disposition: attachment; filename="' . $filename . '"');
+		header('Content-Type: '.$mime);
+		header('Content-Disposition: attachment; filename="'.$filename.'";'.$utf8_filename);
 		header('Expires: 0');
 		header('Content-Transfer-Encoding: binary');
-		header('Content-Length: ' . $filesize);
+		header('Content-Length: '.$filesize);
 		header('Cache-Control: private, no-transform, no-store, must-revalidate');
 
 		// If we have raw data - just dump it
-		if ($data !== NULL) {
+		if ($data !== NULL)
+		{
 			exit($data);
 		}
 
-		// Flush 1MB chunks of data
-		while (! feof($fp) && ($data = fread($fp, 1048576)) !== FALSE) {
-			echo $data;
+		// Flush the file
+		if (@readfile($filepath) === FALSE)
+		{
+			return;
 		}
 
-		fclose($fp);
-		// exit;
+		exit;
 	}
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * CodeIgniter
  *
@@ -7,7 +6,7 @@
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2014 - 2018, British Columbia Institute of Technology
+ * Copyright (c) 2014 - 2019, British Columbia Institute of Technology
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,32 +29,25 @@
  * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
- * @license	http://opensource.org/licenses/MIT	MIT License
+ * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
+ * @license	https://opensource.org/licenses/MIT	MIT License
  * @link	https://codeigniter.com
  * @since	Version 1.0.0
  * @filesource
  */
 
-/*
-	*--------------------------------------------------------------
-	* CUSTOM STARTER CODE
-	*--------------------------------------------------------------
-	*/
-
-// Path dari backend folder, sesuaikan konstanta ini jika memindahkan file ini (index.php)
-define('BACKPATH', '..');
+define("BACKPATH", "..");
 
 // Load composer disini karena fungsi-fungsinya nya akan digunakan sejak awal
-if (!file_exists(BACKPATH . '/vendor/autoload.php')) {
-	echo 'Your backpath folder path does not appear to be set correctly. Please open the following file and correct this: ' . pathinfo(__FILE__, PATHINFO_BASENAME);
+if (!file_exists(BACKPATH . "/vendor/autoload.php")) {
+	echo "Your backpath folder path does not appear to be set correctly. Please open the following file and correct this: " .
+		pathinfo(__FILE__, PATHINFO_BASENAME);
 	exit();
 }
-require_once(BACKPATH . '/vendor/autoload.php');
+require_once BACKPATH . "/vendor/autoload.php";
 
 // Load dotenv ke $_SERVER
 Dotenv\Dotenv::createMutable(BACKPATH)->load();
-
 
 /*
  *---------------------------------------------------------------
@@ -74,7 +66,10 @@ Dotenv\Dotenv::createMutable(BACKPATH)->load();
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+define(
+	"ENVIRONMENT",
+	isset($_SERVER["CI_ENV"]) ? $_SERVER["CI_ENV"] : "development",
+);
 
 /*
  *---------------------------------------------------------------
@@ -85,24 +80,33 @@ define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'developm
  * By default development will show errors but testing and live will hide them.
  */
 switch (ENVIRONMENT) {
-	case 'development':
+	case "development":
 		error_reporting(-1);
-		ini_set('display_errors', 1);
+		ini_set("display_errors", 1);
 		break;
 
-	case 'testing':
-	case 'production':
-		ini_set('display_errors', 0);
-		if (version_compare(PHP_VERSION, '5.3', '>=')) {
-			error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
+	case "testing":
+	case "production":
+		ini_set("display_errors", 0);
+		if (version_compare(PHP_VERSION, "8.4", ">=")) {
+			error_reporting(
+				E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_USER_NOTICE & ~E_USER_DEPRECATED,
+			);
 		} else {
-			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
+			error_reporting(
+				E_ALL &
+					~E_NOTICE &
+					~E_DEPRECATED &
+					~E_STRICT &
+					~E_USER_NOTICE &
+					~E_USER_DEPRECATED,
+			);
 		}
 		break;
 
 	default:
-		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
-		echo 'The application environment is not set correctly.';
+		header("HTTP/1.1 503 Service Unavailable.", true, 503);
+		echo "The application environment is not set correctly.";
 		exit(1); // EXIT_ERROR
 }
 
@@ -114,7 +118,7 @@ switch (ENVIRONMENT) {
  * This variable must contain the name of your "system" directory.
  * Set the path if it is not in the same directory as this file.
  */
-$system_path = BACKPATH . '/system';
+$system_path = BACKPATH . "/system";
 
 /*
  *---------------------------------------------------------------
@@ -127,11 +131,11 @@ $system_path = BACKPATH . '/system';
  * use an absolute (full) server path.
  * For more info please see the user guide:
  *
- * https://codeigniter.com/user_guide/general/managing_apps.html
+ * https://codeigniter.com/userguide3/general/managing_apps.html
  *
  * NO TRAILING SLASH!
  */
-$application_folder = BACKPATH . '/application';
+$application_folder = BACKPATH . "/application";
 
 /*
  *---------------------------------------------------------------
@@ -146,8 +150,7 @@ $application_folder = BACKPATH . '/application';
  *
  * NO TRAILING SLASH!
  */
-$view_folder = '';
-
+$view_folder = "";
 
 /*
  * --------------------------------------------------------------------
@@ -178,7 +181,6 @@ $view_folder = '';
 // The controller function you wish to be called.
 // $routing['function']	= '';
 
-
 /*
  * -------------------------------------------------------------------
  *  CUSTOM CONFIG VALUES
@@ -195,8 +197,6 @@ $view_folder = '';
  */
 // $assign_to_config['name_of_config_item'] = 'value of config item';
 
-
-
 // --------------------------------------------------------------------
 // END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
 // --------------------------------------------------------------------
@@ -208,25 +208,27 @@ $view_folder = '';
  */
 
 // Set the current directory correctly for CLI requests
-if (defined('STDIN')) {
+if (defined("STDIN")) {
 	chdir(dirname(__FILE__));
 }
 
-if (($_temp = realpath($system_path)) !== FALSE) {
+if (($_temp = realpath($system_path)) !== false) {
 	$system_path = $_temp . DIRECTORY_SEPARATOR;
 } else {
 	// Ensure there's a trailing slash
-	$system_path = strtr(
-		rtrim($system_path, '/\\'),
-		'/\\',
-		DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
-	) . DIRECTORY_SEPARATOR;
+	$system_path =
+		strtr(
+			rtrim($system_path, "/\\"),
+			"/\\",
+			DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR,
+		) . DIRECTORY_SEPARATOR;
 }
 
 // Is the system path correct?
-if (! is_dir($system_path)) {
-	header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
-	echo 'Your system folder path does not appear to be set correctly. Please open the following file and correct this: ' . pathinfo(__FILE__, PATHINFO_BASENAME);
+if (!is_dir($system_path)) {
+	header("HTTP/1.1 503 Service Unavailable.", true, 503);
+	echo "Your system folder path does not appear to be set correctly. Please open the following file and correct this: " .
+		pathinfo(__FILE__, PATHINFO_BASENAME);
 	exit(3); // EXIT_CONFIG
 }
 
@@ -236,68 +238,77 @@ if (! is_dir($system_path)) {
  * -------------------------------------------------------------------
  */
 // The name of THIS file
-define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
+define("SELF", pathinfo(__FILE__, PATHINFO_BASENAME));
 
 // Path to the system directory
-define('BASEPATH', $system_path);
+define("BASEPATH", $system_path);
 
 // Path to the front controller (this file) directory
-define('FCPATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+define("FCPATH", dirname(__FILE__) . DIRECTORY_SEPARATOR);
 
 // Name of the "system" directory
-define('SYSDIR', basename(BASEPATH));
+define("SYSDIR", basename(BASEPATH));
 
 // The path to the "application" directory
 if (is_dir($application_folder)) {
-	if (($_temp = realpath($application_folder)) !== FALSE) {
+	if (($_temp = realpath($application_folder)) !== false) {
 		$application_folder = $_temp;
 	} else {
 		$application_folder = strtr(
-			rtrim($application_folder, '/\\'),
-			'/\\',
-			DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
+			rtrim($application_folder, "/\\"),
+			"/\\",
+			DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR,
 		);
 	}
 } elseif (is_dir(BASEPATH . $application_folder . DIRECTORY_SEPARATOR)) {
-	$application_folder = BASEPATH . strtr(
-		trim($application_folder, '/\\'),
-		'/\\',
-		DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
-	);
+	$application_folder =
+		BASEPATH .
+		strtr(
+			trim($application_folder, "/\\"),
+			"/\\",
+			DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR,
+		);
 } else {
-	header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
-	echo 'Your application folder path does not appear to be set correctly. Please open the following file and correct this: ' . SELF;
+	header("HTTP/1.1 503 Service Unavailable.", true, 503);
+	echo "Your application folder path does not appear to be set correctly. Please open the following file and correct this: " .
+		self;
 	exit(3); // EXIT_CONFIG
 }
 
-define('APPPATH', $application_folder . DIRECTORY_SEPARATOR);
+define("APPPATH", $application_folder . DIRECTORY_SEPARATOR);
 
 // The path to the "views" directory
-if (! isset($view_folder[0]) && is_dir(APPPATH . 'views' . DIRECTORY_SEPARATOR)) {
-	$view_folder = APPPATH . 'views';
+if (
+	!isset($view_folder[0]) &&
+	is_dir(APPPATH . "views" . DIRECTORY_SEPARATOR)
+) {
+	$view_folder = APPPATH . "views";
 } elseif (is_dir($view_folder)) {
-	if (($_temp = realpath($view_folder)) !== FALSE) {
+	if (($_temp = realpath($view_folder)) !== false) {
 		$view_folder = $_temp;
 	} else {
 		$view_folder = strtr(
-			rtrim($view_folder, '/\\'),
-			'/\\',
-			DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
+			rtrim($view_folder, "/\\"),
+			"/\\",
+			DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR,
 		);
 	}
 } elseif (is_dir(APPPATH . $view_folder . DIRECTORY_SEPARATOR)) {
-	$view_folder = APPPATH . strtr(
-		trim($view_folder, '/\\'),
-		'/\\',
-		DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
-	);
+	$view_folder =
+		APPPATH .
+		strtr(
+			trim($view_folder, "/\\"),
+			"/\\",
+			DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR,
+		);
 } else {
-	header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
-	echo 'Your view folder path does not appear to be set correctly. Please open the following file and correct this: ' . SELF;
+	header("HTTP/1.1 503 Service Unavailable.", true, 503);
+	echo "Your view folder path does not appear to be set correctly. Please open the following file and correct this: " .
+		self;
 	exit(3); // EXIT_CONFIG
 }
 
-define('VIEWPATH', $view_folder . DIRECTORY_SEPARATOR);
+define("VIEWPATH", $view_folder . DIRECTORY_SEPARATOR);
 
 /*
  * --------------------------------------------------------------------
@@ -306,4 +317,4 @@ define('VIEWPATH', $view_folder . DIRECTORY_SEPARATOR);
  *
  * And away we go...
  */
-require_once BASEPATH . 'core/CodeIgniter.php';
+require_once BASEPATH . "core/CodeIgniter.php";
