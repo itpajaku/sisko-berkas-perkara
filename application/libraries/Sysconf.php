@@ -7,12 +7,25 @@ use App\Libraries\Eloquent;
 
 class Sysconf
 {
-  public Eloquent $eloquent;
+  /** @var Eloquent */
+  public $eloquent;
   protected static $sysObj;
 
   protected static $sysArr;
 
-  public function __construct(Eloquent $eloquent)
+  private $data = [];
+
+  public function __set($name, $value)
+  {
+    $this->data[$name] = $value;
+  }
+
+  public function __get($name)
+  {
+    return $this->data[$name] ?? null;
+  }
+
+  public function __construct($eloquent)
   {
     $this->eloquent = $eloquent;
     $sysdata = $this->eloquent->capsule->connection("sipp")->table("sys_config")->where("id", ">", 60)->get();
