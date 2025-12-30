@@ -6,7 +6,7 @@
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2014 - 2018, British Columbia Institute of Technology
+ * Copyright (c) 2022, CodeIgniter Foundation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,34 +28,33 @@
  *
  * @package	CodeIgniter
  * @author	EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
- * @license	http://opensource.org/licenses/MIT	MIT License
+ * @copyright	Copyright (c) 2022, CodeIgniter Foundation (https://codeigniter.com/)
+ * @license	https://opensource.org/licenses/MIT	MIT License
  * @link	https://codeigniter.com
- * @since	Version 1.3.0
+ * @since	Version 3.0.0
  * @filesource
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * SQLite Utility Class
+ * CI_Session_driver_interface
  *
- * @category	Database
- * @author		EllisLab Dev Team
- * @link		https://codeigniter.com/user_guide/database/
+ * A compatibility typeless SessionHandlerInterface alias
+ *
+ * @package	CodeIgniter
+ * @subpackage	Libraries
+ * @category	Sessions
+ * @author	Andrey Andreev
+ * @link	https://codeigniter.com/userguide3/libraries/sessions.html
  */
-class CI_DB_sqlite_utility extends CI_DB_utility {
+interface CI_Session_driver_interface {
 
-	/**
-	 * Export
-	 *
-	 * @param	array	$params	Preferences
-	 * @return	mixed
-	 */
-	protected function _backup($params = array())
-	{
-		// Currently unsupported
-		return $this->db->display_error('db_unsupported_feature');
-	}
-
+	public function open($save_path, $name);
+	public function close();
+	public function read($session_id);
+	public function write($session_id, $session_data);
+	public function destroy($session_id);
+	public function gc($maxlifetime);
+	public function updateTimestamp($session_id, $data);
+	public function validateId($session_id);
 }
