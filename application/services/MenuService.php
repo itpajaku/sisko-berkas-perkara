@@ -19,8 +19,8 @@ class MenuService
 
     self::$menu = AccessMenuSection::with(['menu_section.menu' => function ($q) {
       $q->whereHas('access_menu', function ($qq) {
-        $qq->where('group_id', AuthData::getUserData()->groupid);
-      });
+        $qq->where('group_id', AuthData::getUserData()->groupid)->where('is_active', 1);
+      })->where('is_active', 1);
     }])
       ->where("group_id", AuthData::getUserData()->groupid)
       ->get();
