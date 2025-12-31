@@ -4,6 +4,7 @@ namespace App\Libraries;
 
 
 use App\Libraries\Eloquent;
+use stdClass;
 
 class Sysconf
 {
@@ -43,7 +44,7 @@ class Sysconf
         ->where("id", ">", 60)
         ->get();
 
-      self::$sysObj = new class {};
+      self::$sysObj = new stdClass();
       foreach ($sysdata as $row) {
         self::$sysObj->{$row->name} = $row->value;
       }

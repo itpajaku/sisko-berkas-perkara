@@ -55,77 +55,75 @@ $group_id = Hashid::encode($selected_group->group_id);
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th colspan="3"> Tabel Akses Group Menu</th>
-                  <th class="text-end">
-                    <button
-                      class="btn btn-primary btn-sm"
-                      hx-get="<?= site_url("pengaturan/akun/" . Hashid::encode($selected_group->group_id) . "/form") ?>"
-                      hx-target="#modalTambahAkses>.modal-dialog>.modal-content>.modal-body"
-                      hx-swap="innerHTML"
-                      hx-headers='{"HX-Request-Component":true}'
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalTambahAkses">
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th colspan="3"> Tabel Akses Group Menu</th>
+              <th class="text-end">
+                <button
+                  class="btn btn-primary btn-sm"
+                  hx-get="<?= site_url("pengaturan/akun/" . Hashid::encode($selected_group->group_id) . "/form") ?>"
+                  hx-target="#modalTambahAkses>.modal-dialog>.modal-content>.modal-body"
+                  hx-swap="innerHTML"
+                  hx-headers='{"HX-Request-Component":true}'
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalTambahAkses">
 
-                      <i class="ti ti-plus"></i>
-                      Tambah Akses
-                    </button>
-                    <button
-                      hx-get="<?= base_url('/pengaturan/akun/' . $group_id . '/form_menu') ?>"
-                      hx-target="#modalAddAccessMenu>.modal-dialog>.modal-content>.modal-body"
-                      hx-headers='{"HX-Request-Component":true}'
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalAddAccessMenu"
-                      class="btn btn-success btn-sm">
-                      <i class="ti ti-plus"></i>
-                      Tambah Akses Menu
-                    </button>
-                  </th>
-                </tr>
-                <tr class="bg-info-subtle text-center">
-                  <th>No</th>
-                  <th>Nama Section</th>
-                  <th>Total Menu</th>
-                  <th>Nama Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php
-                foreach ($selected_group->access_menu_section as $n => $access_section) {
-                ?>
-                  <tr>
-                    <td><?= ++$n ?></td>
-                    <td><?= $access_section->menu_section->header ?></td>
-                    <td>
-                      <ol>
-                        <?php foreach ($allowed_menu->where('menu.section_id', $access_section->menu_section_id)->all() as $item) { ?>
-                          <li>
-                            <i class="<?= $item->menu->icon ?>"></i>
-                            <?= $item->menu->title ?>
-                          </li>
-                        <?php } ?>
-                      </ol>
-                    </td>
-                    <td>
-                      <button
-                        class="btn btn-danger btn-sm"
-                        hx-delete="<?= site_url('pengaturan/akun/' . Hashid::encode($selected_group->group_id) . '/menu_section/' . Hashid::encode($access_section->menu_section_id)) ?>"
-                        hx-swap="none"
-                        hx-confirm="Apakah anda yakin ingin menghapus akses ini?">
-                        <i class="ti ti-x"></i>
-                        Hapus
-                      </button>
-                    </td>
-                  </tr>
-                <?php } ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
+                  <i class="ti ti-plus"></i>
+                  Tambah Akses
+                </button>
+                <button
+                  hx-get="<?= base_url('/pengaturan/akun/' . $group_id . '/form_menu') ?>"
+                  hx-target="#modalAddAccessMenu>.modal-dialog>.modal-content>.modal-body"
+                  hx-headers='{"HX-Request-Component":true}'
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalAddAccessMenu"
+                  class="btn btn-success btn-sm">
+                  <i class="ti ti-plus"></i>
+                  Tambah Akses Menu
+                </button>
+              </th>
+            </tr>
+            <tr class="bg-info-subtle text-center">
+              <th>No</th>
+              <th>Nama Section</th>
+              <th>Total Menu</th>
+              <th>Nama Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            foreach ($selected_group->access_menu_section as $n => $access_section) {
+            ?>
+              <tr>
+                <td><?= ++$n ?></td>
+                <td><?= $access_section->menu_section->header ?></td>
+                <td>
+                  <ol>
+                    <?php foreach ($allowed_menu->where('menu.section_id', $access_section->menu_section_id)->all() as $item) { ?>
+                      <li>
+                        <i class="<?= $item->menu->icon ?>"></i>
+                        <?= $item->menu->title ?>
+                      </li>
+                    <?php } ?>
+                  </ol>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    hx-delete="<?= site_url('pengaturan/akun/' . Hashid::encode($selected_group->group_id) . '/menu_section/' . Hashid::encode($access_section->menu_section_id)) ?>"
+                    hx-swap="none"
+                    hx-confirm="Apakah anda yakin ingin menghapus akses ini?">
+                    <i class="ti ti-x"></i>
+                    Hapus
+                  </button>
+                </td>
+              </tr>
+            <?php } ?>
+          </tbody>
+        </table>
       </div>
       <div class="form-actions">
         <div class="card-body">

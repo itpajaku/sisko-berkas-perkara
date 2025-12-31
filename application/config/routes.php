@@ -98,6 +98,10 @@ $route['sinkron/stream_log'] = 'SinkronController/stream_log';
 
 $route['widget/(:any)'] = "WidgetController/$1";
 $route['charts/(:any)'] = "ChartsController/$1";
+
+
+$route['arsip_perkara'] = 'ArsipPerkaraController/index';
+$route['arsip_perkara/monitoring/datatable'] = 'ArsipPerkaraController/perkara_belum_arsip_datatable';
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes
