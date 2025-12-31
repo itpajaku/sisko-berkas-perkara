@@ -2,18 +2,19 @@
 
 namespace App\Libraries;
 
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Database\Capsule\Manager;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 
 class Eloquent
 {
-  public Capsule $capsule;
-  private static Capsule $instance;
+
+  public  $capsule;
+  private static  $instance;
 
   public function boot()
   {
-    $capsule = new Capsule;
+    $capsule = new Manager();
 
     $capsule->addConnection([
       'driver' => 'mysql',

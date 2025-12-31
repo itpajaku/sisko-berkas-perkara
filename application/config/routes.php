@@ -97,6 +97,7 @@ $route['sinkron/akta']['POST'] = 'SinkronController/akta_action';
 $route['sinkron/stream_log'] = 'SinkronController/stream_log';
 
 $route['widget/(:any)'] = "WidgetController/$1";
+$route['charts/(:any)'] = "ChartsController/$1";
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes

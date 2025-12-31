@@ -51,8 +51,10 @@ use App\Libraries\Templ;
       </div>
     </div>
     <hr>
-    <div class="text-center">Dashboard Arsip</div>
-    <div class="col-lg-4 d-flex align-items-stretch">
+  </div>
+  <div class="text-center">Dashboard Arsip</div>
+  <div class="row">
+    <div class="col-lg-12">
       <?= Templ::component("components/arsip_bar") ?>
     </div>
   </div>
