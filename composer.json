@@ -14,7 +14,7 @@
 		"php": ">=8.2",
 		"vlucas/phpdotenv": "^4.1.8",
 		"azharlihan/ci3-modules": "^1.0",
-		"robmorgan/phinx": "^0.12.13",
+		"robmorgan/phinx": "^0.16.10",
 		"illuminate/database": "12.44.0",
 		"illuminate/events": "12.44.0",
 		"hashids/hashids": "^4.1.0",
