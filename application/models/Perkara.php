@@ -44,4 +44,9 @@ class Perkara extends Model
   {
     return $this->setConnection("default")->hasOne(BerkasGugatan::class, "perkara_id", "perkara_id");
   }
+
+  public function pemberitahuan_putusan()
+  {
+    return $this->hasMany(PerkaraPemberitahuanPutusan::class, "perkara_id", "perkara_id");
+  }
 }

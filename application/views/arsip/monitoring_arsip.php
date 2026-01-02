@@ -33,8 +33,41 @@
   </div>
 </div>
 
+
+
+<!-- Modal Body-->
+<div
+  class="modal fade"
+  id="dynamic-modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div id="dynamic-modal-content" class="modal-content">
+      <div class="text-center m-3 p-3">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
   window.addEventListener("load", () => {
+    const dynamicModeal = document.getElementById("dynamic-modal");
+    dynamicModeal.addEventListener("show.bs.modal", (event) => {
+      $("#dynamic-modal-content").html(`
+        <div class="text-center m-3 p-3">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      `);
+    })
+
     $("#datatable-monitoring-arsip").DataTable({
       processing: true,
       serverSide: true,
@@ -62,7 +95,7 @@
         data: "aksi"
       }],
       drawCallback: () => {
-        // htmx.proccess("#datatable-monitoring-arsip")
+        htmx.process("#datatable-monitoring-arsip")
       }
     })
   })
