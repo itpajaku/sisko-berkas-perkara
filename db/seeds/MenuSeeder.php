@@ -129,6 +129,22 @@ class MenuSeeder extends AbstractSeed
 					"link" => "arsip_perkara",
 					"icon" => "ti ti-books",
 				],
+				[
+					"id" => 16,
+					"title" => "Stock Opname ATK",
+					"section_id" => 8,
+					"is_sub" => false,
+					"link" => "stock_opname_atk",
+					"icon" => "ti ti-pencil-plus",
+				],
+				[
+					"id" => 17,
+					"title" => "Referensi ATK",
+					"section_id" => 8,
+					"is_sub" => false,
+					"link" => "stock_opname_atk/referensi",
+					"icon" => "ti ti-books-pencil-cog",
+				],
 			])
 			->saveData();
 	}

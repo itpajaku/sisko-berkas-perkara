@@ -1,20 +1,25 @@
 <?php
 
-use App\Libraries\AuthData;
-?>
+use App\Libraries\AuthData; ?>
 <!doctype html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="<?= $this->security->get_csrf_token_name(); ?>" content="<?= $this->security->get_csrf_hash(); ?>" id="csrf-hash">
+  <meta name="<?= $this->security->get_csrf_token_name() ?>" content="<?= $this->security->get_csrf_hash() ?>" id="csrf-hash">
 
   <title><?= $title ?? $_ENV["APP_NAME"] ?></title>
-  <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('favicon/apple-touch-icon.png') ?>/">
-  <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('favicon/favicon-32x32.png') ?>">
-  <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('favicon/favicon-16x16.png') ?>">
-  <link rel="manifest" href="<?= base_url('favicon/site.webmanifest') ?>">
+  <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url(
+  	"favicon/apple-touch-icon.png",
+  ) ?>/">
+  <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url(
+  	"favicon/favicon-32x32.png",
+  ) ?>">
+  <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url(
+  	"favicon/favicon-16x16.png",
+  ) ?>">
+  <link rel="manifest" href="<?= base_url("favicon/site.webmanifest") ?>">
 
   <link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.min.css" />
   <link rel="stylesheet" href="<?= base_url() ?>assets/libs/datatable/datatable.bs5.css" />
@@ -22,6 +27,8 @@ use App\Libraries\AuthData;
   <link rel="stylesheet" href="<?= base_url() ?>assets/css/addons.css?v=2" />
   <link rel="stylesheet" href="<?= base_url() ?>assets/libs/swal2/swal2.css" />
   <link rel="stylesheet" href="<?= base_url() ?>assets/libs/material_datepicker/material.datepicker.css" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
   <script src="<?= base_url() ?>assets/js/htmx.min.js"></script>
   <script src="<?= base_url() ?>assets/js/htmx.sse.js"></script>
@@ -38,7 +45,7 @@ use App\Libraries\AuthData;
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
           <a href="javascript:void(0)" class="text-nowrap logo-img">
-            <img src="<?= base_url($_SERVER['LOGO']) ?>" width="180" alt="" />
+            <img src="<?= base_url($_SERVER["LOGO"]) ?>" width="180" alt="" />
           </a>
           <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
             <i class="ti ti-x fs-8"></i>
@@ -72,25 +79,31 @@ use App\Libraries\AuthData;
           <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
               <div class="d-flex flex-column align-items-end ">
-                <a href="javascript:void(0)" class=" text-dark"><?= AuthData::getUserData()->fullname ?></a>
-                <a href="javascript:void(0)"><?= AuthData::getUserData()->name ?></a>
+                <a href="javascript:void(0)" class=" text-dark"><?= AuthData::getUserData()
+                	->fullname ?></a>
+                <a href="javascript:void(0)"><?= AuthData::getUserData()
+                	->name ?></a>
               </div>
               <li class="nav-item dropdown">
                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <img src="https://api.dicebear.com/9.x/micah/svg?seed=<?= AuthData::getAvatar()->dice_bear_query ?? "w0e9as" ?>" alt="" width="35" height="35" class="rounded-circle">
+                  <img src="https://api.dicebear.com/9.x/micah/svg?seed=<?= AuthData::getAvatar()
+                  	->dice_bear_query ??
+                  	"w0e9as" ?>" alt="" width="35" height="35" class="rounded-circle">
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                   <div class="message-body">
-                    <a href="<?= base_url("/profile") ?>" class="d-flex align-items-center gap-2 dropdown-item">
+                    <a href="<?= base_url(
+                    	"/profile",
+                    ) ?>" class="d-flex align-items-center gap-2 dropdown-item">
                       <i class="ti ti-user fs-6"></i>
                       <p class="mb-0 fs-3">My Profile</p>
                     </a>
                     <button
                       hx-post="<?= base_url("/logout") ?>"
                       hx-vals='<?= json_encode([
-                                  $this->security->get_csrf_token_name() => $this->security->get_csrf_hash()
-                                ]) ?>'
+                      	$this->security->get_csrf_token_name() => $this->security->get_csrf_hash(),
+                      ]) ?>'
                       class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</button>
                   </div>
                 </div>
@@ -118,9 +131,9 @@ use App\Libraries\AuthData;
   <script src="<?= base_url() ?>assets/libs/swal2/swal2.js"></script>
   <script src="<?= base_url() ?>assets/libs/toastr/toastr.js"></script>
   <?php if ($this->uri->segment(1) != "dashboard") { ?>
-    <script src="<?= base_url('assets/js/main.js') ?>"></script>
+    <script src="<?= base_url("assets/js/main.js") ?>"></script>
   <?php } ?>
-  <script src="<?= base_url('assets/js/chart.init.js') ?>"></script>
+  <script src="<?= base_url("assets/js/chart.init.js") ?>"></script>
 </body>
 
 </html>
