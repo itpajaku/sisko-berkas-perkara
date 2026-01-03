@@ -41,7 +41,7 @@ class ReferensiAtkDataTable
 				$end   = $_POST['end'] ?? null;
 
 				if ($start && $end) {
-					$query->whereBetween('perkara.created_at', [$start, $end]);
+					$query->whereBetween('created_at', [$start, $end]);
 				}
 			}
 
@@ -49,7 +49,7 @@ class ReferensiAtkDataTable
 				$year = $_POST['year'] ?? null;
 
 				if ($year) {
-					$query->whereYear('perkara.created_at', $year);
+					$query->whereYear('created_at', $year);
 				}
 			}
 		}
@@ -60,7 +60,7 @@ class ReferensiAtkDataTable
 
 			$query->where(function ($q) use ($search) {
 				foreach ($this->columnSearch as $column) {
-					$q->orWhere("perkara.$column", 'LIKE', "%{$search}%");
+					$q->orWhere("$column", 'LIKE', "%{$search}%");
 				}
 			});
 		}
@@ -69,7 +69,6 @@ class ReferensiAtkDataTable
 		if (isset($_POST['order'][0])) {
 			$columnIndex = $_POST['order'][0]['column'];
 			$direction   = $_POST['order'][0]['dir'];
-
 			$query->orderBy(
 				$this->columnOrder[$columnIndex],
 				$direction

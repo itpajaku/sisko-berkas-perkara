@@ -1,6 +1,10 @@
 <div class="modal-content" id="dynamic-modal-content">
 	<div class="modal-header">
-		<?php if (isset($isEddit)) { ?>
+		<?php
+
+		use App\Libraries\Hashid;
+
+		if (isset($item)) { ?>
 			<h1 class="modal-title fs-5" id="exampleModalLabel">Form Ubah</h1>
 		<?php } else { ?>
 			<h1 class="modal-title fs-5" id="exampleModalLabel">Form Tambah</h1>
@@ -9,7 +13,11 @@
 	</div>
 	<div class="modal-body">
 		<form
+			<?php if (isset($item)) { ?>
+			hx-post="<?= base_url('stock_opname_atk/referensi/' . Hashid::encode($item->id)) ?>"
+			<?php } else { ?>
 			hx-post="<?= base_url('stock_opname_atk/referensi') ?>"
+			<?php } ?>
 			hx-trigger="submit"
 			hx-target="#form-referensi-alert"
 			hx-swap="outerHTML">
@@ -20,7 +28,13 @@
 					<i class="ti ti-edit"></i> Name
 				</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" name="name" placeholder="Nama item ATK..." required>
+					<input
+						type="text"
+						class="form-control"
+						name="name"
+						placeholder="Nama item ATK..."
+						required
+						value="<?= $item->name ?? null ?>">
 				</div>
 			</div>
 
@@ -31,9 +45,9 @@
 				</label>
 				<div class="col-sm-10">
 					<select name="type" class="form-select">
-						<option value="consume">Consume</option>
-						<option value="assets">Assets</option>
-						<option value="etc">Other</option>
+						<option <?= (isset($item) && $item->type == 'consume') ? 'selected' : null ?> value="consume">Consume</option>
+						<option <?= (isset($item) && $item->type == 'assets') ? 'selected' : null ?> value="assets">Assets</option>
+						<option <?= (isset($item) && $item->type == 'etc') ? 'selected' : null ?> value="etc">Other</option>
 					</select>
 				</div>
 			</div>
@@ -74,17 +88,32 @@
 					<i class="ti ti-file-description"></i> Deskripsi
 				</label>
 				<div class="col-sm-10">
-					<textarea name="desc" class="form-control" rows="3" placeholder="Deskripsi item..."></textarea>
+					<textarea name="desc" class="form-control" rows="3" placeholder="Deskripsi item..."><?= $item->desc ?? null ?></textarea>
 				</div>
 			</div>
 
-			<div class="text-end">
-				<button type="reset" class="btn btn-secondary ">
-					<i class="ti ti-refresh"></i> Reset
-				</button>
-				<button type="submit" class="btn btn-primary ">
-					<i class="ti ti-device-floppy"></i> Simpan
-				</button>
+			<div class="d-flex justify-content-between">
+				<?php if (isset($item)) { ?>
+					<button
+						type="button"
+						onclick="swalDeleteConfirm(this)"
+						hx-trigger="confirmed"
+						hx-delete="<?= base_url('stock_opname_atk/referensi/' . Hashid::encode($item->id)) ?>"
+						class="btn btn-danger">
+						<i class="ti ti-trash"></i>
+						Hapus Item
+					</button>
+				<?php } else {
+					echo "<div></div>";
+				} ?>
+				<div class="text-end">
+					<button type="reset" class="btn btn-secondary ">
+						<i class="ti ti-refresh"></i> Reset
+					</button>
+					<button type="submit" class="btn btn-primary ">
+						<i class="ti ti-device-floppy"></i> Simpan
+					</button>
+				</div>
 			</div>
 		</form>
 		<div id="form-referensi-alert">

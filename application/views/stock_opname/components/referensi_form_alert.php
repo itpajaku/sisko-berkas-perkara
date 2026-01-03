@@ -1,4 +1,4 @@
-<div id="form-referensi-alert" class="alert alert-<?= $type ?> alert-dismissible fade show" role="alert">
+<div id="form-referensi-alert" class="alert alert-<?= $type ?> alert-dismissible mt-3 fade show" role="alert">
 	<div class="d-flex">
 		<strong>Alert !</strong>
 		<div><?= $message ?></div>

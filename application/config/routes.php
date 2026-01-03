@@ -130,9 +130,12 @@ $route["arsip_perkara/monitoring/datatable"] =
 	"ArsipPerkaraController/perkara_belum_arsip_datatable";
 
 $route["stock_opname_atk"] = "StockOpnameAtkController/index";
-$route["stock_opname_atk/referensi"]['GET'] = "StockOpnameAtkController/referensi_page";
-$route["stock_opname_atk/referensi/datatable"] = "StockOpnameAtkController/referensi_datatable";
 $route["stock_opname_atk/referensi/form"] = "StockOpnameAtkController/referensi_form";
+$route["stock_opname_atk/referensi/datatable"] = "StockOpnameAtkController/referensi_datatable";
+$route["stock_opname_atk/referensi"]['GET'] = "StockOpnameAtkController/referensi_page";
+$route["stock_opname_atk/referensi/(:any)"]['GET'] = 'StockOpnameAtkController/referensi_edit/$1';
+$route["stock_opname_atk/referensi/(:any)"]['POST'] = 'StockOpnameAtkController/referensi_update/$1';
+$route["stock_opname_atk/referensi/(:any)"]['DELETE'] = 'StockOpnameAtkController/referensi_delete/$1';
 $route["stock_opname_atk/referensi"]['POST'] = "StockOpnameAtkController/add_referensi";
 /*
 | -------------------------------------------------------------------------

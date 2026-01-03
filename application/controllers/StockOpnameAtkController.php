@@ -1,11 +1,15 @@
 <?php
 
+use App\Libraries\Hashid;
 use App\Libraries\Templ;
 use App\Models\AtkItem;
 use App\Models\ReferensiAtkDataTable;
+use App\Traits\ItemAtkValidation;
 
 class StockOpnameAtkController extends APP_Controller
 {
+	use ItemAtkValidation;
+
 	public function index(): void
 	{
 		Templ::render("stock_opname/monitoring_atk", [
@@ -34,7 +38,7 @@ class StockOpnameAtkController extends APP_Controller
 				'type' => $item->type,
 				'desc' => $item->desc,
 				'status' => $item->status ? "Berlaku" : "Tidak Berlaku",
-				'aksi' => Templ::component("stock_opname/components/datatable_aksi_button"),
+				'aksi' => Templ::component("stock_opname/components/datatable_aksi_button", compact("item")),
 			];
 		});
 		return $this->output
@@ -65,53 +69,7 @@ class StockOpnameAtkController extends APP_Controller
 		};
 
 		try {
-			$this->form_validation->set_rules([
-				[
-					'field' => 'name',
-					'label' => 'Nama Item',
-					'rules' => 'required|min_length[3]|max_length[255]',
-					'errors' => [
-						'required'   => '%s wajib diisi.',
-						'min_length' => '%s minimal 3 karakter.',
-						'max_length' => '%s maksimal 255 karakter.',
-					]
-				],
-				[
-					'field' => 'type',
-					'label' => 'Tipe Item',
-					'rules' => 'required|in_list[consume,assets,etc]',
-					'errors' => [
-						'required' => '%s wajib dipilih.',
-						'in_list'  => '%s tidak valid.',
-					]
-				],
-				[
-					'field' => 'icon',
-					'label' => 'Icon',
-					'rules' => 'max_length[32]',
-					'errors' => [
-						'max_length' => '%s maksimal 32 karakter.',
-					]
-				],
-				[
-					'field' => 'desc',
-					'label' => 'Deskripsi',
-					'rules' => 'required|max_length[512]',
-					'errors' => [
-						'max_length' => '%s maksimal 512 karakter.',
-						'required' => 'Tolong isi keterangan barang'
-					]
-				],
-			]);
-
-			if ($this->form_validation->run() == FALSE) {
-				$ul = "<ul>";
-				foreach ($this->form_validation->error_array() as $er) {
-					$ul .= "<li>$er</li>";
-				}
-				$ul .= "</ul>";
-				throw new Exception($ul);
-			}
+			$this->validate_form();
 
 			$item = AtkItem::create([
 				'name'   => $this->input->post('name', true),
@@ -133,6 +91,84 @@ class StockOpnameAtkController extends APP_Controller
 				->set_content_type("text/html")
 				->set_output(Templ::component("stock_opname/components/referensi_form_alert", [
 					"message" => "Berhasil Menambahkan Item. Jendela akan ditutup dalam 2 detik",
+					"type" => "success"
+				]));
+		} catch (\Throwable $th) {
+			$this->output
+				->set_content_type("text/html")
+				->set_output(Templ::component("stock_opname/components/referensi_form_alert", [
+					"message" => $th->getMessage(),
+					"type" => "danger"
+				]));
+		}
+	}
+
+	public function referensi_edit($id)
+	{
+		if (!isset($this->input->request_headers()['Hx-Request'])) {
+			return $this->output->set_header(404)->set_output("Theres nothing here");
+		};
+
+		$item = AtkItem::find(Hashid::singleDecode($id));
+
+		$this->output
+			->set_content_type("text/html")
+			->set_output(Templ::component("stock_opname/components/referensi_form", [
+				"item" => $item
+			]));
+	}
+
+	public function referensi_update($id)
+	{
+		if (!isset($this->input->request_headers()['Hx-Request'])) {
+			return $this->output->set_header(404)->set_output("Theres nothing here");
+		};
+
+		try {
+			$this->validate_form();
+			AtkItem::where("id", Hashid::singleDecode($id))->update([
+				'name'   => $this->input->post('name', true),
+				'type'   => $this->input->post('type', true),
+				'status' => $this->input->post('status') ? 1 : 0,
+				'icon'   => $this->input->post('icon', true) ?: 'ti ti-pencil',
+				'desc'   => $this->input->post('desc', true),
+			]);
+
+			$htmxEvent = [
+				"updateSuccess" => true,
+				"closeDynamicModal" => true
+			];
+
+			$this->output
+				->set_header("HX-Trigger: " . json_encode($htmxEvent))
+				->set_content_type("text/html")
+				->set_output(Templ::component("stock_opname/components/referensi_form_alert", [
+					"message" => "Berhasil Memperbaharui Item. Jendela akan ditutup dalam 2 detik",
+					"type" => "success"
+				]));
+		} catch (\Throwable $th) {
+			$this->output
+				->set_content_type("text/html")
+				->set_output(Templ::component("stock_opname/components/referensi_form_alert", [
+					"message" => $th->getMessage(),
+					"type" => "danger"
+				]));
+		}
+	}
+
+	public function referensi_delete($id)
+	{
+		if (!isset($this->input->request_headers()['Hx-Request'])) {
+			return $this->output->set_header(404)->set_output("Theres nothing here");
+		};
+
+		try {
+			AtkItem::find(Hashid::singleDecode($id))->delete();
+			$this->output
+				->set_header("HX-Trigger: deleteSuccess, closeDynamicModal")
+				->set_content_type("text/html")
+				->set_output(Templ::component("stock_opname/components/referensi_form_alert", [
+					"message" => "Berhasil Menghapus Item. Jendela akan ditutup dalam 2 detik",
 					"type" => "success"
 				]));
 		} catch (\Throwable $th) {

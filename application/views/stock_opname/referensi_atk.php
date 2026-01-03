@@ -85,7 +85,7 @@
 				data: "aksi"
 			}],
 			drawCallback: () => {
-				// htmx.proccess("#datatable-monitoring-arsip")
+				htmx.process("#table-referensi-atk")
 			}
 		})
 
@@ -96,6 +96,14 @@
 		})
 
 		document.body.addEventListener("insertSuccess", (e) => {
+			datatable.ajax.reload(null, false)
+		})
+
+		document.body.addEventListener("updateSuccess", (e) => {
+			datatable.ajax.reload(null, false)
+		})
+
+		document.body.addEventListener("deleteSuccess", (e) => {
 			datatable.ajax.reload(null, false)
 		})
 	})
