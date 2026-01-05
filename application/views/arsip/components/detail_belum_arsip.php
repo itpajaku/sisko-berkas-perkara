@@ -131,14 +131,33 @@
            <i class="ti ti-calendar me-1"></i>
            Tanggal Diterima Berkas
          </div>
-         <div class="fw-semibold"><?= !$berkas ? "Belum Diregis" : tanggal_indo($berkas->tanggal_diterima, false)  ?></div>
+         <div class="fw-semibold"><?php
+                                  if (isset($berkas)) {
+                                    if ($berkas->tanggal_diterima) {
+                                      echo tanggal_indo($berkas->tanggal_diterima, false);
+                                    } else {
+                                      echo "Tanggal diterima belum diisi";
+                                    }
+                                  } else {
+                                    echo "Berkas Belum Diregister";
+                                  } ?></div>
        </div>
        <div class="col-6">
          <div class="text-muted mb-1">
            <i class="ti ti-file-description me-1"></i>
            Status
          </div>
-         <div class="fw-semibold"><?= $berkas->status ?? "Nihil" ?></div>
+         <div class="fw-semibold"><?php
+                                  if (isset($berkas)) {
+                                    if ($berkas->status) {
+                                      echo "Diregister. Diterima.";
+                                    } else {
+                                      echo "Diregister. Belum Diterima.";
+                                    }
+                                  } else {
+                                    echo "Berkas Belum Diregister";
+                                  }
+                                  ?></div>
        </div>
      </div>
      <table class="table table-bordered  border-primary">
@@ -151,11 +170,16 @@
        </thead>
        <tbody>
          <?php if ($berkas) { ?>
-           <tr>
-             <td>1</td>
-             <td><?= $berkas->ekspedisi_berkas ?></td>
-             <td><?= $berkas->keterangan ?></td>
-           </tr>
+           <?php foreach ($berkas->berkas_ekspedisi as $n => $ekspedisi) { ?>
+             <tr>
+               <td><?= ++$n ?></td>
+               <td><?= $ekspedisi->posisi_ekspedisi->posisi ?></td>
+               <td><?= tanggal_indo(date("Y-m-d", strtotime($ekspedisi->save_time)), false) ?> <details>
+                   <?= $ekspedisi->save_time ?>
+                 </details>
+               </td>
+             </tr>
+           <?php } ?>
          <?php } else { ?>
            <tr>
              <td colspan="3" class="text-center">
@@ -164,6 +188,24 @@
          <?php } ?>
        </tbody>
      </table>
+     <div
+       class="alert alert-warning alert-dismissible fade show mx-3"
+       role="alert">
+       <button
+         type="button"
+         class="btn-close"
+         data-bs-dismiss="alert"
+         aria-label="Close"></button>
+       <strong>Perhatian !</strong> Untuk menghapus perkara yang yang muncul di tabel ini. Silahkan input perkara ini di arsip SIPP, atau pastikan kolom nomor perkara sesuai dengan nomor perkara disini.
+     </div>
+
+     <script>
+       var alertList = document.querySelectorAll(".alert");
+       alertList.forEach(function(alert) {
+         new bootstrap.Alert(alert);
+       });
+     </script>
+
    </div>
    <div class="modal-footer">
      <button
