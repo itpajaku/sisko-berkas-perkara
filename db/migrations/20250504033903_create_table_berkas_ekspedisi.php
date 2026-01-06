@@ -21,7 +21,7 @@ final class CreateTableBerkasEkspedisi extends AbstractMigration
     {
         $table = $this->table("berkas_ekspedisi");
         $table->addColumn("save_point", "string", ["null" => false]);
-        $table->addColumn("save_time", "timestamp", ["null" => true]);
+        $table->addColumn("save_time", "datetime", ["null" => true]);
         $table->addColumn("berkas_id", "integer", ["null" => false]);
         $table->addColumn("berkas_type", "string");
         $table->addColumn("status", "boolean", ["default" => true]);

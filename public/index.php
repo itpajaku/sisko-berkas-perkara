@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CodeIgniter
  *
@@ -317,4 +318,5 @@ define("VIEWPATH", $view_folder . DIRECTORY_SEPARATOR);
  *
  * And away we go...
  */
+date_default_timezone_set('Asia/Jakarta');
 require_once BASEPATH . "core/CodeIgniter.php";
