@@ -13,6 +13,7 @@ use App\Models\BerkasGugatan;
 use APP_Controller;
 use Illuminate\Support\Facades\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class BerkasGugatanService
 {
@@ -82,10 +83,21 @@ class BerkasGugatanService
     $list = $this->app->BerkasGugatanDataTable->get_datatables();
     $data = [];
     $n = 1;
+
+    $perkara = DB::connection("sipp")
+      ->table("perkara")
+      ->select("nomor_perkara", "prodeo", "efiling_id", "perkara.perkara_id as perkara_id")
+      ->leftJoin("perkara_efiling_id", "perkara.perkara_id", "=", "perkara_efiling_id.perkara_id")
+      ->whereIn("perkara.perkara_id", array_column($list, "perkara_id"))
+      ->get();
+
     foreach ($list as $r) {
       $row = [];
       $row['no'] = $n;
-      $row['nomor_perkara'] = $r->nomor_perkara;
+      $row['nomor_perkara'] = Templ::component("berkas_gugatan/components/kolom_nomor_perkara", [
+        "perkara" => $perkara->firstWhere("perkara_id", $r->perkara_id),
+        "berkas" => $r
+      ]);
       $row['tanggal_pendaftaran'] = tanggal_indo($r->tanggal_pendaftaran, false);
       $row['tanggal_putusan'] = tanggal_indo($r->tanggal_putusan, false);
       $row['tanggal_pbt'] = $this->app->load->view("berkas_gugatan/kolom_pbt", ["berkas" => $r], true);
@@ -104,6 +116,7 @@ class BerkasGugatanService
       "recordsTotal" => $this->app->BerkasGugatanDataTable->count_all(),
       "recordsFiltered" => $this->app->BerkasGugatanDataTable->count_filtered(),
       "data" => $data,
+      "perkara" => $perkara
     ];
   }
 
@@ -194,7 +207,8 @@ class BerkasGugatanService
   public function updateOne($id)
   {
     $berkas = BerkasGugatan::findOrFail($id);
-    $berkas->update(RequestBody::post()->toArray());
+
+    $berkas->update(RequestBody::post()->except($this->app->security->get_csrf_token_name())->toArray());
   }
 
   public function generate_docs()

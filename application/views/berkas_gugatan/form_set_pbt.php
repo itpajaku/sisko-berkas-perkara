@@ -3,6 +3,7 @@
   hx-target="#pbt-picker-result"
   hx-on::before-request="$('#buttonSimpanPBT').attr('disabled', true).html('Menyimpan...')"
   hx-on::after-request="$('#buttonSimpanPBT').attr('disabled', false).html('Simpan')">
+  <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
   <div class="modal-body">
     <div class="m-2">
       <div class="input-group">

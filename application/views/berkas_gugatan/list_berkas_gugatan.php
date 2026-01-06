@@ -133,6 +133,9 @@
       "ajax": {
         "url": "<?= base_url("/berkas_gugatan/datatable?" . $_SERVER['QUERY_STRING']) ?>",
         "type": "POST",
+        "data": {
+          "<?= $this->security->get_csrf_token_name() ?>": "<?= $this->security->get_csrf_hash(); ?>",
+        }
       },
       "columns": [{
           "data": "no"

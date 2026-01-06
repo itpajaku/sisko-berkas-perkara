@@ -12,9 +12,9 @@
         <a
           class="dropdown-item"
           hx-post="<?= base_url("berkas_gugatan/sinkron/" . App\Libraries\Hashid::encode($berkas->id)) ?>"
+          hx-vals='{"<?= $this->security->get_csrf_token_name() ?>":"<?= $this->security->get_csrf_hash() ?>", "status" : 1}'
           hx-target="#kolom-selisih-<?= App\Libraries\Hashid::encode($berkas->id) ?>"
           hx-swap="none"
-          hx-vals='{"status":1}'
           href="javascript:void(0)">Sinkron Berkas SIPP</a>
       </li>
     <?php } ?>
@@ -24,8 +24,8 @@
           class="dropdown-item"
           hx-post="<?= base_url("berkas_gugatan/sinkron/" . App\Libraries\Hashid::encode($berkas->id)) ?>"
           hx-target="#kolom-selisih-<?= App\Libraries\Hashid::encode($berkas->id) ?>"
+          hx-vals='{"<?= $this->security->get_csrf_token_name() ?>":"<?= $this->security->get_csrf_hash() ?>", "status" : 0}'
           hx-swap="none"
-          hx-vals='{"status":0}'
           href="javascript:void(0)">Hapus Status Berkas</a>
       </li>
     <?php } ?>

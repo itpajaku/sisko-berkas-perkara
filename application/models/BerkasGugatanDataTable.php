@@ -23,6 +23,7 @@ class BerkasGugatanDataTable extends CI_Model
       false
     );
     $this->db->from($this->table);
+    $year = date("Y");
     if (isset($_GET["filter"])) {
       if ($_GET["type"] == "range") {
         $start = $_GET["start"];
@@ -34,6 +35,8 @@ class BerkasGugatanDataTable extends CI_Model
         $year = RequestBody::get()->year;
         $this->db->where("YEAR(created_at) = '$year'");
       }
+    } else {
+      $this->db->where("YEAR(created_at) = '$year'");
     }
 
     $i = 0;
@@ -79,6 +82,21 @@ class BerkasGugatanDataTable extends CI_Model
   public function count_all()
   {
     $this->db->from($this->table);
+    $year = date("Y");
+    if (isset($_GET["filter"])) {
+      if ($_GET["type"] == "range") {
+        $start = $_GET["start"];
+        $end = $_GET["end"];
+        $this->db->where("created_at >= '$start' AND created_at <= '$end'");
+      }
+
+      if ($_GET["type"] == "year") {
+        $year = RequestBody::get()->year;
+        $this->db->where("YEAR(created_at) = '$year'");
+      }
+    } else {
+      $this->db->where("YEAR(created_at) = '$year'");
+    }
     return $this->db->count_all_results();
   }
 }
