@@ -23,6 +23,7 @@
       hx-on::after-request="$('#btn-cari-perkara').attr('disabled', false).html('<i class=\'ti ti-search\'></i> Cari')"
       class="form-horizontal r-separator">
       <div class="form-group p-3 mb-3 text-bg-light">
+        <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
         <div class="row">
           <label for="inputNomorPerkara" class="col-sm-3 text-end  col-form-label">Nomor Perkara</label>
           <div class="col-sm-9">
