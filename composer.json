@@ -18,7 +18,8 @@
 		"illuminate/database": "12.44.0",
 		"illuminate/events": "12.44.0",
 		"hashids/hashids": "^4.1.0",
-		"phpoffice/phpword": "^1.3"
+		"phpoffice/phpword": "^1.3",
+		"phpseclib/phpseclib": "^3.0"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
