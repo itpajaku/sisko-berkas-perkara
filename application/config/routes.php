@@ -87,6 +87,14 @@ $route['pengaturan/akun/(:any)/menu_section']['POST'] = 'PengaturanController/ad
 $route['pengaturan/akun/(:any)/menu_section/(:any)']['DELETE'] = 'PengaturanController/delete_menu_section/$1/$2';
 $route['pengaturan/akun/(:any)/form_menu'] = 'PengaturanController/fetch_menu_form/$1';
 $route['pengaturan/akun/(:any)/menu_section/(:any)/form_menu'] = 'PengaturanController/fetch_menu_section_form/$1/$2';
+$route['pengaturan/ekspedisi'] = 'PengaturanEkspedisiController/index';
+$route['pengaturan/ekspedisi/page'] = 'PengaturanEkspedisiController/pagination/$1';
+$route['pengaturan/ekspedisi/page/(:num)'] = 'PengaturanEkspedisiController/pagination/$1';
+$route['pengaturan/ekspedisi/tambah']['GET'] = 'PengaturanEkspedisiController/form_tambah';
+$route['pengaturan/ekspedisi/tambah']['POST'] = 'PengaturanEkspedisiController/tambah';
+$route['pengaturan/ekspedisi/edit/(:any)']['GET'] = 'PengaturanEkspedisiController/form_edit/$1';
+$route['pengaturan/ekspedisi/edit/(:any)']['PUT'] = 'PengaturanEkspedisiController/edit/$1';
+$route['pengaturan/ekspedisi/(:any)']['DELETE'] = 'PengaturanEkspedisiController/delete/$1';
 
 $route['sinkron'] = 'SinkronController/berkas_gugatan_page';
 $route['sinkron/berkas']['GET'] = 'SinkronController/berkas_page';

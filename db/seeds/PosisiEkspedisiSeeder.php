@@ -18,41 +18,37 @@ class PosisiEkspedisiSeeder extends AbstractSeed
         $table = $this->table("posisi_ekspedisi");
         $table->insert([
             [
-                "posisi" => "Meja 3 Gugatan",
-                "keterangan" => "Meja 3 Gugatan"
+                "posisi" => "Meja 3",
+                "keterangan" => "Meja 3 Produk"
             ],
             [
-                "posisi" => "Meja 2 Gugatan",
-                "keterangan" => "Meja 2 Gugatan"
+                "posisi" => "Meja 2",
+                "keterangan" => "Meja 2 Berkas"
             ],
             [
-                "posisi" => "Meja 1 Gugatan",
-                "keterangan" => "Meja 1 Gugatan"
+                "posisi" => "Meja 1",
+                "keterangan" => "Meja 1 Pendaftaran"
             ],
             [
-                "posisi" => "Panmud Gugatan",
-                "keterangan" => "Panitera Muda Gugatan"
+                "posisi" => "Panitera",
+                "keterangan" => "Panitera Pengadilan"
             ],
             [
-                "posisi" => "Panmud Permohonan",
-                "keterangan" => "Panitera Muda Permohonan"
+                "posisi" => "Hakim",
+                "keterangan" => "Majelis Hakim"
             ],
             [
-                "posisi" => "Panmud Hukum",
-                "keterangan" => "Panitera Muda Hukum"
+                "posisi" => "Jurusita",
+                "keterangan" => "Jurusita/Jurusita Pengganti"
             ],
             [
-                "posisi" => "Panitera Pengganti",
-                "keterangan" => "Panitera pengganti yang telah ditetapkan"
-            ],
-            [
-                "posisi" => "Ketua Majelis",
-                "keterangan" => "Ketua Majelis Hakim"
+                "posisi" => "Upaya Hukum",
+                "keterangan" => "Upaya Hukum Banding/Kasasi/PK"
             ],
             [
                 "posisi" => "Arsip",
-                "keterangan" => "Ruang Arsip"
-            ],
+                "keterangan" => "Arsip Pengadilan"
+            ]
         ])->saveData();
     }
 }
