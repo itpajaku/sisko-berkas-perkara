@@ -23,7 +23,7 @@ class ReferensiAtkDataTable
 	];
 
 	protected array $defaultOrder = [
-		'id' => 'desc'
+		'atk_item.id' => 'desc'
 	];
 
 	/* ==========================================================
@@ -31,7 +31,9 @@ class ReferensiAtkDataTable
        ========================================================== */
 	private function baseQuery()
 	{
-		$query = DB::table($this->table);
+		$query = DB::table($this->table)->select(['atk_item.*', 'atk_stock.stock'])->leftJoin("atk_stock", function ($q) {
+			$q->on('atk_item.id', '=', 'atk_stock.atk_item_id')->where('tahun', date('Y'));
+		});
 
 		/* ================= FILTER ================= */
 		if (isset($_POST['filter'])) {

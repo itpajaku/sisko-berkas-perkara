@@ -29,6 +29,7 @@
 						<th>Keterangan</th>
 						<th>Status</th>
 						<th>Aksi</th>
+						<th>Stock</th>
 					</tr>
 				</thead>
 			</table>
@@ -83,6 +84,8 @@
 				data: "status"
 			}, {
 				data: "aksi"
+			}, {
+				data: "stock"
 			}],
 			drawCallback: () => {
 				htmx.process("#table-referensi-atk")

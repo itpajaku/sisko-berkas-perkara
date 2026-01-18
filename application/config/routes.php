@@ -137,6 +137,12 @@ $route["stock_opname_atk/referensi/(:any)"]['GET'] = 'StockOpnameAtkController/r
 $route["stock_opname_atk/referensi/(:any)"]['POST'] = 'StockOpnameAtkController/referensi_update/$1';
 $route["stock_opname_atk/referensi/(:any)"]['DELETE'] = 'StockOpnameAtkController/referensi_delete/$1';
 $route["stock_opname_atk/referensi"]['POST'] = "StockOpnameAtkController/add_referensi";
+$route["stock_opname_atk/tambah"]['GET'] = "StockOpnameAtkController/add_transaction_form";
+$route["stock_opname_atk/autocomplete_name"]['GET'] = "StockOpnameAtkController/autocomplete_item";
+$route["stock_opname_atk/referensi/(:any)/stock"]['GET'] = 'StockOpnameAtkController/stock_page/$1';
+$route["stock_opname_atk/referensi/(:any)/stock_form"]['GET'] = 'StockOpnameAtkController/stock_form/$1';
+$route['stock_opname_atk/referensi/(:any)/stock']['POST'] = 'StockOpnameAtkController/stock_store/$1';
+
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes

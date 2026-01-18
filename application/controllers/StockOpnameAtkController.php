@@ -1,10 +1,13 @@
 <?php
 
 use App\Libraries\Hashid;
+use App\Libraries\MethodFilter;
 use App\Libraries\Templ;
 use App\Models\AtkItem;
+use App\Models\AtkStock;
 use App\Models\ReferensiAtkDataTable;
 use App\Traits\ItemAtkValidation;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class StockOpnameAtkController extends APP_Controller
 {
@@ -32,6 +35,7 @@ class StockOpnameAtkController extends APP_Controller
 	{
 		$model = new ReferensiAtkDataTable();
 		$data = $model->getDatatables()->map(function ($item, $index) {
+			$item->hashedId = Hashid::encode($item->id);
 			return [
 				'no' => $_POST['start'] + $index + 1,
 				'item' => "<strong><ti class='$item->icon'></ti> $item->name</strong>",
@@ -39,6 +43,7 @@ class StockOpnameAtkController extends APP_Controller
 				'desc' => $item->desc,
 				'status' => $item->status ? "Berlaku" : "Tidak Berlaku",
 				'aksi' => Templ::component("stock_opname/components/datatable_aksi_button", compact("item")),
+				'stock' => Templ::component("stock_opname/components/kolom_stock_atk", compact("item")),
 			];
 		});
 		return $this->output
@@ -178,6 +183,142 @@ class StockOpnameAtkController extends APP_Controller
 					"message" => $th->getMessage(),
 					"type" => "danger"
 				]));
+		}
+	}
+
+	public function add_transaction_form()
+	{
+		MethodFilter::mustHeader('HX-Request-Component');
+		$this->output->set_content_type("text/html")->set_output(
+			Templ::component("stock_opname/components/add_atk_trans_form")
+		);
+	}
+
+	public function autocomplete_item()
+	{
+		MethodFilter::mustHeader("HX-Request-Autocomplete");
+		$q = $this->input->get('q', true);
+
+		$data = DB::table('atk_item')
+			->select('id', 'name', 'type', 'icon')
+			->where('status', 1)
+			->where('name', 'like', "%{$q}%")
+			->limit(10)
+			->get();
+
+		echo json_encode($data->transform(function ($value, $key) {
+			$value->id = Hashid::encode($value->id);
+			return $value;
+		}));
+	}
+
+	public function stock_info($id)
+	{
+		$itemId = Hashid::singleDecode($id);
+
+		$stock = DB::table('atk_stock')
+			->where('atk_item_id', $itemId)
+			->where('tahun', date('Y'))
+			->first();
+
+		$this->output->set_output(
+			Templ::component("stock_opname/components/info_stock_atk", [
+				["stock" => $stock->stock]
+			])
+		);
+	}
+
+	public function stock_page($id)
+	{
+		$atk = AtkItem::findOrFail(Hashid::singleDecode($id));
+		$stocks = AtkStock::where('atk_item_id', $atk->id)
+			->orderBy('tahun', 'desc')
+			->get();
+		$page_name = "Halaman Stock ATK $atk->name";
+		Templ::render("stock_opname/atk_stock_page", [
+			"atk" => $atk,
+			"stocks" => $stocks,
+			"breadcrumb" => Templ::component("layouts/page_header", [
+				"page_name" => $page_name,
+				"breadcrumbs" => [
+					["name" => "Home", "url" => site_url("meja_3/dashboard")],
+					["name" => "Referensi ATK", "url" => site_url("stock_opname_atk/referensi")],
+					["name" => $page_name, "url" => site_url("stock_opname_atk/referensi/$id/stock")],
+				],
+			])
+		])->layout("layouts/main_layout");
+	}
+
+	public function stock_form($id)
+	{
+		MethodFilter::mustHeader("HX-Request-Component");
+		$atk = AtkItem::findOrFail(Hashid::singleDecode($id));
+		$this->load->view('stock_opname/components/atk_stock_form', compact('atk'));
+	}
+
+
+
+	public function stock_store($hashId)
+	{
+		try {
+
+			$atkId = Hashid::singleDecode($hashId);
+			$atk = AtkItem::findOrFail($atkId);
+
+			$this->form_validation->set_rules('tahun', 'Tahun', [
+				'required',
+				[
+					'tahun_check',
+					function ($val) use ($atk) {
+						$cekTahun = AtkStock::where('atk_item_id', $atk->id)->where('tahun', $val)->first();
+						if ($cekTahun) {
+							$this->form_validation->set_message('tahun_check', 'Tidak dapat menggunakan tahun yang sama');
+							return FALSE;
+						}
+						return TRUE;
+					}
+				]
+			]);
+			$this->form_validation->set_rules('stock', 'Stock', 'required|numeric');
+
+			$tahun = $this->input->post('tahun', true);
+
+			if ($this->form_validation->run() === FALSE) {
+				$this->output
+					->set_content_type("text/html")
+					->set_output(
+						Templ::component(
+							"stock_opname/components/atk_stock_form",
+							compact('atk')
+						)
+					);
+				return;
+			}
+
+
+			AtkStock::create([
+				'atk_item_id' => $atkId,
+				'tahun' => $tahun,
+				'stock' => $this->input->post('stock', true),
+			]);
+
+			$this->output->set_header('HX-Trigger: action-success');
+
+			$this->output
+				->set_content_type("text/html")
+				->set_output(
+					'<div class="alert alert-success">
+						<i class="ti ti-check"></i> Stock berhasil ditambahkan. Jendela akan ditutup dalam 2 detik.
+					</div>'
+				);
+		} catch (\Throwable $th) {
+			$this->output
+				->set_content_type("text/html")
+				->set_output(
+					Templ::component("components/exception_alert", [
+						"message" => $th->getMessage()
+					])
+				);
 		}
 	}
 }
