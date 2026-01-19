@@ -174,6 +174,7 @@ class PengaturanEkspedisiController extends APP_Controller
       if ($checkBerkas) {
         throw new Exception("Ekspedisi ini masih digunakan pada riwayat ekspedisi berkas nomor " . $checkBerkas->berkas->nomor_perkara . ", anda hanya bisa menonaktifkan ekspedisi ini.", 1);
       }
+      $pos->delete();
       $this->output->set_content_type("text/html")
         ->set_header('HX-Trigger: ' . json_encode($htmxEvent))
         ->set_output(Templ::component('components/success_alert', [
