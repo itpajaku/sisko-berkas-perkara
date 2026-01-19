@@ -321,4 +321,32 @@ class StockOpnameAtkController extends APP_Controller
 				);
 		}
 	}
+
+	public function stock_table($hashId)
+	{
+		$atkId = Hashid::singleDecode($hashId);
+
+		$stocks = AtkStock::where('atk_item_id', $atkId)
+			->orderBy('tahun', 'desc')
+			->get();
+
+		$this->output
+			->set_content_type("text/html")
+			->set_output(
+				Templ::component(
+					"stock_opname/components/atk_stock_table",
+					compact('stocks')
+				)
+			);
+	}
+
+	public function stock_delete($hashid)
+	{
+		$atkId = Hashid::singleDecode($hashid);
+
+		$stock = AtkStock::findOrFail('atk_item_id', $atkId);
+
+		if ((int) $stock->tahun <= (int) date("Y")) {
+		}
+	}
 }

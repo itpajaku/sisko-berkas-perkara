@@ -140,8 +140,10 @@ $route["stock_opname_atk/referensi"]['POST'] = "StockOpnameAtkController/add_ref
 $route["stock_opname_atk/tambah"]['GET'] = "StockOpnameAtkController/add_transaction_form";
 $route["stock_opname_atk/autocomplete_name"]['GET'] = "StockOpnameAtkController/autocomplete_item";
 $route["stock_opname_atk/referensi/(:any)/stock"]['GET'] = 'StockOpnameAtkController/stock_page/$1';
+$route["stock_opname_atk/referensi/(:any)/stock_table"]['GET'] = 'StockOpnameAtkController/stock_table/$1';
 $route["stock_opname_atk/referensi/(:any)/stock_form"]['GET'] = 'StockOpnameAtkController/stock_form/$1';
 $route['stock_opname_atk/referensi/(:any)/stock']['POST'] = 'StockOpnameAtkController/stock_store/$1';
+$route['stock_opname_atk/referensi/(:any)/stock']['DELETE'] = 'StockOpnameAtkController/stock_delete/$1';
 
 /*
 | -------------------------------------------------------------------------

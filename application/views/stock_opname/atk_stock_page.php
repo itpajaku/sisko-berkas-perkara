@@ -19,42 +19,13 @@ use App\Libraries\Hashid;
 			</button>
 		</div>
 
-		<div class="table-responsive">
-			<table class="table table-bordered table-hover mb-0">
-				<thead class="table-light">
-					<tr>
-						<th width="5%">No</th>
-						<th>Tahun</th>
-						<th>Stock</th>
-						<th width="15%">Aksi</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php if ($stocks->count()): ?>
-						<?php foreach ($stocks as $i => $row): ?>
-							<tr>
-								<td><?= $i + 1 ?></td>
-								<td><?= $row->tahun ?></td>
-								<td><?= $row->stock ?></td>
-								<td>
-									<button class="btn btn-sm btn-warning">
-										<i class="ti ti-edit"></i>
-									</button>
-									<button class="btn btn-sm btn-danger">
-										<i class="ti ti-trash"></i>
-									</button>
-								</td>
-							</tr>
-						<?php endforeach ?>
-					<?php else: ?>
-						<tr>
-							<td colspan="4" class="text-center text-muted">
-								Belum ada data stok
-							</td>
-						</tr>
-					<?php endif ?>
-				</tbody>
-			</table>
+		<div id="stock-table-wrapper"
+			hx-get="<?= site_url('stock_opname_atk/referensi/' . Hashid::singleEncode($atk->id)) ?>/stock_table"
+			hx-headers='{"HX-Request-Component":true}'
+			hx-trigger="load, action-success from:body">
+			<div class="text-center py-4">
+				<div class="spinner-border"></div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -95,5 +66,8 @@ use App\Libraries\Hashid;
 				dynamicModal.hide()
 			}, 2000);
 		});
+		setTimeout(() => {
+			htmx.trigger('#stock-table-wrapper', 'load');
+		}, 4000)
 	})
 </script>
