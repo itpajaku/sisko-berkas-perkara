@@ -79,6 +79,8 @@ class BerkasGugatanService
    */
   public function datatable()
   {
+    $this->app->load->library("Legacyen");
+    $this->app->legacyen->set_key($_ENV["SIPP_APP_KEY"]);
     $this->app->load->model('BerkasGugatanDataTable', 'BerkasGugatanDataTable');
     $list = $this->app->BerkasGugatanDataTable->get_datatables();
     $data = [];
@@ -92,6 +94,7 @@ class BerkasGugatanService
       ->get();
 
     foreach ($list as $r) {
+      $r->perkara_en_id = base64_encode($this->app->legacyen->encode($r->perkara_id));
       $row = [];
       $row['no'] = $n;
       $row['nomor_perkara'] = Templ::component("berkas_gugatan/components/kolom_nomor_perkara", [

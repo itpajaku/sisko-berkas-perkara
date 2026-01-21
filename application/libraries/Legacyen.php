@@ -100,7 +100,7 @@ class Legacyen
    */
   function set_key($key = '')
   {
-    $this->encryption_key = $key;
+    $this->encryption_key = md5($key);
   }
 
 	// --------------------------------------------------------------------

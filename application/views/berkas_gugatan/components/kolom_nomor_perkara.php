@@ -1,9 +1,8 @@
-<?php
-
-use App\Libraries\Hashid;
-?>
 <strong>
-  <?= $berkas->nomor_perkara ?>
+  <a href="javascript:void(0)" onclick="window.open('<?= sipp_url('perkara_detil_agama/' . $berkas->perkara_en_id) ?>', 'Snopzer',
+'left=20,top=20,width=1200,height=800,toolbar=1,resizable=0'); return false;">
+    <?= $berkas->nomor_perkara ?>
+  </a>
 </strong>
 <p>
   <?= $berkas->jenis_perkara ?>
