@@ -112,6 +112,9 @@ $route['charts/(:any)'] = "ChartsController/$1";
 $route['arsip_perkara'] = 'ArsipPerkaraController/index';
 $route['arsip_perkara/monitoring/datatable'] = 'ArsipPerkaraController/perkara_belum_arsip_datatable';
 $route['arsip_perkara/monitoring/detail/(:any)'] = 'ArsipPerkaraController/perkara_belum_arsip_detail/$1';
+
+$route['kalender_bht'] = "KalenderBHTController/index";
+$route['kalender_bht/events']['GET'] = "KalenderBHTController/events";
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes

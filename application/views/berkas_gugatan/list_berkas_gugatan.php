@@ -57,7 +57,10 @@
       <?= $this->session->flashdata("error_alert") ?>
       <h4 class="card-title">Tabel Register Berkas</h4>
       <p class="card-subtitle mb-3">
-        Tabel hanya mencangkup tahun perkara <?= date('Y') ?>. Gunakan fitur cari berdasarkan tanggal untuk mencari data yang diregister selain tahun ini.
+      <ul>
+        <li> Tabel hanya mencangkup tahun perkara <?= date('Y') ?>. Gunakan fitur cari berdasarkan tanggal untuk mencari data yang diregister selain tahun ini.</li>
+        <li>Klik nomor perkara untuk membuka jendela SIPP. Pastikan anda sudah login ke SIPP</li>
+      </ul>
       </p>
       <div class="table-responsive">
         <table id="table-berkas-gugatan" class="table table-hover table-striped table-bordered text-nowrap align-middle">

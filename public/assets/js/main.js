@@ -29,16 +29,11 @@ $(document).ready(function () {
   });
 
   htmx.on("htmx:beforeRequest", function () {
-    Swal.fire({
-      title: "Mohon Tunggu ... ",
-      didOpen: () => Swal.showLoading(),
-      allowOutsideClick: false,
-      showConfirmButton: false
-    })
+    swalLoadingPopUp()
   })
 
   htmx.on("htmx:afterRequest", function () {
-    Swal.close();
+    swalLoadingClose()
   })
 })
 
@@ -72,3 +67,16 @@ window.addEventListener("beforeunload", () => {
     sseSource.close();
   }
 });
+
+function swalLoadingPopUp() {
+  Swal.fire({
+    title: "Mohon Tunggu ... ",
+    didOpen: () => Swal.showLoading(),
+    allowOutsideClick: false,
+    showConfirmButton: false
+  })
+}
+
+function swalLoadingClose() {
+  Swal.close()
+}

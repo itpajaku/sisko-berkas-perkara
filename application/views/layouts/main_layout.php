@@ -117,6 +117,7 @@ use App\Libraries\AuthData;
   <script src="<?= base_url() ?>assets/libs/material_datepicker/material.datepicker.js"></script>
   <script src="<?= base_url() ?>assets/libs/swal2/swal2.js"></script>
   <script src="<?= base_url() ?>assets/libs/toastr/toastr.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.20/index.global.min.js'></script>
   <?php if ($this->uri->segment(1) != "dashboard") { ?>
     <script src="<?= base_url('assets/js/main.js') ?>"></script>
   <?php } ?>

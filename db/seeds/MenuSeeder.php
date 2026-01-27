@@ -38,7 +38,7 @@ class MenuSeeder extends AbstractSeed
                 'title' => 'BHT Hari Ini',
                 "section_id" => 2,
                 "is_sub" => false,
-                "link" => "/bht_hari_ini",
+                "link" => "/kalender_bht",
                 "icon" => "ti ti-gavel"
             ],
             [

@@ -29,4 +29,9 @@ class BerkasGugatan extends Model
   {
     return $this->hasOne(BerkasAkta::class, "perkara_id", "perkara_id");
   }
+
+  public function perkara_putusan()
+  {
+    return $this->setConnection("sipp")->hasOne(PerkaraPutusan::class, "perkara_id", "perkara_id");
+  }
 }
