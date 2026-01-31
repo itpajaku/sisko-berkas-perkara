@@ -25,6 +25,7 @@
 							</button>
 							<button
 								hx-confirm="Menghapus data stock tahunan akan membuat error."
+								hx-swap="outerHTML"
 								hx-delete="<?= base_url('stock_opname_atk/referensi/' . Hashid::encode($row->id)) ?>/stock"
 								class="btn btn-sm btn-danger">
 								<i class="ti ti-trash"></i>

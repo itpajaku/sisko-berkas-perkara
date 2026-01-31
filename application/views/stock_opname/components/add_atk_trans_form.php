@@ -8,6 +8,11 @@
 	hx-post="<?= site_url('stock_opname_atk/store') ?>"
 	hx-target="#modal-transaksi-body"
 	hx-swap="innerHTML">
+	<input type="hidden" name="atk_item_id" id="atk-item-id"
+		value="<?= set_value('atk_item_id') ?>">
+	<input type="hidden"
+		name="<?= $this->security->get_csrf_token_name(); ?>"
+		value="<?= $this->security->get_csrf_hash(); ?>">
 	<div class="row mb-3 align-items-center">
 		<label class="col-sm-3 col-form-label">
 			<i class="ti ti-package me-1"></i> Nama Barang
@@ -91,7 +96,14 @@
 			</div>
 		</div>
 	</div>
-	<div id="stock-info"></div>
+
+	<div class="row mb-4">
+		<div class="col-sm-3"></div>
+		<div class="col-sm-9">
+			<div id="stock-info"></div>
+		</div>
+	</div>
+
 
 	<hr class="my-3">
 
@@ -150,7 +162,7 @@
 
 		$('#nama-barang')
 			.on('typeahead:select typeahead:autocomplete', function(e, item) {
-				// trigger htmx request manual
+				$("atk-item-id").val(item.id)
 				htmx.ajax('GET',
 					'<?= site_url('stock_opname_atk/stock_info/') ?>' + item.id, {
 						target: '#stock-info',

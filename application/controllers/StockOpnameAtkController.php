@@ -221,10 +221,20 @@ class StockOpnameAtkController extends APP_Controller
 			->where('tahun', date('Y'))
 			->first();
 
+		if (!$stock) {
+			return $this->output->set_output(
+				Templ::component(
+					"components/exception_alert",
+					["message" => "Belum ada stock tahunan pada item ini. Silahkan tambahkan terlebih dahulu <a href='" . base_url("stock_opname_atk/referensi/$id/stock") . "' target='_blank'> disini </a>"]
+				)
+			);
+		}
+
 		$this->output->set_output(
-			Templ::component("stock_opname/components/info_stock_atk", [
+			Templ::component(
+				"stock_opname/components/info_stock_atk",
 				["stock" => $stock->stock]
-			])
+			)
 		);
 	}
 
@@ -344,9 +354,101 @@ class StockOpnameAtkController extends APP_Controller
 	{
 		$atkId = Hashid::singleDecode($hashid);
 
-		$stock = AtkStock::findOrFail('atk_item_id', $atkId);
-
-		if ((int) $stock->tahun <= (int) date("Y")) {
+		$stock = AtkStock::find($atkId);
+		try {
+			if (!$stock) {
+				throw new Exception("Tidak ada data");
+			}
+			if ((int) $stock->tahun == (int) date("Y")) {
+				throw new Exception("Tidak bisa menghapus stock tahun ini");
+			}
+			$stock->delete();
+			$this->output->set_header("HX-Trigger: action-success")->set_output("Menghapus stock berhasil");	
+		} catch (\Throwable $th) {
+			$this->output->set_output($th->getMessage());
 		}
+	}
+
+	public function add_transaction($id)
+	{
+		$this->load->library('form_validation');
+
+		$this->form_validation->set_rules(
+			'nama_barang',
+			'Nama Barang',
+			'required|trim'
+		);
+
+		$this->form_validation->set_rules(
+			'waktu',
+			'Waktu Transaksi',
+			'required'
+		);
+
+		$this->form_validation->set_rules(
+			'restock',
+			'Restock',
+			'numeric|greater_than_equal_to[0]'
+		);
+
+		$this->form_validation->set_rules(
+			'pengeluaran',
+			'Pengeluaran',
+			'numeric|greater_than_equal_to[0]'
+		);
+
+		$this->form_validation->set_rules(
+			'keterangan',
+			'Keterangan',
+			'trim|max_length[255]'
+		);
+
+		$this->form_validation->set_rules(
+			'atk_item_id',
+			'Item ATK',
+			'required'
+		);
+
+		$this->form_validation->set_error_delimiters('', '');
+
+		if ($this->form_validation->run() === FALSE) {
+
+			// ❗ KHUSUS HTMX → render ulang FORM
+			return $this->output
+				->set_content_type('text/html')
+				->set_output(
+					Templ::component('stock_opname_atk/components/add_atk_trans_form')
+				);
+		}
+
+		$this->output
+			->set_header('HX-Trigger: action-success')
+			->set_content_type('text/html')
+			->set_output(
+				'<div class="alert alert-success">Transaksi berhasil disimpan</div>'
+			);
+	}
+
+	public function stock_calculation($id)
+	{
+		$restock     = (int) $this->input->get('restock');
+		$pengeluaran = (int) $this->input->get('pengeluaran');
+		$atkId = Hashid::singleDecode($id);
+		$stockAwal = AtkStock::where('atk_item_id', $atkId)
+			->where('tahun', date('Y'))
+			->value('stock') ?? 0;
+
+		$sisaStock = $stockAwal + $restock - $pengeluaran;
+
+		return $this->output
+			->set_content_type('text/html')
+			->set_output(
+				Templ::component('stock_opname_atk/stock_info', [
+					'stock_awal'  => $stockAwal,
+					'restock'     => $restock,
+					'pengeluaran' => $pengeluaran,
+					'sisa_stock'  => $sisaStock
+				])
+			);
 	}
 }
