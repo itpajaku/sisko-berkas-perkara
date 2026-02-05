@@ -1,6 +1,8 @@
 <?php
 
 use App\Libraries\Hashid;
+
+$hash_id = Hashid::encode($berkas->id);
 ?>
 <div class="container-fluid">
     <?= $this->load->view("layouts/page_header", [
@@ -21,7 +23,7 @@ use App\Libraries\Hashid;
             </p>
         </div>
         <form
-            hx-patch="<?= base_url("/berkas_gugatan/" . Hashid::encode($berkas->id)) ?>"
+            hx-patch="<?= base_url("/berkas_gugatan/" . $hash_id) ?>"
             hx-target="#submit-result"
             hx-on::before-request="$('#btn-submit').attr('disabled', true).html('<i class=\'ti ti-loader ti-pulse\'></i> Mohon Tunggu...')"
             hx-on::after-request="$('#btn-submit').attr('disabled', false).html('<i class=\'ti ti-device-floppy\'></i> Simpan')"
@@ -228,7 +230,7 @@ use App\Libraries\Hashid;
                 <div class="form-group text-end">
                     <a
                         type="button"
-                        href="<?= base_url("berkas_gugatan") ?>"
+                        href="<?= base_url("berkas_gugatan/$hash_id") ?>"
                         class="btn bg-danger-subtle text-warning ms-6">
                         <i class="ti ti-arrow-left"></i>
                         Kembali

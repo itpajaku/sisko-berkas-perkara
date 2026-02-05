@@ -57,10 +57,10 @@
       <?= $this->session->flashdata("error_alert") ?>
       <h4 class="card-title">Tabel Register Berkas</h4>
       <p class="card-subtitle mb-3">
-      <ul>
+      <ol>
         <li> Tabel hanya mencangkup tahun perkara <?= date('Y') ?>. Gunakan fitur cari berdasarkan tanggal untuk mencari data yang diregister selain tahun ini.</li>
         <li>Klik nomor perkara untuk membuka jendela SIPP. Pastikan anda sudah login ke SIPP</li>
-      </ul>
+      </ol>
       </p>
       <div class="table-responsive">
         <table id="table-berkas-gugatan" class="table table-hover table-striped table-bordered text-nowrap align-middle">
@@ -133,6 +133,7 @@
       "processing": true,
       "serverSide": true,
       "ordering": false,
+      "pageLength": 50,
       "ajax": {
         "url": "<?= base_url("/berkas_gugatan/datatable?" . $_SERVER['QUERY_STRING']) ?>",
         "type": "POST",

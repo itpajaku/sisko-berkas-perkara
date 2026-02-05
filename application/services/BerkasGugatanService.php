@@ -95,6 +95,7 @@ class BerkasGugatanService
 
     foreach ($list as $r) {
       $r->perkara_en_id = base64_encode($this->app->legacyen->encode($r->perkara_id));
+      $r->hash_id = Hashid::encode($r->id);
       $row = [];
       $row['no'] = $n;
       $row['nomor_perkara'] = Templ::component("berkas_gugatan/components/kolom_nomor_perkara", [
@@ -108,7 +109,7 @@ class BerkasGugatanService
       $row['selisih'] = $this->app->load->view("berkas_gugatan/kolom_selisih", ["berkas" => $r], true);
       $row['ekspedisi'] = $this->app->load->view("berkas_gugatan/kolom_ekspedisi", ["berkas" => $r], true);
       $row['majelis'] = explode('\n', $r->majelis_hakim)[0] . "<br>" . $r->panitera . "<br>" . $r->jurusita;
-      $row['aksi'] = $this->app->load->view("berkas_gugatan/kolom_aksi", ["berkas" => $r], true);
+      $row['aksi'] = Templ::component("berkas_gugatan/components/kolom_detail", ["row" => $r]);
       $row['tanggal_terima'] = tanggal_indo($r->tanggal_terima, false) ?? "Tanggal diterima belum diisi";
       $n++;
       $data[] = $row;
@@ -210,6 +211,9 @@ class BerkasGugatanService
   public function updateOne($id)
   {
     $berkas = BerkasGugatan::findOrFail($id);
+    if (RequestBody::post()) {
+      # code...
+    }
 
     $berkas->update(RequestBody::post()->except($this->app->security->get_csrf_token_name())->toArray());
   }
