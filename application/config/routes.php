@@ -147,6 +147,8 @@ $route["stock_opname_atk/referensi/(:any)/stock_table"]['GET'] = 'StockOpnameAtk
 $route["stock_opname_atk/referensi/(:any)/stock_form"]['GET'] = 'StockOpnameAtkController/stock_form/$1';
 $route['stock_opname_atk/referensi/(:any)/stock']['POST'] = 'StockOpnameAtkController/stock_store/$1';
 $route['stock_opname_atk/referensi/(:any)/stock']['DELETE'] = 'StockOpnameAtkController/stock_delete/$1';
+$route['stock_opname_atk/store']['POST'] = 'StockOpnameAtkController/add_transaction';
+$route['stock_opname_atk/datatable'] = 'StockOpnameAtkController/datatable';
 
 /*
 | -------------------------------------------------------------------------

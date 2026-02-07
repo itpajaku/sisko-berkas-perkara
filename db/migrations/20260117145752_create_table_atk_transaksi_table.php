@@ -23,11 +23,12 @@ final class CreateTableAtkTransaksiTable extends AbstractMigration
 		$table = $this->table("atk_transaksi");
 		$table->addColumn("atk_item_id", "integer", ["null" => false]);
 		$table->addColumn("waktu", "datetime", ["null" => false]);
-		$table->addColumn("restock", "integer", ["limit" => MysqlAdapter::INT_TINY]);
-		$table->addColumn("pengeluaran", "integer", ["limit" => MysqlAdapter::INT_TINY]);
+		$table->addColumn("restock", "integer", ["limit" => MysqlAdapter::INT_SMALL]);
+		$table->addColumn("pengeluaran", "integer", ["limit" => MysqlAdapter::INT_SMALL]);
 		$table->addColumn("input_by", "string", ["null" => false]);
 		$table->addColumn("current_stock", "integer", ["comment" => "Stock sebelum transaksi"]);
 		$table->addColumn("after_stock", "integer", ["comment" => "Stock setelah transaksi"]);
+		$table->addColumn("keterangan", "varchar", ["limit" => 255]);
 		$table->addTimestamps();
 		$table->create();
 	}

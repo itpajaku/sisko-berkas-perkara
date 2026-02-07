@@ -76,6 +76,9 @@
 				class="form-control <?= form_error('pengeluaran') ? 'is-invalid' : '' ?>"
 				value="<?= set_value('pengeluaran', 0) ?>">
 			<div class="invalid-feedback">
+				Tidak bisa melebihi stock
+			</div>
+			<div class="invalid-feedback">
 				<?= form_error('pengeluaran') ?>
 			</div>
 		</div>
@@ -117,7 +120,6 @@
 	</div>
 </form>
 
-<!-- TAMBAHKAN SCRIPT TYPEAHEAD + BLOODHOUND -->
 <script>
 	(function() {
 		const items = new Bloodhound({
@@ -162,7 +164,7 @@
 
 		$('#nama-barang')
 			.on('typeahead:select typeahead:autocomplete', function(e, item) {
-				$("atk-item-id").val(item.id)
+				$('#atk-item-id').val(item.id);
 				htmx.ajax('GET',
 					'<?= site_url('stock_opname_atk/stock_info/') ?>' + item.id, {
 						target: '#stock-info',
@@ -171,6 +173,74 @@
 						}
 					}
 				);
+				setTimeout(function() {
+					$('input[name="restock"]').trigger('input');
+				}, 200);
 			});
+	})();
+</script>
+<script>
+	(function() {
+
+		let typingTimer;
+		const delay = 500;
+
+		const submitBtn = $('button[type="submit"]');
+
+		submitBtn.prop('disabled', true);
+
+		function calcStock() {
+
+			let stockAwal = parseInt($('#stock_awal').text()) || 0;
+			let restock = parseInt($('input[name="restock"]').val()) || 0;
+			let pengeluaran = parseInt($('input[name="pengeluaran"]').val()) || 0;
+
+			$('#restock').text(restock);
+			$('#pengeluaran').text(pengeluaran);
+
+			let sisa = stockAwal + restock - pengeluaran;
+			$('#sisa_stock').text(sisa);
+
+			const pengeluaranInput = $('input[name="pengeluaran"]');
+			const atkItemId = $('#atk-item-id').val();
+
+			if (!atkItemId) {
+				submitBtn.prop('disabled', true);
+				return;
+			}
+
+			if (sisa < 0) {
+
+				pengeluaranInput.addClass('is-invalid');
+				submitBtn.prop('disabled', true);
+
+			} else {
+
+				pengeluaranInput.removeClass('is-invalid');
+				submitBtn.prop('disabled', false);
+			}
+
+			if (sisa < 0) {
+				$('#sisa_stock').addClass('text-danger');
+			} else {
+				$('#sisa_stock').removeClass('text-danger');
+			}
+		}
+
+		function onTyping() {
+			clearTimeout(typingTimer);
+			typingTimer = setTimeout(calcStock, delay);
+		}
+
+		$('input[name="restock"]').on('input', onTyping);
+		$('input[name="pengeluaran"]').on('input', onTyping);
+
+		$('#nama-barang')
+			.on('typeahead:select typeahead:autocomplete', function(e, item) {
+				$('#atk-item-id').val(item.id);
+
+				setTimeout(calcStock, 200);
+			});
+
 	})();
 </script>

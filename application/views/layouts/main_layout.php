@@ -10,19 +10,14 @@ use App\Libraries\AuthData; ?>
 	<meta name="<?= $this->security->get_csrf_token_name() ?>" content="<?= $this->security->get_csrf_hash() ?>" id="csrf-hash">
 
 	<title><?= $title ?? $_ENV["APP_NAME"] ?></title>
-	<link rel="apple-touch-icon" sizes="180x180" href="<?= base_url(
-																												"favicon/apple-touch-icon.png",
-																											) ?>/">
-	<link rel="icon" type="image/png" sizes="32x32" href="<?= base_url(
-																													"favicon/favicon-32x32.png",
-																												) ?>">
-	<link rel="icon" type="image/png" sizes="16x16" href="<?= base_url(
-																													"favicon/favicon-16x16.png",
-																												) ?>">
+	<link rel="apple-touch-icon" sizes="180x180" href="<?= base_url("favicon/apple-touch-icon.png") ?>">
+	<link rel="icon" type="image/png" sizes="32x32" href="<?= base_url("favicon/favicon-32x32.png") ?>">
+	<link rel="icon" type="image/png" sizes="16x16" href="<?= base_url("favicon/favicon-16x16.png") ?>">
 	<link rel="manifest" href="<?= base_url("favicon/site.webmanifest") ?>">
 
 	<link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.min.css" />
 	<link rel="stylesheet" href="<?= base_url() ?>assets/libs/datatable/datatable.bs5.css" />
+	<link rel="stylesheet" href="<?= base_url() ?>assets/libs/datatable/fixed.column.css" />
 	<link rel="stylesheet" href="<?= base_url() ?>assets/css/bs.datepicker.css" />
 	<link rel="stylesheet" href="<?= base_url() ?>assets/css/addons.css?v=2" />
 	<link rel="stylesheet" href="<?= base_url() ?>assets/libs/swal2/swal2.css" />
@@ -123,6 +118,8 @@ use App\Libraries\AuthData; ?>
 	<script src="<?= base_url() ?>assets/libs/simplebar/dist/simplebar.js"></script>
 	<script src="<?= base_url() ?>assets/libs/datatable/datatable.js"></script>
 	<script src="<?= base_url() ?>assets/libs/datatable/datatable.bs5.js"></script>
+	<script src="<?= base_url() ?>assets/libs/datatable/fixedcolumn.js"></script>
+	<script src="<?= base_url() ?>assets/libs/datatable/fixedrow.js"></script>
 	<script src="<?= base_url() ?>assets/js/bloodhound.min.js"></script>
 	<script src="<?= base_url() ?>assets/js/typeahead.jquery.js"></script>
 	<script src="<?= base_url() ?>assets/js/moment.min.js"></script>

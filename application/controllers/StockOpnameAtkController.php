@@ -2,12 +2,15 @@
 
 use App\Libraries\Hashid;
 use App\Libraries\MethodFilter;
+use App\Libraries\RequestBody;
 use App\Libraries\Templ;
 use App\Models\AtkItem;
 use App\Models\AtkStock;
+use App\Models\AtkTransaksi;
 use App\Models\ReferensiAtkDataTable;
 use App\Traits\ItemAtkValidation;
 use Illuminate\Database\Capsule\Manager as DB;
+use Symfony\Component\Config\Builder\Method;
 
 class StockOpnameAtkController extends APP_Controller
 {
@@ -232,7 +235,7 @@ class StockOpnameAtkController extends APP_Controller
 
 		$this->output->set_output(
 			Templ::component(
-				"stock_opname/components/info_stock_atk",
+				"stock_opname/components/calculate_stock_atk",
 				["stock" => $stock->stock]
 			)
 		);
@@ -305,7 +308,6 @@ class StockOpnameAtkController extends APP_Controller
 				return;
 			}
 
-
 			AtkStock::create([
 				'atk_item_id' => $atkId,
 				'tahun' => $tahun,
@@ -363,13 +365,13 @@ class StockOpnameAtkController extends APP_Controller
 				throw new Exception("Tidak bisa menghapus stock tahun ini");
 			}
 			$stock->delete();
-			$this->output->set_header("HX-Trigger: action-success")->set_output("Menghapus stock berhasil");	
+			$this->output->set_header("HX-Trigger: action-success")->set_output("Menghapus stock berhasil");
 		} catch (\Throwable $th) {
 			$this->output->set_output($th->getMessage());
 		}
 	}
 
-	public function add_transaction($id)
+	public function add_transaction()
 	{
 		$this->load->library('form_validation');
 
@@ -409,11 +411,7 @@ class StockOpnameAtkController extends APP_Controller
 			'required'
 		);
 
-		$this->form_validation->set_error_delimiters('', '');
-
 		if ($this->form_validation->run() === FALSE) {
-
-			// ❗ KHUSUS HTMX → render ulang FORM
 			return $this->output
 				->set_content_type('text/html')
 				->set_output(
@@ -421,12 +419,53 @@ class StockOpnameAtkController extends APP_Controller
 				);
 		}
 
-		$this->output
-			->set_header('HX-Trigger: action-success')
-			->set_content_type('text/html')
-			->set_output(
-				'<div class="alert alert-success">Transaksi berhasil disimpan</div>'
-			);
+		try {
+			$atk_item_id = Hashid::singleDecode(RequestBody::post("atk_item_id"));
+			$checkStock = AtkStock::where("atk_item_id", $atk_item_id)->where("tahun", date("Y"))->first();
+			if (!$checkStock) {
+				throw new Exception("Tidak bisa menambah transaksi atas item ini. Tidak ada stock");
+			}
+			DB::connection("default")->transaction(function () use ($atk_item_id) {
+				AtkTransaksi::create([
+					"atk_item_id" => $atk_item_id,
+					"waktu" => RequestBody::post("waktu"),
+					"restock" => (int) RequestBody::post("restock") ?? 0,
+					"pengeluaran" => (int) RequestBody::post("pengeluaran") ?? 0,
+					"keterangan" => RequestBody::post("keterangan")
+				]);
+			});
+			$triggers = [
+				"htmx:toastr" => [
+					"level" => "success",
+					"message" => "Input transaksi berhasil jendela akan ditutup dalam 2 detik"
+				],
+				"action-success" => true
+			];
+			$this->output
+				->set_header("HX-Trigger:" . json_encode($triggers))
+				->set_output(Templ::component("components/success_alert", [
+					"message" => "Input transaksi berhasil. Jendela akan ditutup dalam 2 detik"
+				]));
+		} catch (\Throwable $th) {
+			$toastErr = [
+				"htmx:toastr" => [
+					"level" => "error",
+					"message" => $th->getMessage()
+				]
+			];
+			header("HX-Trigger:contol");
+			$this->output
+				->set_status_header(200)
+				->set_header("HX-Trigger: " . json_encode([
+					"htmx:toastr" => [
+						"level" => "error",
+						"message" => $th->getMessage(),
+					],
+				]))
+				->set_output(Templ::component("components/exception_alert", [
+					"message" => $th->getMessage()
+				]));
+		}
 	}
 
 	public function stock_calculation($id)
@@ -443,12 +482,114 @@ class StockOpnameAtkController extends APP_Controller
 		return $this->output
 			->set_content_type('text/html')
 			->set_output(
-				Templ::component('stock_opname_atk/stock_info', [
+				Templ::component('stock_opname_atk/components/calculate_stock_info', [
 					'stock_awal'  => $stockAwal,
 					'restock'     => $restock,
 					'pengeluaran' => $pengeluaran,
 					'sisa_stock'  => $sisaStock
 				])
 			);
+	}
+
+	public function datatable()
+	{
+		MethodFilter::mustHeader("HX-Request-DataTable");
+		$draw   = $this->input->get('draw');
+		$start  = $this->input->get('start', 0);
+		$length = $this->input->get('length', 10);
+		$search = $this->input->get('search.value');
+
+		$bulan = $this->input->get("bulan") ?? date("m");
+		$tahun = $this->input->get("tahun") ?? date("Y");
+		$jumlahHari = 31;
+
+		$itemQuery = AtkItem::query()
+			->where('status', 1);
+
+		if ($search) {
+			$itemQuery->where('name', 'like', "%{$search}%");
+		}
+
+		$recordsTotal = AtkItem::where('status', 1)->count();
+		$recordsFiltered = $itemQuery->count();
+
+		$items = $itemQuery
+			->where('status', 1)
+			->orderBy('name')
+			->get();
+
+		$itemIds = $items->pluck('id');
+
+		$rows = DB::table('atk_transaksi')
+			->whereIn('atk_item_id', $itemIds)
+			->whereMonth('waktu', $bulan)
+			->whereYear('waktu', $tahun)
+			->select(
+				'atk_item_id',
+				DB::raw('DAY(waktu) as tanggal'),
+				DB::raw('SUM(COALESCE(restock,0)) as restock'),
+				DB::raw('SUM(COALESCE(pengeluaran,0)) as pengeluaran')
+			)
+			->groupBy('atk_item_id', DB::raw('DAY(waktu)'))
+			->get();
+
+		$transaksiPivot = [];
+
+		foreach ($rows as $r) {
+			$transaksiPivot[$r->atk_item_id][$r->tanggal] = [
+				(int)$r->restock,
+				(int)$r->pengeluaran
+			];
+		}
+
+		$stocks = AtkStock::whereIn("atk_item_id", $itemIds)->where("tahun", $tahun)->get();
+		$data = [];
+		foreach ($items as $index => $item) {
+
+			$row = [];
+
+			$row[] = $start + $index + 1;
+			$row[] = $item->name;
+
+			for ($d = 1; $d <= $jumlahHari; $d++) {
+
+				$t = $transaksiPivot[$item->id][$d] ?? [0, 0];
+
+				$row[] = "
+					<div class='small text-success'>+{$t[0]}</div>
+					<div class='small text-danger'>-{$t[1]}</div>
+				";
+			}
+
+			$totalRestock = 0;
+			$totalPengeluaran = 0;
+
+			for ($d = 1; $d <= 31; $d++) {
+				$t = $transaksiPivot[$item->id][$d] ?? [0, 0];
+
+				$totalRestock += $t[0];
+				$totalPengeluaran += $t[1];
+			}
+
+			$row[] = "
+				<div class='small text-success fw-bold'>+{$totalRestock}</div>
+				<div class='small text-danger fw-bold'>-{$totalPengeluaran}</div>
+			";
+
+			if ($stocks->where("atk_item_id", $item->id)->first()) {
+				$row[] = $stocks->where("atk_item_id", $item->id)->first()->stock;
+			} else {
+				$row[] = 0;
+			}
+
+			$data[] = $row;
+		}
+
+		$this->output->set_content_type("application/json")->set_output(json_encode([
+			"draw" => intval($draw),
+			"recordsTotal" => $recordsTotal,
+			"recordsFiltered" => $recordsFiltered,
+			"data" => $data
+		]));
 	}
 }
