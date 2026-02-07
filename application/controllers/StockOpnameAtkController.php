@@ -426,12 +426,19 @@ class StockOpnameAtkController extends APP_Controller
 				throw new Exception("Tidak bisa menambah transaksi atas item ini. Tidak ada stock");
 			}
 			DB::connection("default")->transaction(function () use ($atk_item_id) {
-				AtkTransaksi::create([
+				$atk = AtkTransaksi::create([
 					"atk_item_id" => $atk_item_id,
 					"waktu" => RequestBody::post("waktu"),
 					"restock" => (int) RequestBody::post("restock") ?? 0,
 					"pengeluaran" => (int) RequestBody::post("pengeluaran") ?? 0,
 					"keterangan" => RequestBody::post("keterangan")
+				]);
+				$stockThisYear = $atk->stocks()->where("tahun", date(("Y")))->first();
+				$atk->current_stock = $stockThisYear->stock;
+				$atk->after_stock = (int) $stockThisYear->stock + (int) $atk->restock - (int) $atk->pengeluaran;
+				$atk->save();
+				$stockThisYear->where("tahun", date(("Y")))->update([
+					"stock" => $atk->after_stock
 				]);
 			});
 			$triggers = [
@@ -555,10 +562,11 @@ class StockOpnameAtkController extends APP_Controller
 
 				$t = $transaksiPivot[$item->id][$d] ?? [0, 0];
 
-				$row[] = "
-					<div class='small text-success'>+{$t[0]}</div>
-					<div class='small text-danger'>-{$t[1]}</div>
-				";
+				$row[] = Templ::component("stock_opname/components/kolom_transaksi", [
+					"t" => $t,
+					"tanggal" => "$tahun-$bulan-$d",
+					"item_id" => $item->id
+				]);
 			}
 
 			$totalRestock = 0;
@@ -591,5 +599,36 @@ class StockOpnameAtkController extends APP_Controller
 			"recordsFiltered" => $recordsFiltered,
 			"data" => $data
 		]));
+	}
+
+	public function modal_detail()
+	{
+		MethodFilter::mustHeader("HX-Request-Component");
+		$data = AtkTransaksi::where('atk_item_id', $this->input->get("item_id"))
+			->whereDate('waktu', $this->input->get("date"))
+			->orderBy('waktu', 'asc')
+			->get();
+		$html = Templ::component("stock_opname/components/modal_detail_trans", compact("data"));
+
+		$this->output->set_content_type("text/html")->set_output($html);
+	}
+
+	public function delete_trans($hid)
+	{
+		MethodFilter::must("delete");
+		try {
+			$id = Hashid::singleDecode($hid);
+			DB::connection("default")->transaction(function () use ($id) {
+				$atk = AtkTransaksi::find($id);
+				$stock = $atk->stocks()->where("tahun", date("Y"))->first();
+				$stock->update([
+					"stock" => (int) $stock->stock + (int) $atk->pengeluaran - (int) $atk->restock
+				]);
+				$atk->delete();
+			});
+			$this->output->set_output("Berhasil Menghapus Transaksi");
+		} catch (\Throwable $th) {
+			$this->output->set_output($th->getMessage());
+		}
 	}
 }

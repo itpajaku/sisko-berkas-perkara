@@ -149,6 +149,8 @@ $route['stock_opname_atk/referensi/(:any)/stock']['POST'] = 'StockOpnameAtkContr
 $route['stock_opname_atk/referensi/(:any)/stock']['DELETE'] = 'StockOpnameAtkController/stock_delete/$1';
 $route['stock_opname_atk/store']['POST'] = 'StockOpnameAtkController/add_transaction';
 $route['stock_opname_atk/datatable'] = 'StockOpnameAtkController/datatable';
+$route['stock_opname_atk/detail'] = 'StockOpnameAtkController/modal_detail';
+$route['stock_opname_atk/(:any)']['DELETE'] = 'StockOpnameAtkController/delete_trans/$1';
 
 /*
 | -------------------------------------------------------------------------

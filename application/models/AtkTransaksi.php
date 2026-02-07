@@ -17,19 +17,6 @@ class AtkTransaksi extends Model
 		static::creating(function ($m) {
 			$m->input_by = AuthData::getUserData()->username;
 		});
-
-		static::created(function ($m) {
-			$stockThisYear = $m->stocks->where("tahun", date(("Y")))->first();
-			$m->current_stock = $stockThisYear->stock;
-			$m->after_stock = (int) $stockThisYear->stock + (int) $m->restock - (int) $m->pengeluaran;
-			$m->save();
-		});
-
-		static::saved(function ($m) {
-			$m->stocks()->where("tahun", date(("Y")))->update([
-				"stock" => $m->after_stock
-			]);
-		});
 	}
 
 	public function atk_item()

@@ -99,6 +99,24 @@
 	</div>
 </div>
 
+<div class="modal fade" id="modalTransaksi">
+	<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<h5 class="modal-title">Detail Transaksi</h5>
+				<button class="btn-close" data-bs-dismiss="modal"></button>
+			</div>
+
+			<div class="modal-body" id="modalTransaksiBody">
+				Loading...
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
 		const modalElm = document.getElementById('modal-transaksi');
@@ -148,7 +166,74 @@
 			paging: false,
 			scrollCollapse: true,
 			scrollX: true,
-			scrollY: 300
+			scrollY: 300,
+			drawCallback() {
+				$(".trx-detail").on('click', function() {
+					const itemId = $(this).data('item');
+					const date = $(this).data('date');
+					$.ajax({
+						url: "<?= base_url('/stock_opname_atk/detail') ?>",
+						data: {
+							item_id: itemId,
+							date: date,
+						},
+						headers: {
+							"HX-Request-Component": true
+						},
+						success(res) {
+							$('#modalTransaksiBody').html(res);
+							$('#modalTransaksi').modal('show');
+						},
+						error(err) {
+							Swal.fire("Terjadi kesalahan", err.message, "error")
+						},
+						complete() {
+							$(".trx-delete").on("click", function() {
+								const itemId = $(this).data('item');
+								Swal.fire({
+									title: 'Are you sure?',
+									text: "You won't be able to revert this!",
+									icon: 'warning',
+									showCancelButton: true,
+									confirmButtonColor: '#3085d6',
+									cancelButtonColor: '#d33',
+									confirmButtonText: 'Yes, delete it!'
+								}).then((result) => {
+									if (result.isConfirmed) {
+										Swal.showLoading();
+										fetch(`/stock_opname_atk/${itemId}`, {
+												method: 'DELETE',
+											})
+											.then(response => {
+												if (!response.ok) {
+													throw new Error(response.statusText);
+												}
+												return response.text();
+											})
+											.then(data => {
+												Swal.fire(
+													'Deleted!',
+													'Your item has been deleted.',
+													'success'
+												).then(() => {
+													datatable.ajax.reload()
+													$('#modalTransaksi').modal('hide');
+												})
+											})
+											.catch(error => {
+												Swal.fire(
+													'Error!',
+													'There was a problem deleting your item: ' + error.message,
+													'error'
+												);
+											});
+									}
+								});
+							})
+						}
+					});
+				});
+			}
 		})
 	})
 </script>
