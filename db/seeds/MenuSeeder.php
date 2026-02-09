@@ -145,6 +145,14 @@ class MenuSeeder extends AbstractSeed
 					"link" => "stock_opname_atk/referensi",
 					"icon" => "ti ti-books-pencil-cog",
 				],
+				[
+					"id" => 18,
+					"title" => "Referensi ATK",
+					"section_id" => 8,
+					"is_sub" => false,
+					"link" => "stock_opname_atk/referensi",
+					"icon" => "ti ti-books-pencil-cog",
+				],
 			])
 			->saveData();
 	}

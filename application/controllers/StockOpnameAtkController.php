@@ -631,4 +631,74 @@ class StockOpnameAtkController extends APP_Controller
 			$this->output->set_output($th->getMessage());
 		}
 	}
+
+	public function dashboard()
+	{
+		$page_name = "Dashboard Monitoring ATK";
+		$items = AtkItem::with(['stocks' => function ($q) {
+			$q->where('tahun', date('Y'));
+		}])->where("status", 1)->get();
+		Templ::render("stock_opname/dashboard_page_atk", [
+			"items" => $items,
+			"breadcrumb" => Templ::component("layouts/page_header", [
+				"page_name" => $page_name,
+				"breadcrumbs" => [
+					["name" => "Dashboard", "url" => site_url("stock_opname_atk/dashboard")],
+				],
+			])
+		])->layout("layouts/main_layout", [
+			"title" => $page_name,
+		]);
+	}
+
+	public function chart($hid)
+	{
+		MethodFilter::must('get');
+		MethodFilter::mustHeader("HX-Request-Chart");
+		$itemId = Hashid::singleDecode($hid);
+		$item = AtkItem::findOrFail($itemId);
+		try {
+			$year = $this->input->get('tahun') ?? date("Y");
+			$month = $this->input->get('bulan') ?? date("m");
+
+			$transaksi = DB::table('atk_transaksi')
+				->selectRaw("
+        DAY(waktu) as hari,
+        SUM(COALESCE(restock,0)) as total_restock,
+        SUM(COALESCE(pengeluaran,0)) as total_pengeluaran
+    ")
+				->where('atk_item_id', $itemId)
+				->whereYear('waktu', $year)
+				->whereMonth('waktu', $month)
+				->groupBy(DB::raw('DAY(waktu)'))
+				->get()
+				->keyBy('hari');
+			$days = collect(range(1, 31));
+			$series = [
+				[
+					'name' => 'Restock',
+					'data' => $days
+						->map(fn($d) => optional($transaksi->get($d))->total_restock ?? 0)
+						->values()
+				],
+				[
+					'name' => 'Pengeluaran',
+					'data' => $days
+						->map(fn($d) => optional($transaksi->get($d))->total_pengeluaran ?? 0)
+						->values()
+				]
+			];
+			$categories = $days->map(fn($d) => (string) $d)->values();
+			$this->output
+				->set_content_type("application/json")
+				->set_output(json_encode([
+					'categories' => $categories,
+					'series' => $series,
+					'item_name' => $item->name,
+					'month' => nama_bulan($month - 1)
+				]));
+		} catch (\Throwable $th) {
+			$this->output->set_output($th->getMessage());
+		}
+	}
 }
