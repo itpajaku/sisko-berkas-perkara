@@ -33,6 +33,7 @@ $route['berkas_gugatan/(:any)']['DELETE'] = 'BerkasGugatanController/delete/$1';
 $route['berkas_gugatan/(:any)/sinkron_bht']['PATCH'] = 'BerkasGugatanController/set_bht/$1';
 $route['berkas_gugatan/(:any)']['GET'] = 'BerkasGugatanController/detail_page/$1';
 
+$route['berkas_pbt'] = "BerkasPbtController/index";
 
 $route['bht_hari_ini'] = "BerkasGugatanController/bht_page";
 $route['is_ecourt/(:any)'] = "PerkaraController/check_is_ecourt/$1";

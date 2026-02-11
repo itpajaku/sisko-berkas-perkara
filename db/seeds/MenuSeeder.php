@@ -5,14 +5,6 @@ use Phinx\Seed\AbstractSeed;
 
 class MenuSeeder extends AbstractSeed
 {
-    /**
-     * Run Method.
-     *
-     * Write your database seeder using this method.
-     *
-     * More information on writing seeders is available here:
-     * https://book.cakephp.org/phinx/0/en/seeding.html
-     */
     public function run(): void
     {
         $table = $this->table('menus');
@@ -121,6 +113,14 @@ class MenuSeeder extends AbstractSeed
                 "link" => "/sinkron/akta",
                 "icon" => "ti ti-cloud-download"
             ],
+            [
+                "id" => 13,
+                'title' => 'Berkas PBT',
+                "section_id" => 2,
+                "is_sub" => false,
+                "link" => "/berkas_pbt",
+                "icon" => "ti ti-phone-outgoing"
+            ]
         ])->saveData();
     }
 }
