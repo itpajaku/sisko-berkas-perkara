@@ -6,12 +6,14 @@ use App\Libraries\MethodFilter;
 use App\Libraries\RequestBody;
 use App\Libraries\Templ;
 use App\Models\BerkasAkta;
+use App\Models\BerkasEkspedisi;
 use App\Models\BerkasGugatan;
 use App\Models\Perkara;
 use App\Models\PosisiEkspedisi;
 use App\Traits\BerkasGugatanValidation;
 use App\Services\BerkasGugatanService;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Request; #
+use Illuminate\Database\Capsule\Manager as DB;
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
@@ -313,6 +315,97 @@ class BerkasGugatanController extends APP_Controller
 		} catch (\Throwable $th) {
 			$this->session->set_flashdata("error_alert", Templ::component("components/exception_alert", ["message" => $th->getMessage()]));
 			redirect("/berkas_gugatan/laporan");
+		}
+	}
+
+	public function detail_page($hashid = null)
+	{
+		$id = Hashid::singleDecode($hashid);
+
+		MethodFilter::must("get");
+		$this->load->library("Legacyen");
+		$this->legacyen->set_key($_ENV["SIPP_APP_KEY"]);
+
+		$berkas = BerkasGugatan::findOrFail($id);
+		$title = "Detail Berkas Gugatan";
+		$legacyenid = base64_encode($this->legacyen->encode($berkas->perkara_id));
+		$sipp_url = sipp_url("perkara_detil_agama/$legacyenid");
+
+
+		$is_efiling = DB::connection("sipp")->table("perkara_efiling_id")
+			->where("perkara_id", $berkas->perkara_id)
+			->exists();
+
+		Templ::render("berkas_gugatan/detail_berkas_gugatan", [
+			"berkas" => BerkasGugatan::findOrFail($id),
+			"hash_id" => $hashid,
+			"perkara_hash_id" => Hashid::encode($berkas->perkara_id),
+			"is_efiling" => $is_efiling,
+			"sipp_url" => $sipp_url,
+			"perkara" => $berkas->perkara,
+			"posisi_berkas" => PosisiEkspedisi::where("status", 1)->get(),
+			"breadcrumb" => Templ::component("layouts/page_header", [
+				"page_name" => $title,
+				"breadcrumbs" => [
+					["name" => "Berkas Gugatan", "url" => site_url("berkas_gugatan")],
+					["name" => 	$berkas->nomor_perkara, "url" => site_url("berkas_gugatan/" . $hashid)],
+				],
+			])
+		])
+			->layout("layouts/main_layout", [
+				"title" => $title
+			]);
+	}
+
+	public function detail_pbt_sipp($perkara_hash_id = null)
+	{
+		MethodFilter::must("get");
+		MethodFilter::mustHeader("HX-Request-Component");
+
+		$this->load->library("Legacyen");
+		$this->legacyen->set_key($_ENV["SIPP_APP_KEY"]);
+
+		$perkara_id = Hashid::singleDecode($perkara_hash_id);
+		$legacy_en_id = base64_encode($this->legacyen->encode($perkara_id));
+		printdie($this->input->get_request_header('Cookie'));
+		$cookie = $this->input->get_request_header('Cookie');
+		$headers = [
+			'User-Agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'CI-Proxy',
+			'Cookie'     => $cookie
+		];
+
+		$this->load->library('proxy', [
+			'allowed_hosts' => [$_ENV["SIPP_HOST"]]
+		]);
+
+		// http: //ip_sipp/sipp_folder/add_pemberitahuan/legacy_en_id/update
+
+		$html = $this->proxy->request_raw(
+			sipp_url("add_pemberitahuan/$legacy_en_id/update"),
+			'GET',
+			$headers
+		);
+
+		$this->output->set_output($html);
+	}
+
+	public function ekspedisi($hash_id = null)
+	{
+		MethodFilter::must("get");
+		MethodFilter::mustHeader("HX-Request-Component");
+
+		try {
+			$id = Hashid::singleDecode($hash_id);
+			$ekspedisi = BerkasEkspedisi::with('posisi_ekspedisi')->where("berkas_id", $id)
+				->get();
+
+			$this->load->view("berkas_gugatan/components/" . $this->input->get_request_header("HX-Request-Component"), [
+				"ekspedisi" => $ekspedisi,
+			]);
+		} catch (\Throwable $th) {
+			$this->output->set_output(
+				Templ::component("components/exception_alert", ["message" => $th->getMessage()])
+			);
 		}
 	}
 }

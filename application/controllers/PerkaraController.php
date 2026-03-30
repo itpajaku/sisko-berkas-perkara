@@ -3,7 +3,9 @@
 use App\Libraries\Hashid;
 use App\Libraries\MethodFilter;
 use App\Libraries\RequestBody;
+use App\Libraries\Templ;
 use App\Models\Arsip;
+use Illuminate\Database\Capsule\Manager as DB;
 
 defined("BASEPATH") or exit("Exited");
 
@@ -86,6 +88,34 @@ class PerkaraController extends APP_Controller
           ]
         ]))
         ->set_output($th->getMessage());
+    }
+  }
+
+  public function check_is_ecourt($hashed_perkara_id)
+  {
+    MethodFilter::must("get");
+    MethodFilter::mustHeader("HX-Request-Component");
+    try {
+      $perkara_id = Hashid::singleDecode($hashed_perkara_id);
+
+      $efiling = DB::connection("sipp")->table("perkara_efiling_id")
+        ->where("perkara_id", $perkara_id)
+        ->first();
+
+      $isEcourt = $efiling ? true : false;
+
+
+      $this->output
+        ->set_content_type("text/html")
+        ->set_output(Templ::component("components/is_ecourt", [
+          "is_ecourt" => $isEcourt
+        ]));
+    } catch (\Throwable $th) {
+      $this->output
+        ->set_status_header(500)
+        ->set_output(json_encode([
+          "error" => $th->getMessage()
+        ]));
     }
   }
 }

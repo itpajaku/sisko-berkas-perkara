@@ -6,6 +6,7 @@
    class="form-horizontal r-separator">
    <input type="hidden" name="perkara_id" value="<?= App\Libraries\Hashid::encode($perkara->perkara_id)  ?>" />
    <input type="hidden" name="nomor_perkara" value="<?= $perkara->nomor_perkara ?>" />
+   <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
    <div class="form-group p-3 ">
      <div class="row">
        <label for="inputJenisPerkara" class="col-sm-3 text-end  col-form-label">Jenis Perkara</label>

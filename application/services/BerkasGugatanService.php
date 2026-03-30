@@ -13,6 +13,7 @@ use App\Models\BerkasGugatan;
 use APP_Controller;
 use Illuminate\Support\Facades\Request;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class BerkasGugatanService
 {
@@ -78,14 +79,29 @@ class BerkasGugatanService
    */
   public function datatable()
   {
+    $this->app->load->library("Legacyen");
+    $this->app->legacyen->set_key($_ENV["SIPP_APP_KEY"]);
     $this->app->load->model('BerkasGugatanDataTable', 'BerkasGugatanDataTable');
     $list = $this->app->BerkasGugatanDataTable->get_datatables();
     $data = [];
     $n = 1;
+
+    $perkara = DB::connection("sipp")
+      ->table("perkara")
+      ->select("nomor_perkara", "prodeo", "efiling_id", "perkara.perkara_id as perkara_id")
+      ->leftJoin("perkara_efiling_id", "perkara.perkara_id", "=", "perkara_efiling_id.perkara_id")
+      ->whereIn("perkara.perkara_id", array_column($list, "perkara_id"))
+      ->get();
+
     foreach ($list as $r) {
+      $r->perkara_en_id = base64_encode($this->app->legacyen->encode($r->perkara_id));
+      $r->hash_id = Hashid::encode($r->id);
       $row = [];
       $row['no'] = $n;
-      $row['nomor_perkara'] = $r->nomor_perkara;
+      $row['nomor_perkara'] = Templ::component("berkas_gugatan/components/kolom_nomor_perkara", [
+        "perkara" => $perkara->firstWhere("perkara_id", $r->perkara_id),
+        "berkas" => $r
+      ]);
       $row['tanggal_pendaftaran'] = tanggal_indo($r->tanggal_pendaftaran, false);
       $row['tanggal_putusan'] = tanggal_indo($r->tanggal_putusan, false);
       $row['tanggal_pbt'] = $this->app->load->view("berkas_gugatan/kolom_pbt", ["berkas" => $r], true);
@@ -93,7 +109,7 @@ class BerkasGugatanService
       $row['selisih'] = $this->app->load->view("berkas_gugatan/kolom_selisih", ["berkas" => $r], true);
       $row['ekspedisi'] = $this->app->load->view("berkas_gugatan/kolom_ekspedisi", ["berkas" => $r], true);
       $row['majelis'] = explode('\n', $r->majelis_hakim)[0] . "<br>" . $r->panitera . "<br>" . $r->jurusita;
-      $row['aksi'] = $this->app->load->view("berkas_gugatan/kolom_aksi", ["berkas" => $r], true);
+      $row['aksi'] = Templ::component("berkas_gugatan/components/kolom_detail", ["row" => $r]);
       $row['tanggal_terima'] = tanggal_indo($r->tanggal_terima, false) ?? "Tanggal diterima belum diisi";
       $n++;
       $data[] = $row;
@@ -104,6 +120,7 @@ class BerkasGugatanService
       "recordsTotal" => $this->app->BerkasGugatanDataTable->count_all(),
       "recordsFiltered" => $this->app->BerkasGugatanDataTable->count_filtered(),
       "data" => $data,
+      "perkara" => $perkara
     ];
   }
 
@@ -194,7 +211,11 @@ class BerkasGugatanService
   public function updateOne($id)
   {
     $berkas = BerkasGugatan::findOrFail($id);
-    $berkas->update(RequestBody::post()->toArray());
+    if (RequestBody::post()) {
+      # code...
+    }
+
+    $berkas->update(RequestBody::post()->except($this->app->security->get_csrf_token_name())->toArray());
   }
 
   public function generate_docs()

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Phinx\Db\Adapter\MysqlAdapter;
 use Phinx\Migration\AbstractMigration;
 
 final class CreateTableBerkasEkspedisi extends AbstractMigration
@@ -20,8 +21,11 @@ final class CreateTableBerkasEkspedisi extends AbstractMigration
     public function change(): void
     {
         $table = $this->table("berkas_ekspedisi");
-        $table->addColumn("save_point", "string", ["null" => false]);
-        $table->addColumn("save_time", "timestamp", ["null" => true]);
+        $table->addColumn("save_point", "integer", [
+            "null" => false,
+            'limit' => MysqlAdapter::INT_TINY
+        ]);
+        $table->addColumn("save_time", "datetime", ["null" => true]);
         $table->addColumn("berkas_id", "integer", ["null" => false]);
         $table->addColumn("berkas_type", "string");
         $table->addColumn("status", "boolean", ["default" => true]);

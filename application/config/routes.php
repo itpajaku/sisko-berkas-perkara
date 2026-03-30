@@ -21,18 +21,21 @@ $route['berkas_gugatan/datatable']['POST'] = 'BerkasGugatanController/datatable'
 $route['berkas_gugatan/bht_datatable']['POST'] = 'BerkasGugatanController/bht_datatable';
 $route['berkas_gugatan/(:any)/ekspedisi']['POST'] = 'EkspedisiBerkasController/attach_to_berkas/$1';
 $route['berkas_gugatan/(:any)/ekspedisi']['DELETE'] = 'EkspedisiBerkasController/detach_from_berkas/$1';
+$route['berkas_gugatan/(:any)/ekspedisi']['GET'] = 'BerkasGugatanController/ekspedisi/$1';
 $route['berkas_gugatan/ekspedisi/(:any)']['GET'] = 'BerkasGugatanController/ekspedisi_berkas/$1';
 $route['berkas_gugatan/sinkron/(:any)']['POST'] = 'BerkasGugatanController/sinkron_berkas_sipp/$1';
 $route['berkas_gugatan/laporan']['GET'] = 'BerkasGugatanController/laporan_page/$1';
 $route['berkas_gugatan/laporan']['POST'] = 'BerkasGugatanController/generate_laporan/$1';
-$route['berkas_gugatan/(:any)']['GET'] = 'BerkasGugatanController/edit/$1';
+$route['berkas_gugatan/(:any)/edit']['GET'] = 'BerkasGugatanController/edit/$1';
 $route['berkas_gugatan/set_pbt']['POST'] = 'BerkasGugatanController/fetchFormPbt';
 $route['berkas_gugatan/(:any)']['PATCH'] = 'BerkasGugatanController/save/$1';
 $route['berkas_gugatan/(:any)']['DELETE'] = 'BerkasGugatanController/delete/$1';
 $route['berkas_gugatan/(:any)/sinkron_bht']['PATCH'] = 'BerkasGugatanController/set_bht/$1';
+$route['berkas_gugatan/(:any)']['GET'] = 'BerkasGugatanController/detail_page/$1';
 
 
 $route['bht_hari_ini'] = "BerkasGugatanController/bht_page";
+$route['is_ecourt/(:any)'] = "PerkaraController/check_is_ecourt/$1";
 $route['perkara/suggest'] = 'perkara/AutocompletePerkara';
 $route['berkas/(:any)/ekspedisi']['POST'] = "EkspedisiBerkasController/attach_to_berkas/$1";
 $route['berkas/(:any)/ekspedisi']['DELETE'] = 'EkspedisiBerkasController/detach_from_berkas/$1';
@@ -86,6 +89,14 @@ $route['pengaturan/akun/(:any)/menu_section']['POST'] = 'PengaturanController/ad
 $route['pengaturan/akun/(:any)/menu_section/(:any)']['DELETE'] = 'PengaturanController/delete_menu_section/$1/$2';
 $route['pengaturan/akun/(:any)/form_menu'] = 'PengaturanController/fetch_menu_form/$1';
 $route['pengaturan/akun/(:any)/menu_section/(:any)/form_menu'] = 'PengaturanController/fetch_menu_section_form/$1/$2';
+$route['pengaturan/ekspedisi'] = 'PengaturanEkspedisiController/index';
+$route['pengaturan/ekspedisi/page'] = 'PengaturanEkspedisiController/pagination/$1';
+$route['pengaturan/ekspedisi/page/(:num)'] = 'PengaturanEkspedisiController/pagination/$1';
+$route['pengaturan/ekspedisi/tambah']['GET'] = 'PengaturanEkspedisiController/form_tambah';
+$route['pengaturan/ekspedisi/tambah']['POST'] = 'PengaturanEkspedisiController/tambah';
+$route['pengaturan/ekspedisi/edit/(:any)']['GET'] = 'PengaturanEkspedisiController/form_edit/$1';
+$route['pengaturan/ekspedisi/edit/(:any)']['PUT'] = 'PengaturanEkspedisiController/edit/$1';
+$route['pengaturan/ekspedisi/(:any)']['DELETE'] = 'PengaturanEkspedisiController/delete/$1';
 
 $route['sinkron'] = 'SinkronController/berkas_gugatan_page';
 $route['sinkron/berkas']['GET'] = 'SinkronController/berkas_page';
@@ -102,6 +113,10 @@ $route['charts/(:any)'] = "ChartsController/$1";
 
 $route['arsip_perkara'] = 'ArsipPerkaraController/index';
 $route['arsip_perkara/monitoring/datatable'] = 'ArsipPerkaraController/perkara_belum_arsip_datatable';
+$route['arsip_perkara/monitoring/detail/(:any)'] = 'ArsipPerkaraController/perkara_belum_arsip_detail/$1';
+
+$route['kalender_bht'] = "KalenderBHTController/index";
+$route['kalender_bht/events']['GET'] = "KalenderBHTController/events";
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes

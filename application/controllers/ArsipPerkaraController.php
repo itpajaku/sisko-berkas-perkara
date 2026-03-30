@@ -1,7 +1,10 @@
 <?php
 
 use App\Libraries\Templ;
+use App\Models\BerkasPermohonan;
+use App\Models\Perkara;
 use App\Models\PerkaraBelumArsipDataTable;
+use Illuminate\Support\Str;
 
 class ArsipPerkaraController extends APP_Controller
 {
@@ -30,9 +33,11 @@ class ArsipPerkaraController extends APP_Controller
         'nomor_perkara' => $item->nomor_perkara,
         'jenis_perkara' => $item->jenis_perkara_nama,
         'majelis' => $item->majelis_hakim_nama,
-        'tanggal_putusan' => date("d-m-Y", strtotime($item->tanggal_putusan)),
-        'tanggal_bht' => date("d-m-Y", strtotime($item->tanggal_bht)),
-        'aksi' => '<a href="' . site_url("perkara/" . $item->perkara_id) . '" class="btn btn-sm btn-primary">Detail</a>',
+        'tanggal_putusan' =>  tanggal_indo($item->tanggal_putusan, false),
+        'tanggal_bht' => tanggal_indo($item->tanggal_bht, false),
+        'aksi' => Templ::component("arsip/components/arsip_detail_button", [
+          'perkara_id' => $item->perkara_id,
+        ]),
       ];
     });
     return $this->output
@@ -43,5 +48,30 @@ class ArsipPerkaraController extends APP_Controller
         'recordsFiltered' => $model->countFiltered(),
         'data'            => $data,
       ]));
+  }
+
+  public function perkara_belum_arsip_detail($perkara_id = null)
+  {
+    if (!isset($this->input->request_headers()["Hx-Request"])) {
+      return show_404();
+    }
+
+    $perkara = Perkara::with("perkara_penetapan", "perkara_putusan")
+      ->where("perkara_id", $perkara_id)
+      ->first();
+
+    if (Str::contains($perkara->jenis_perkara_nama, "Pdt.P")) {
+      $berkas = $perkara->register_berkas_permohonan;
+    } else {
+      $berkas = $perkara->register_berkas_gugatan;
+    }
+
+    $this->output->set_content_type('text/html')
+      ->set_output(
+        Templ::component("arsip/components/detail_belum_arsip", [
+          "perkara" => $perkara,
+          "berkas" => $berkas,
+        ])
+      );
   }
 }

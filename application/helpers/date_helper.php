@@ -42,3 +42,13 @@ if (!function_exists("tanggal_indo")) {
     return $tgl_indo;
   }
 }
+
+if (!function_exists("selisih_hari")) {
+  function selisih_hari($tanggal_awal, $tanggal_akhir)
+  {
+    $awal = new DateTime($tanggal_awal);
+    $akhir = new DateTime($tanggal_akhir);
+    $selisih = $awal->diff($akhir);
+    return $selisih->days;
+  }
+}

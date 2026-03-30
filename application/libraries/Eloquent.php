@@ -5,6 +5,7 @@ namespace App\Libraries;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
+use PDO;
 
 class Eloquent
 {

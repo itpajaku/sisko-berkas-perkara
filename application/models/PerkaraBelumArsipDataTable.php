@@ -12,7 +12,7 @@ class PerkaraBelumArsipDataTable
   protected array $columnOrder = [
     'nomor_perkara',
     'jenis_perkara_nama',
-    'majelis_jakim_nama',
+    'majelis_hakim_nama',
     'panitera_pengganti_text',
     'tanggal_putusan',
     'tanggal_bht'
@@ -21,10 +21,10 @@ class PerkaraBelumArsipDataTable
   protected array $columnSearch = [
     'nomor_perkara',
     'jenis_perkara_nama',
-    'majelis_jakim_nama',
-    'panitera_pengganti_text',
-    'tanggal_putusan',
-    'tanggal_bht'
+    'perkara_penetapan.majelis_hakim_nama',
+    'perkara_penetapan.panitera_pengganti_text',
+    'perkara_putusan.tanggal_putusan',
+    'perkara_putusan.tanggal_bht'
   ];
 
   protected array $defaultOrder = [
@@ -91,9 +91,9 @@ class PerkaraBelumArsipDataTable
     if (!empty($_POST['search']['value'])) {
       $search = $_POST['search']['value'];
 
-      $query->where(function ($q) use ($search) {
+      $query->where(function ($q) use ($query, $search) {
         foreach ($this->columnSearch as $column) {
-          $q->orWhere("perkara.$column", 'LIKE', "%{$search}%");
+          $q->orWhere("$column", 'LIKE', "%{$search}%");
         }
       });
     }

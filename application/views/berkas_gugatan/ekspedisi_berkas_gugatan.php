@@ -44,7 +44,7 @@
                                         hx-confirm="Data yang dihapus tidak bisa dikembalikan."
                                         hx-vals='<?= json_encode([
                                                         "save_point" => $ekspedisi->save_point,
-                                                        "save_time" => $ekspedisi->save_time,
+                                                        "save_time" => $ekspedisi->save_time->toDateTimeString(),
                                                         "berkas_type" => class_basename($berkas)
                                                     ]) ?>'>
                                         <i class="ti ti-trash"></i>
@@ -82,6 +82,7 @@
                 hx-post="<?= base_url("/berkas_gugatan/" . App\Libraries\Hashid::encode($berkas->id) . "/ekspedisi") ?>"
                 hx-target="#post-result">
                 <input type="hidden" name="berkas_type" value="<?= class_basename($berkas) ?>">
+                <input type="hidden" name="<?= $this->security->get_csrf_token_name() ?>" value="<?= $this->security->get_csrf_hash() ?>">
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div id="post-result"></div>

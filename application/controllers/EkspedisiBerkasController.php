@@ -74,7 +74,6 @@ class EkspedisiBerkasController extends APP_Controller
                 "berkas_type" => "App\Models\\$berkasType"
             ])->first();
             $berkas->delete();
-
             if ($berkas->status) {
                 $rest = BerkasEkspedisi::where([
                     "berkas_id" => $berkasId,
@@ -82,9 +81,11 @@ class EkspedisiBerkasController extends APP_Controller
                 ])
                     ->orderBy("id", "desc")
                     ->first();
-                $rest->update([
-                    "status" => true
-                ]);
+                if ($rest) {
+                    $rest->update([
+                        "status" => true
+                    ]);
+                }
             }
 
             DB::connection("default")->commit();
@@ -92,8 +93,8 @@ class EkspedisiBerkasController extends APP_Controller
         } catch (\Throwable $th) {
             DB::connection("default")->rollBack();
             $alertData = ["htmx:toastr" => [
-                "level" => "success",
-                "message" => "Sinkronisasi berkas ke SIPP berhasil"
+                "level" => "error",
+                "message" => "Ekspedisi Gagal Diperbaharui"
             ]];
 
             $this->output
