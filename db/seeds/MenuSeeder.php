@@ -147,11 +147,19 @@ class MenuSeeder extends AbstractSeed
 				],
 				[
 					"id" => 18,
-					"title" => "Referensi ATK",
+					"title" => "Statistik ATK",
 					"section_id" => 8,
 					"is_sub" => false,
-					"link" => "stock_opname_atk/referensi",
-					"icon" => "ti ti-books-pencil-cog",
+					"link" => "stock_opname_atk/dashboard",
+					"icon" => "ti ti-pencil-discount",
+				],
+				[
+					"id" => 19,
+					"title" => "Laporan ATK",
+					"section_id" => 8,
+					"is_sub" => false,
+					"link" => "stock_opname_atk/laporan",
+					"icon" => "ti ti-pencil-check",
 				],
 			])
 			->saveData();

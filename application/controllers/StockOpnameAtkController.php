@@ -701,4 +701,22 @@ class StockOpnameAtkController extends APP_Controller
 			$this->output->set_output($th->getMessage());
 		}
 	}
+
+	public function laporan()
+	{
+		$page_name = "Laporan Transaksi ATK";
+		$items = AtkItem::where("status", 1)->get();
+		Templ::render("stock_opname/laporan_atk_page", [
+			"items" => $items,
+			"breadcrumb" => Templ::component("layouts/page_header", [
+				"page_name" => $page_name,
+				"breadcrumbs" => [
+					["name" => "Dashboard", "url" => site_url("stock_opname_atk/dashboard")],
+					["name" => "Laporan", "url" => site_url("stock_opname_atk/laporan")],
+				],
+			])
+		])->layout("layouts/main_layout", [
+			"title" => $page_name,
+		]);
+	}
 }
