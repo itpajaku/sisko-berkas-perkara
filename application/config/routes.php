@@ -10,6 +10,11 @@ $route['login'] = 'auth/Auth/login';
 $route['logout'] = 'auth/Auth/logout';
 
 $route['dashboard'] = 'DashboardController/index';
+$route['dashboard_gugatan'] = 'DashboardGugatanController/index';
+$route['dashboard_gugatan/total_berkas'] = 'DashboardGugatanController/total_berkas';
+$route['dashboard_gugatan/total_ekspedisi_berkas'] = 'DashboardGugatanController/total_ekspedisi_berkas';
+$route['dashboard_gugatan/chart_berkas_harian'] = 'DashboardGugatanController/chart_berkas_harian';
+$route['dashboard_gugatan/detail_ekspedisi_berkas'] = 'DashboardGugatanController/detail_ekspedisi_berkas';
 
 $route['berkas_gugatan'] = 'BerkasGugatanController/index';
 $route['berkas_gugatan/register'] = 'BerkasGugatanController/daftar_register';

@@ -120,7 +120,15 @@ class MenuSeeder extends AbstractSeed
                 "is_sub" => false,
                 "link" => "/berkas_pbt",
                 "icon" => "ti ti-phone-outgoing"
-            ]
+            ],
+            [
+                "id" => 15,
+                'title' => 'Dashboard',
+                "section_id" => 2,
+                "is_sub" => false,
+                "link" => "/dashboard_gugatan",
+                "icon" => "ti ti-home"
+            ],
         ])->saveData();
     }
 }
