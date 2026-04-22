@@ -84,7 +84,19 @@ class AccessMenuSectionSeeder extends AbstractSeed
 			],
 			[
 				"group_id" => 1000,
+				"menu_section_id" => 2,
+			],
+			[
+				"group_id" => 1000,
+				"menu_section_id" => 3,
+			],
+			[
+				"group_id" => 1000,
 				"menu_section_id" => 4,
+			],
+			[
+				"group_id" => 1000,
+				"menu_section_id" => 5,
 			],
 			[
 				"group_id" => 1000,
@@ -99,36 +111,22 @@ class AccessMenuSectionSeeder extends AbstractSeed
 			],
 			[
 				"group_id" => 1010,
+				"menu_section_id" => 3,
+			],
+			[
+				"group_id" => 1010,
 				"menu_section_id" => 7,
 			],
 		];
 
-		$aksesMeja3 = [
-			[
-				"group_id" => 1003,
-				"menu_section_id" => 1,
-			],
-			[
-				"group_id" => 1003,
-				"menu_section_id" => 2,
-			],
-			[
-				"group_id" => 1003,
-				"menu_section_id" => 3,
-			],
-			[
-				"group_id" => 1003,
-				"menu_section_id" => 4,
-			],
-		];
+
 
 		$table->insert(
 			array_merge(
 				$aksesAdmin,
 				$aksesPanmudHukum,
 				$aksesPanmudGugatan,
-				$aksesPanmudPermohonan,
-				$aksesMeja3,
+				$aksesPanmudPermohonan
 			),
 		);
 		$table->saveData();

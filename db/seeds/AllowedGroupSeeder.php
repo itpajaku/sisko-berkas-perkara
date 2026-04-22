@@ -23,12 +23,7 @@ class AllowedGroupSeeder extends AbstractSeed
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
-            [
-                'group_id' => 1003, // Meja 3 Gugatan
-                'group_name' => 'Meja 3 Gugatan',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ],
+
             [
                 'group_id' => 430, // Panmud Hukum
                 'group_name' => 'Panmud Hukum',
