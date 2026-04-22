@@ -1,31 +1,33 @@
 <?php
 
-use App\Libraries\AuthData;
-?>
+use App\Libraries\AuthData; ?>
 <!doctype html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="<?= $this->security->get_csrf_token_name(); ?>" content="<?= $this->security->get_csrf_hash(); ?>" id="csrf-hash">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="<?= $this->security->get_csrf_token_name() ?>" content="<?= $this->security->get_csrf_hash() ?>" id="csrf-hash">
 
-  <title><?= $title ?? $_ENV["APP_NAME"] ?></title>
-  <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('favicon/apple-touch-icon.png') ?>/">
-  <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('favicon/favicon-32x32.png') ?>">
-  <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('favicon/favicon-16x16.png') ?>">
-  <link rel="manifest" href="<?= base_url('favicon/site.webmanifest') ?>">
+	<title><?= $title ?? $_ENV["APP_NAME"] ?></title>
+	<link rel="apple-touch-icon" sizes="180x180" href="<?= base_url("favicon/apple-touch-icon.png") ?>">
+	<link rel="icon" type="image/png" sizes="32x32" href="<?= base_url("favicon/favicon-32x32.png") ?>">
+	<link rel="icon" type="image/png" sizes="16x16" href="<?= base_url("favicon/favicon-16x16.png") ?>">
+	<link rel="manifest" href="<?= base_url("favicon/site.webmanifest") ?>">
 
-  <link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.min.css" />
-  <link rel="stylesheet" href="<?= base_url() ?>assets/libs/datatable/datatable.bs5.css" />
-  <link rel="stylesheet" href="<?= base_url() ?>assets/css/bs.datepicker.css" />
-  <link rel="stylesheet" href="<?= base_url() ?>assets/css/addons.css?v=2" />
-  <link rel="stylesheet" href="<?= base_url() ?>assets/libs/swal2/swal2.css" />
-  <link rel="stylesheet" href="<?= base_url() ?>assets/libs/material_datepicker/material.datepicker.css" />
+	<link rel="stylesheet" href="<?= base_url() ?>assets/css/styles.min.css" />
+	<link rel="stylesheet" href="<?= base_url() ?>assets/libs/datatable/datatable.bs5.css" />
+	<link rel="stylesheet" href="<?= base_url() ?>assets/libs/datatable/fixed.column.css" />
+	<link rel="stylesheet" href="<?= base_url() ?>assets/css/bs.datepicker.css" />
+	<link rel="stylesheet" href="<?= base_url() ?>assets/css/addons.css?v=2" />
+	<link rel="stylesheet" href="<?= base_url() ?>assets/libs/swal2/swal2.css" />
+	<link rel="stylesheet" href="<?= base_url() ?>assets/libs/material_datepicker/material.datepicker.css" />
 
-  <script src="<?= base_url() ?>assets/js/htmx.min.js"></script>
-  <script src="<?= base_url() ?>assets/js/htmx.sse.js"></script>
-  <script src="<?= base_url() ?>assets/libs/apexcharts/dist/apexcharts.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+	<script src="<?= base_url() ?>assets/js/htmx.min.js"></script>
+	<script src="<?= base_url() ?>assets/js/htmx.sse.js"></script>
+	<script src="<?= base_url() ?>assets/libs/apexcharts/dist/apexcharts.min.js"></script>
 </head>
 
 <body>
@@ -110,6 +112,8 @@ use App\Libraries\AuthData;
   <script src="<?= base_url() ?>assets/libs/simplebar/dist/simplebar.js"></script>
   <script src="<?= base_url() ?>assets/libs/datatable/datatable.js"></script>
   <script src="<?= base_url() ?>assets/libs/datatable/datatable.bs5.js"></script>
+  <script src="<?= base_url() ?>assets/libs/datatable/fixedcolumn.js"></script>
+  <script src="<?= base_url() ?>assets/libs/datatable/fixedrow.js"></script>
   <script src="<?= base_url() ?>assets/js/bloodhound.min.js"></script>
   <script src="<?= base_url() ?>assets/js/typeahead.jquery.js"></script>
   <script src="<?= base_url() ?>assets/js/moment.min.js"></script>
@@ -122,6 +126,21 @@ use App\Libraries\AuthData;
     <script src="<?= base_url('assets/js/main.js') ?>"></script>
   <?php } ?>
   <script src="<?= base_url('assets/js/chart.init.js') ?>"></script>
+  <script>
+    function swalDeleteConfirm(el) {
+      Swal.fire({
+        title: 'Apa anda yakin',
+        icon: 'warning',
+        text: 'Anda bisa menonaktifkan alih-alih menghapus data ini.',
+        confirmButtonText: 'Yakin',
+        showCancelButton: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          htmx.trigger(el, 'confirmed');
+        }
+      })
+    }
+  </script>
 </body>
 
 </html>

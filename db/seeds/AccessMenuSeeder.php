@@ -77,6 +77,14 @@ class AccessMenuSeeder extends AbstractSeed
 				"group_id" => 1,
 				"menu_id" => 15,
 			],
+			[
+				"group_id" => 1,
+				"menu_id" => 16,
+			],
+			[
+				"group_id" => 1,
+				"menu_id" => 17,
+			],
 		];
 
 		$aksesMeja3Gugatan = [

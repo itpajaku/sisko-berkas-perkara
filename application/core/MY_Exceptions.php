@@ -27,5 +27,6 @@ class MY_Exceptions extends CI_Exceptions
 		header("HX-Trigger: " . json_encode($triggerEvent));
 		set_status_header(200);
 		echo "An error occurred. " . $message;
+		die;
 	}
 }

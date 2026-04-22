@@ -8,23 +8,22 @@ use App\Models\SectionMenu;
 
 class MenuService
 {
-  protected static $menu = [];
+	protected static $menu = [];
 
+	public static function getMenu()
+	{
+		if (!empty(self::$menu)) {
+			return self::$menu;
+		}
 
-  public static function getMenu()
-  {
-    if (!empty(self::$menu)) {
-      return self::$menu;
-    }
+		self::$menu = AccessMenuSection::with(['menu_section.menu' => function ($q) {
+			$q->whereHas('access_menu', function ($qq) {
+				$qq->where('group_id', AuthData::getUserData()->groupid)->where('is_active', 1);
+			})->where('is_active', 1);
+		}])
+			->where("group_id", AuthData::getUserData()->groupid)
+			->get();
 
-    self::$menu = AccessMenuSection::with(['menu_section.menu' => function ($q) {
-      $q->whereHas('access_menu', function ($qq) {
-        $qq->where('group_id', AuthData::getUserData()->groupid)->where('is_active', 1);
-      })->where('is_active', 1);
-    }])
-      ->where("group_id", AuthData::getUserData()->groupid)
-      ->get();
-
-    return self::$menu;
-  }
+		return self::$menu;
+	}
 }
