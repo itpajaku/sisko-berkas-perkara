@@ -18,12 +18,12 @@ class MenuSeeder extends AbstractSeed
 		$table
 			->insert([
 				[
+					"id" => 1,
 					"title" => "Dashboard",
 					"section_id" => 1,
 					"is_sub" => false,
 					"link" => "/dashboard",
 					"icon" => "ti ti-layout-dashboard",
-					"id" => 1,
 				],
 				[
 					"id" => 2,
@@ -38,7 +38,7 @@ class MenuSeeder extends AbstractSeed
 					"title" => "BHT Hari Ini",
 					"section_id" => 2,
 					"is_sub" => false,
-					"link" => "/bht_hari_ini",
+					"link" => "/kalender_bht",
 					"icon" => "ti ti-gavel",
 				],
 				[
@@ -94,7 +94,7 @@ class MenuSeeder extends AbstractSeed
 					"title" => "Pengaturan Ekspedisi",
 					"section_id" => 5,
 					"is_sub" => false,
-					"link" => "/pengaturan/akses_menu",
+					"link" => "/pengaturan/ekspedisi",
 					"icon" => "ti ti-settings",
 				],
 				[
@@ -114,6 +114,14 @@ class MenuSeeder extends AbstractSeed
 					"icon" => "ti ti-cloud-download",
 				],
 				[
+					"id" => 13,
+					"title" => "Berkas PBT",
+					"section_id" => 2,
+					"is_sub" => false,
+					"link" => "/berkas_pbt",
+					"icon" => "ti ti-phone-outgoing",
+				],
+				[
 					"id" => 14,
 					"title" => "Sinkron Akta",
 					"section_id" => 5,
@@ -123,11 +131,11 @@ class MenuSeeder extends AbstractSeed
 				],
 				[
 					"id" => 15,
-					"title" => "Arsip Perkara",
-					"section_id" => 9,
+					"title" => "Dashboard",
+					"section_id" => 2,
 					"is_sub" => false,
-					"link" => "arsip_perkara",
-					"icon" => "ti ti-books",
+					"link" => "/dashboard_gugatan",
+					"icon" => "ti ti-home",
 				],
 				[
 					"id" => 16,
@@ -160,6 +168,14 @@ class MenuSeeder extends AbstractSeed
 					"is_sub" => false,
 					"link" => "stock_opname_atk/laporan",
 					"icon" => "ti ti-pencil-check",
+				],
+				[
+					"id" => 20,
+					"title" => "Arsip Perkara",
+					"section_id" => 9,
+					"is_sub" => false,
+					"link" => "arsip_perkara",
+					"icon" => "ti ti-books",
 				],
 			])
 			->saveData();

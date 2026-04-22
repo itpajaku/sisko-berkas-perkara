@@ -14,7 +14,13 @@
 
 <div class="container-fluid">
   <?= $breadcrumb ?>
-  <div class="card mb-4">
+  <div class="d-flex">
+    <a href="<?= site_url("berkas_gugatan") ?>" class="btn btn-danger mb-3">
+      Kembali
+      <i class="ti ti-arrow-left ms-1"></i>
+    </a>
+  </div>
+  <div class="card mb-4 shadow-md">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-start">
         <div>

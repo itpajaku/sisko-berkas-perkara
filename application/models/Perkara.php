@@ -10,6 +10,8 @@ class Perkara extends Model
   protected $connection = "sipp";
   protected $table = "perkara";
 
+  protected $fillable = [];
+
   public function perkara_penetapan()
   {
     return $this->hasOne(PerkaraPenetapan::class, "perkara_id", "perkara_id");
@@ -48,5 +50,10 @@ class Perkara extends Model
   public function pemberitahuan_putusan()
   {
     return $this->hasMany(PerkaraPemberitahuanPutusan::class, "perkara_id", "perkara_id");
+  }
+
+  public function perkara_transaksi()
+  {
+    return $this->hasMany(PerkaraTransaksi::class, "perkara_id", "perkara_id");
   }
 }

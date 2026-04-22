@@ -11,7 +11,12 @@ $route["logout"] = "auth/Auth/logout";
 
 $route["admin"] = "admin/Dashboard.php";
 
-$route["dashboard"] = "DashboardController/index";
+$route['dashboard'] = 'DashboardController/index';
+$route['dashboard_gugatan'] = 'DashboardGugatanController/index';
+$route['dashboard_gugatan/total_berkas'] = 'DashboardGugatanController/total_berkas';
+$route['dashboard_gugatan/total_ekspedisi_berkas'] = 'DashboardGugatanController/total_ekspedisi_berkas';
+$route['dashboard_gugatan/chart_berkas_harian'] = 'DashboardGugatanController/chart_berkas_harian';
+$route['dashboard_gugatan/detail_ekspedisi_berkas'] = 'DashboardGugatanController/detail_ekspedisi_berkas';
 
 $route['berkas_gugatan'] = 'BerkasGugatanController/index';
 $route['berkas_gugatan/register'] = 'BerkasGugatanController/daftar_register';
@@ -35,6 +40,7 @@ $route['berkas_gugatan/(:any)']['DELETE'] = 'BerkasGugatanController/delete/$1';
 $route['berkas_gugatan/(:any)/sinkron_bht']['PATCH'] = 'BerkasGugatanController/set_bht/$1';
 $route['berkas_gugatan/(:any)']['GET'] = 'BerkasGugatanController/detail_page/$1';
 
+$route['berkas_pbt'] = "BerkasPbtController/index";
 $route['bht_hari_ini'] = "BerkasGugatanController/bht_page";
 $route['is_ecourt/(:any)'] = "PerkaraController/check_is_ecourt/$1";
 $route['perkara/suggest'] = 'perkara/AutocompletePerkara';

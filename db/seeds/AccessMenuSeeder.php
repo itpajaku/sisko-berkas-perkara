@@ -79,6 +79,10 @@ class AccessMenuSeeder extends AbstractSeed
 			],
 			[
 				"group_id" => 1,
+				"menu_id" => 20,
+			],
+			[
+				"group_id" => 1,
 				"menu_id" => 16,
 			],
 			[
