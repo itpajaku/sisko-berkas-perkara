@@ -21,10 +21,11 @@ class Hashid
 		return self::$hash->encode($par);
 	}
 
-	public static function singleDecode($par = ""): string
+	public static function singleDecode($par = ""): ?string
 	{
 		self::init();
-		return self::$hash->decode($par)[0];
+		$decoded = self::$hash->decode($par);
+		return isset($decoded[0]) ? (string)$decoded[0] : null;
 	}
 
 	public static function singleEncode($par)

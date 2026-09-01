@@ -7,8 +7,12 @@
     "page_name" => "Berkas Gugatan",
   ], true) ?>
   <div class="card shadow border widget-card bsb-timeline-8">
-    <div class="card-header text-bg-primary">
+    <div class="card-header text-bg-primary d-flex justify-content-between align-items-center">
       <h5 class="mb-0 text-white">Detail Berkas (view only)</h5>
+      <a href="javascript:void(0)" target="_blank" rel="noopener" onclick="window.open( '<?= $sipp_url ?>', 'Snopzer', 'left=20,top=20,width=1200,height=800,toolbar=1,resizable=0'); return false;" class="btn btn-sm btn-success">
+        <i class="ti ti-send"></i>
+        Kunjungi SIPP
+      </a>
     </div>
     <div class="form-horizontal">
       <div class="form-body">
@@ -150,6 +154,14 @@
           </div>
           <div class="row">
             <div class="col-md-6">
+              <div class="form-group row">
+                <label class="form-label text-end col-md-4">Tanggal BHT :</label>
+                <div class="col-md-8">
+                  <p>
+                    <?= isset($putusan) && $putusan->tanggal_bht ? tanggal_indo($putusan->tanggal_bht) : "Belum BHT" ?>
+                  </p>
+                </div>
+              </div>
             </div>
             <!--/span-->
             <div class="col-md-6">

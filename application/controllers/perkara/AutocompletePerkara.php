@@ -13,9 +13,18 @@ class AutocompletePerkara extends APP_Controller
   public function index()
   {
     MethodFilter::must("get");
-    $perkara = Perkara::select("nomor_perkara", "perkara_id")
-      ->where("nomor_perkara", "like", $this->input->get("query") . "%")
-      ->limit(10)
+    $jenis = $this->input->get("jenis");
+    
+    $query = Perkara::select("nomor_perkara", "perkara_id")
+      ->where("nomor_perkara", "like", $this->input->get("query") . "%");
+
+    if ($jenis === 'gugatan') {
+      $query->where("nomor_perkara", "not like", "%Pdt.P%");
+    } else if ($jenis === 'permohonan') {
+      $query->where("nomor_perkara", "like", "%Pdt.P%");
+    }
+
+    $perkara = $query->limit(10)
       ->orderBy("perkara_id", "desc")
       ->get()
       ->toArray();

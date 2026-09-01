@@ -8,6 +8,7 @@ use App\Libraries\Templ;
 use App\Models\Arsip;
 use App\Models\BerkasPermohonan;
 use App\Models\Perkara;
+use App\Models\PerkaraPutusan;
 use App\Models\PosisiEkspedisi;
 use App\Traits\BerkasPermohonanValidation;
 use App\Traits\BerkasPermohonanTrait;
@@ -25,6 +26,98 @@ class BerkasPermohonanController extends APP_Controller
   {
     parent::__construct();
     $this->berkasPermohonanService = new BerkasPermohonanService;
+  }
+
+  public function total_berkas()
+  {
+    MethodFilter::must('get');
+    MethodFilter::mustHeader('HX-Request-Component');
+    try {
+      $startYear = \Carbon\Carbon::now()->startOfYear()->toDateString();
+      $startNextYear = \Carbon\Carbon::now()->addYear()->startOfYear()->toDateString();
+      
+      $startMonth = \Carbon\Carbon::now()->startOfMonth()->toDateString();
+      $startNextMonth = \Carbon\Carbon::now()->addMonth()->startOfMonth()->toDateString();
+
+      $data = \Illuminate\Database\Capsule\Manager::table('berkas_permohonan')
+        ->selectRaw('
+          COUNT(CASE WHEN created_at >= ? AND created_at < ? THEN 1 END) AS total_tahun_ini,
+          COUNT(CASE WHEN created_at >= ? AND created_at < ? THEN 1 END) AS total_bulan_ini
+        ', [$startYear, $startNextYear, $startMonth, $startNextMonth])
+        ->first();
+
+      $this->output->set_content_type('text/html')->set_output(
+        Templ::component("berkas_permohonan/components/card_total_berkas", [
+          "data" => $data
+        ])
+      );
+    } catch (\Throwable $th) {
+      $this->output->set_content_type('text/html')->set_output(
+        Templ::component("components/exception_alert", [
+          "message" => $th->getMessage()
+        ])
+      );
+    }
+  }
+
+  public function dashboard_page()
+  {
+    MethodFilter::must("get");
+    
+    $breadcrumbComp = Templ::component("layouts/page_header", [
+      "page_name" => "Dashboard Berkas Permohonan",
+      "breadcrumbs" => [
+        [
+          "name" => "Dashboard",
+          "url" => site_url("dashboard_permohonan")
+        ]
+      ]
+    ]);
+
+    Templ::render("berkas_permohonan/dashboard_permohonan_page", compact("breadcrumbComp"))
+      ->layout("layouts/main_layout", [
+        "title" => "Dashboard Berkas Permohonan"
+      ]);
+  }
+
+  public function chart_berkas_harian()
+  {
+    MethodFilter::must('get');
+    $bulan = isset($_GET['bulan']) ? (int)$_GET['bulan'] : (int)date('m');
+    $tahun = isset($_GET['tahun']) ? (int)$_GET['tahun'] : (int)date('Y');
+
+    $startDate = date('Y-m-01', strtotime("$tahun-$bulan-01"));
+    $endDate = date('Y-m-t', strtotime($startDate));
+    $berkasPerHari = \App\Models\BerkasPermohonan::selectRaw('DATE(created_at) as tanggal, COUNT(*) as total')
+      ->whereBetween('created_at', [$startDate, $endDate])
+      ->groupByRaw('DATE(created_at)')
+      ->orderBy('tanggal')
+      ->get();
+
+    $labels = [];
+    $data = [];
+    $datePointer = strtotime($startDate);
+    $endPointer = strtotime($endDate);
+    $berkasMap = [];
+    $totalBulan = 0;
+    foreach ($berkasPerHari as $row) {
+      $berkasMap[$row->tanggal] = $row->total;
+      $totalBulan += $row->total;
+    }
+    while ($datePointer <= $endPointer) {
+      $tgl = date('Y-m-d', $datePointer);
+      $labels[] = date('j M', $datePointer);
+      $data[] = isset($berkasMap[$tgl]) ? $berkasMap[$tgl] : 0;
+      $datePointer = strtotime('+1 day', $datePointer);
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode([
+      'labels' => $labels,
+      'data' => $data,
+      'total_bulan' => $totalBulan
+    ]);
+    exit;
   }
 
   public function register_page()
@@ -107,12 +200,23 @@ class BerkasPermohonanController extends APP_Controller
   {
     MethodFilter::must("get");
     $id = Hashid::singleDecode($hash_id);
+    if (!$id) {
+      show_404();
+    }
     $berkas = BerkasPermohonan::findOrFail($id);
+    $putusan = PerkaraPutusan::where("perkara_id", $berkas->perkara_id)->first();
+
+    $this->load->library("Legacyen");
+    $this->legacyen->set_key($_ENV["SIPP_APP_KEY"]);
+    $legacyenid = base64_encode($this->legacyen->encode($berkas->perkara_id));
+    $sipp_url = sipp_url("perkara_detil_agama/$legacyenid");
 
     Templ::render("berkas_permohonan/detail_berkas_permohonan_page", [
       "berkas" => $berkas,
       "posisi_berkas" => PosisiEkspedisi::where("status", 1)->get(),
       "arsip" => Arsip::where("perkara_id", $berkas->perkara_id)->first(),
+      "putusan" => $putusan,
+      "sipp_url" => $sipp_url,
     ])->layout("layouts/main_layout", [
       "title" => "Detail Berkas " . $berkas->nomor_perkara
     ]);

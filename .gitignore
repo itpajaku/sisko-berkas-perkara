@@ -39,3 +39,8 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.key
 
 /doc/template/~$*.docx
+
+# Agent
+.claude
+.gemini
+.codex

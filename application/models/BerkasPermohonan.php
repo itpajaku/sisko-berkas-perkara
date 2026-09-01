@@ -26,8 +26,7 @@ class BerkasPermohonan extends Model
   protected static function booted()
   {
     static::created(function ($model) {
-      $hash = new Hashids();
-      $model->hash_id = $hash->encode($model->id);
+      $model->hash_id = \App\Libraries\Hashid::singleEncode($model->id);
       $model->save();
     });
   }

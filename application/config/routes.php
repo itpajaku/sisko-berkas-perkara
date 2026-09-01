@@ -49,6 +49,9 @@ $route['berkas/(:any)/ekspedisi']['DELETE'] = 'EkspedisiBerkasController/detach_
 
 $route['berkas_permohonan']['GET'] = "BerkasPermohonanController/register_page";
 $route['berkas_permohonan/register'] = "BerkasPermohonanController/register_page";
+$route['dashboard_permohonan'] = 'BerkasPermohonanController/dashboard_page';
+$route['dashboard_permohonan/chart_berkas_harian'] = 'BerkasPermohonanController/chart_berkas_harian';
+$route['dashboard_permohonan/total_berkas'] = 'BerkasPermohonanController/total_berkas';
 $route['berkas_permohonan/datatable']['POST'] = "BerkasPermohonanController/datatable";
 $route['berkas_permohonan/create'] = "BerkasPermohonanController/create_page";
 $route['berkas_permohonan/fetch_form'] = "BerkasPermohonanController/render_fetch_form";

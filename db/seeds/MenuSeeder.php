@@ -151,7 +151,7 @@ class MenuSeeder extends AbstractSeed
 					"section_id" => 8,
 					"is_sub" => false,
 					"link" => "stock_opname_atk/referensi",
-					"icon" => "ti ti-books-pencil-cog",
+					"icon" => "ti ti-pencil-cog",
 				],
 				[
 					"id" => 18,
@@ -176,6 +176,14 @@ class MenuSeeder extends AbstractSeed
 					"is_sub" => false,
 					"link" => "arsip_perkara",
 					"icon" => "ti ti-books",
+				],
+				[
+					"id" => 21,
+					"title" => "Dashboard",
+					"section_id" => 3,
+					"is_sub" => false,
+					"link" => "dashboard_permohonan",
+					"icon" => "ti ti-layout-dashboard",
 				],
 			])
 			->saveData();

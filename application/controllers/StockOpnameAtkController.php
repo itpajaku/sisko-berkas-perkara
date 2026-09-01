@@ -425,20 +425,25 @@ class StockOpnameAtkController extends APP_Controller
 			if (!$checkStock) {
 				throw new Exception("Tidak bisa menambah transaksi atas item ini. Tidak ada stock");
 			}
-			DB::connection("default")->transaction(function () use ($atk_item_id) {
+			DB::connection("default")->transaction(function () use ($atk_item_id, $checkStock) {
+				$restock = (int) RequestBody::post("restock") ?? 0;
+				$pengeluaran = (int) RequestBody::post("pengeluaran") ?? 0;
+				
+				$current_stock = $checkStock->stock;
+				$after_stock = $current_stock + $restock - $pengeluaran;
+
 				$atk = AtkTransaksi::create([
 					"atk_item_id" => $atk_item_id,
 					"waktu" => RequestBody::post("waktu"),
-					"restock" => (int) RequestBody::post("restock") ?? 0,
-					"pengeluaran" => (int) RequestBody::post("pengeluaran") ?? 0,
-					"keterangan" => RequestBody::post("keterangan")
+					"restock" => $restock,
+					"pengeluaran" => $pengeluaran,
+					"keterangan" => RequestBody::post("keterangan"),
+					"current_stock" => $current_stock,
+					"after_stock" => $after_stock
 				]);
-				$stockThisYear = $atk->stocks()->where("tahun", date(("Y")))->first();
-				$atk->current_stock = $stockThisYear->stock;
-				$atk->after_stock = (int) $stockThisYear->stock + (int) $atk->restock - (int) $atk->pengeluaran;
-				$atk->save();
-				$stockThisYear->where("tahun", date(("Y")))->update([
-					"stock" => $atk->after_stock
+				
+				$checkStock->update([
+					"stock" => $after_stock
 				]);
 			});
 			$triggers = [

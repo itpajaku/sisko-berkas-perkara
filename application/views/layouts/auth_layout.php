@@ -4,14 +4,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="<?= $this->security->get_csrf_token_name() ?>" content="<?= $this->security->get_csrf_hash() ?>" id="csrf-hash">
   <title>Login | <?= $_ENV["APP_NAME"] ?></title>
   <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('favicon/apple-touch-icon.png') ?>/">
   <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('favicon/favicon-32x32.png') ?>">
   <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('favicon/favicon-16x16.png') ?>">
   <link rel="manifest" href="<?= base_url('favicon/site.webmanifest') ?>">
   <link rel="stylesheet" href="/assets/css/styles.min.css" />
-  <script src="/assets/js/htmx.min.js">
-
+  <script src="/assets/js/htmx.min.js"></script>
+  <script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+      const csrfHash = document.getElementById('csrf-hash');
+      if (csrfHash && event.detail.verb !== "get") {
+        event.detail.parameters[csrfHash.getAttribute('name')] = csrfHash.getAttribute('content');
+      }
+    });
   </script>
 </head>
 

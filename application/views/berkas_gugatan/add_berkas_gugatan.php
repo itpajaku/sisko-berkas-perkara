@@ -51,7 +51,7 @@
       datumTokenizer: Bloodhound.tokenizers.whitespace,
       queryTokenizer: Bloodhound.tokenizers.whitespace,
       remote: {
-        url: '/perkara/suggest?query=%QUERY',
+        url: '/perkara/suggest?query=%QUERY&jenis=gugatan',
         wildcard: '%QUERY',
       }
     });

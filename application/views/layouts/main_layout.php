@@ -127,6 +127,34 @@ use App\Libraries\AuthData; ?>
   <?php } ?>
   <script src="<?= base_url('assets/js/chart.init.js') ?>"></script>
   <script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+      const csrfHash = document.getElementById('csrf-hash');
+      if (csrfHash && event.detail.verb !== "get") {
+        event.detail.parameters[csrfHash.getAttribute('name')] = csrfHash.getAttribute('content');
+      }
+    });
+
+    $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+      if (options.type.toLowerCase() === "post") {
+        const csrfHash = document.getElementById('csrf-hash');
+        if (csrfHash) {
+          const csrfName = csrfHash.getAttribute('name');
+          const csrfValue = csrfHash.getAttribute('content');
+          if (options.data) {
+            if (typeof options.data === 'string') {
+              options.data += '&' + csrfName + '=' + csrfValue;
+            } else if (options.data instanceof FormData) {
+              options.data.append(csrfName, csrfValue);
+            } else {
+              options.data[csrfName] = csrfValue;
+            }
+          } else {
+            options.data = csrfName + '=' + csrfValue;
+          }
+        }
+      }
+    });
+
     function swalDeleteConfirm(el) {
       Swal.fire({
         title: 'Apa anda yakin',

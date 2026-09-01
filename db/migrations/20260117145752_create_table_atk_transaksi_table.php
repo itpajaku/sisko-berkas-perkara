@@ -28,7 +28,7 @@ final class CreateTableAtkTransaksiTable extends AbstractMigration
 		$table->addColumn("input_by", "string", ["null" => false]);
 		$table->addColumn("current_stock", "integer", ["comment" => "Stock sebelum transaksi"]);
 		$table->addColumn("after_stock", "integer", ["comment" => "Stock setelah transaksi"]);
-		$table->addColumn("keterangan", "varchar", ["limit" => 255]);
+		$table->addColumn("keterangan", "string", ["limit" => 522]);
 		$table->addTimestamps();
 		$table->create();
 	}
