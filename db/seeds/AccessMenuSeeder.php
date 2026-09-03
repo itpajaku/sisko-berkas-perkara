@@ -102,6 +102,10 @@ class AccessMenuSeeder extends AbstractSeed
 				"group_id" => 1,
 				"menu_id" => 23,
 			],
+			[
+				"group_id" => 1,
+				"menu_id" => 24,
+			],
 		];
 
 		$aksesMeja3Gugatan = [
@@ -229,6 +233,10 @@ class AccessMenuSeeder extends AbstractSeed
 			[
 				"group_id" => 1010,
 				"menu_id" => 23,
+			],
+			[
+				"group_id" => 1010,
+				"menu_id" => 24,
 			],
 		];
 		$table->insert(array_merge($aksesAdmin, $aksesMeja3Gugatan, $aksesPanmudHukum, $aksesPanmudGugatan, $aksesPanmudPermohonan))->saveData();

@@ -172,6 +172,11 @@ $route['minutasi_perkara_gugatan/page/(:num)'] = 'MinutasiPerkaraController/pagi
 $route['minutasi_perkara_permohonan'] = 'MinutasiPerkaraController/index/permohonan';
 $route['minutasi_perkara_permohonan/page'] = 'MinutasiPerkaraController/pagination/permohonan';
 $route['minutasi_perkara_permohonan/page/(:num)'] = 'MinutasiPerkaraController/pagination/permohonan/$1';
+
+$route['monitoring_bas_permohonan'] = 'MonitoringBasController/index/permohonan';
+$route['monitoring_bas_permohonan/page'] = 'MonitoringBasController/pagination/permohonan';
+$route['monitoring_bas_permohonan/page/(:num)'] = 'MonitoringBasController/pagination/permohonan/$1';
+
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes

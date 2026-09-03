@@ -202,6 +202,14 @@ class MenuSeeder extends AbstractSeed
 					"link" => "/minutasi_perkara_permohonan",
 					"icon" => "ti ti-file-check",
 				],
+				[
+					"id" => 24,
+					"title" => "Monitoring BAS",
+					"section_id" => 7,
+					"is_sub" => false,
+					"link" => "/monitoring_bas_permohonan",
+					"icon" => "ti ti-writing",
+				],
 			])
 			->saveData();
 	}
