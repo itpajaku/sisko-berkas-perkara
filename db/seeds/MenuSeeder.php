@@ -185,6 +185,14 @@ class MenuSeeder extends AbstractSeed
 					"link" => "dashboard_permohonan",
 					"icon" => "ti ti-layout-dashboard",
 				],
+				[
+					"id" => 22,
+					"title" => "Minutasi Perkara",
+					"section_id" => 6,
+					"is_sub" => false,
+					"link" => "/minutasi_perkara",
+					"icon" => "ti ti-file-check",
+				],
 			])
 			->saveData();
 	}

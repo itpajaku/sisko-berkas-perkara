@@ -160,6 +160,10 @@ $route['stock_opname_atk/(:any)']['DELETE'] = 'StockOpnameAtkController/delete_t
 
 $route['kalender_bht'] = "KalenderBHTController/index";
 $route['kalender_bht/events']['GET'] = "KalenderBHTController/events";
+
+$route['minutasi_perkara'] = 'MinutasiPerkaraController/index';
+$route['minutasi_perkara/page'] = 'MinutasiPerkaraController/pagination';
+$route['minutasi_perkara/page/(:num)'] = 'MinutasiPerkaraController/pagination/$1';
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes

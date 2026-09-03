@@ -93,6 +93,10 @@ class AccessMenuSeeder extends AbstractSeed
 				"group_id" => 1,
 				"menu_id" => 21,
 			],
+			[
+				"group_id" => 1,
+				"menu_id" => 22,
+			],
 		];
 
 		$aksesMeja3Gugatan = [
@@ -201,6 +205,10 @@ class AccessMenuSeeder extends AbstractSeed
 			[
 				"group_id" => 1000,
 				"menu_id" => 9,
+			],
+			[
+				"group_id" => 1000,
+				"menu_id" => 22,
 			],
 		];
 
