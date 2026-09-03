@@ -163,7 +163,15 @@ $route['kalender_bht/events']['GET'] = "KalenderBHTController/events";
 
 $route['minutasi_perkara'] = 'MinutasiPerkaraController/index';
 $route['minutasi_perkara/page'] = 'MinutasiPerkaraController/pagination';
-$route['minutasi_perkara/page/(:num)'] = 'MinutasiPerkaraController/pagination/$1';
+$route['minutasi_perkara/page/(:num)'] = 'MinutasiPerkaraController/pagination/all/$1';
+
+$route['minutasi_perkara_gugatan'] = 'MinutasiPerkaraController/index/gugatan';
+$route['minutasi_perkara_gugatan/page'] = 'MinutasiPerkaraController/pagination/gugatan';
+$route['minutasi_perkara_gugatan/page/(:num)'] = 'MinutasiPerkaraController/pagination/gugatan/$1';
+
+$route['minutasi_perkara_permohonan'] = 'MinutasiPerkaraController/index/permohonan';
+$route['minutasi_perkara_permohonan/page'] = 'MinutasiPerkaraController/pagination/permohonan';
+$route['minutasi_perkara_permohonan/page/(:num)'] = 'MinutasiPerkaraController/pagination/permohonan/$1';
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes

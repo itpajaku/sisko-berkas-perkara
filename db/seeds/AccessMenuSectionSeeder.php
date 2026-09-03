@@ -15,6 +15,7 @@ class AccessMenuSectionSeeder extends AbstractSeed
 	public function run(): void
 	{
 		$table = $this->table("access_menu_section");
+		$table->truncate();
 		$aksesAdmin = [
 			[
 				"group_id" => 1,

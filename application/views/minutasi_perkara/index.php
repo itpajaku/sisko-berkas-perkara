@@ -7,7 +7,7 @@ use App\Libraries\Templ;
 		"page_name" => $page_name,
 		"breadcrumbs" => [
 			["name" => "Home", "url" => site_url("dashboard")],
-			["name" => $page_name, "url" => site_url("minutasi_perkara")],
+			["name" => $page_name, "url" => site_url("minutasi_perkara" . (isset($jenis) && $jenis ? '_' . $jenis : ''))],
 		],
 	]) ?>
 
@@ -82,7 +82,7 @@ use App\Libraries\Templ;
 							</div>
 						</div>
 						<form class="d-flex align-items-center gap-2 flex-wrap"
-							  hx-get="<?= site_url('minutasi_perkara/page') ?>"
+							  hx-get="<?= site_url('minutasi_perkara' . (isset($jenis) && $jenis ? '_' . $jenis : '') . '/page') ?>"
 							  hx-target="#table-wrapper"
 							  hx-swap="innerHTML"
 							  id="filter-form">
@@ -93,7 +93,7 @@ use App\Libraries\Templ;
 									   class="form-control"
 									   name="bulan"
 									   value="<?= $bulan_value ?>"
-									   hx-get="<?= site_url('minutasi_perkara/page') ?>"
+									   hx-get="<?= site_url('minutasi_perkara' . (isset($jenis) && $jenis ? '_' . $jenis : '') . '/page') ?>"
 									   hx-trigger="change"
 									   hx-include="#filter-form" />
 							</div>
@@ -105,7 +105,7 @@ use App\Libraries\Templ;
 									name="search"
 									placeholder="Cari nomor perkara..."
 									value="<?= htmlspecialchars($search ?? '', ENT_QUOTES) ?>"
-									hx-get="<?= site_url('minutasi_perkara/page') ?>"
+									hx-get="<?= site_url('minutasi_perkara' . (isset($jenis) && $jenis ? '_' . $jenis : '') . '/page') ?>"
 									hx-trigger="keyup changed delay:400ms, search"
 									hx-include="#filter-form" />
 							</div>

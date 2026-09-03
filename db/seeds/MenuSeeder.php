@@ -15,6 +15,7 @@ class MenuSeeder extends AbstractSeed
 	public function run(): void
 	{
 		$table = $this->table("menus");
+		$table->truncate();
 		$table
 			->insert([
 				[
@@ -190,7 +191,15 @@ class MenuSeeder extends AbstractSeed
 					"title" => "Minutasi Perkara",
 					"section_id" => 6,
 					"is_sub" => false,
-					"link" => "/minutasi_perkara",
+					"link" => "/minutasi_perkara_gugatan",
+					"icon" => "ti ti-file-check",
+				],
+				[
+					"id" => 23,
+					"title" => "Minutasi Perkara",
+					"section_id" => 7,
+					"is_sub" => false,
+					"link" => "/minutasi_perkara_permohonan",
 					"icon" => "ti ti-file-check",
 				],
 			])

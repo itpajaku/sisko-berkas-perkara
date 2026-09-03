@@ -15,6 +15,7 @@ class AccessMenuSeeder extends AbstractSeed
 	public function run(): void
 	{
 		$table = $this->table("access_menu");
+		$table->truncate();
 		$aksesAdmin = [
 			[
 				"group_id" => 1,
@@ -96,6 +97,10 @@ class AccessMenuSeeder extends AbstractSeed
 			[
 				"group_id" => 1,
 				"menu_id" => 22,
+			],
+			[
+				"group_id" => 1,
+				"menu_id" => 23,
 			],
 		];
 
@@ -214,14 +219,18 @@ class AccessMenuSeeder extends AbstractSeed
 
 		$aksesPanmudPermohonan = [
 			[
-				"group_id" => 10110,
+				"group_id" => 1010,
 				"menu_id" => 1,
 			],
 			[
-				"group_id" => 10110,
+				"group_id" => 1010,
 				"menu_id" => 21,
 			],
+			[
+				"group_id" => 1010,
+				"menu_id" => 23,
+			],
 		];
-		$table->insert(array_merge($aksesAdmin, $aksesMeja3Gugatan))->saveData();
+		$table->insert(array_merge($aksesAdmin, $aksesMeja3Gugatan, $aksesPanmudHukum, $aksesPanmudGugatan, $aksesPanmudPermohonan))->saveData();
 	}
 }

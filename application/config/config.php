@@ -23,17 +23,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-function isSecure()
-{
-	// blok pertama dibawah ini, berisi nilai dari .env apabila di .env diisi
-	if (!empty($_SERVER['eHTTPS']))
-		if (strtolower($_SERVER['eHTTPS']) == 'true') return true;
-		else return false;
+if (!function_exists('isSecure')) {
+	function isSecure()
+	{
+		// blok pertama dibawah ini, berisi nilai dari .env apabila di .env diisi
+		if (!empty($_SERVER['eHTTPS']))
+			if (strtolower($_SERVER['eHTTPS']) == 'true') return true;
+			else return false;
 
-	if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')) return true;
-	if ($_SERVER['SERVER_PORT'] == 443) return true;
-	if ($_SERVER['REQUEST_SCHEME'] == 'https') return true;
-	return false;
+		if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')) return true;
+		if (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) return true;
+		if (isset($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'https') return true;
+		return false;
+	}
 }
 if (!empty($_SERVER['BASE_URL'])) $config['base_url'] = $_SERVER['BASE_URL'];
 else $config['base_url'] = isSecure() ? 'https://' . $_SERVER['HTTP_HOST'] : 'http://' . $_SERVER['HTTP_HOST'];

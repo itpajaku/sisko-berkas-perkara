@@ -15,6 +15,7 @@ class MenuSectionSeeder extends AbstractSeed
 	public function run(): void
 	{
 		$table = $this->table("menu_section");
+		$table->truncate();
 		$table->insert([
 			[
 				"header" => "Beranda",
