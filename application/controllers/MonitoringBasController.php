@@ -26,21 +26,32 @@ class MonitoringBasController extends APP_Controller
 		$this->load->library('pagination');
 
 		$search = $this->input->get('search', true);
-		$inputBulan = $this->input->get('bulan', true);
+		$filterWaktu = $this->input->get('filter_waktu', true);
+		$isAllYearInput = $this->input->get('is_all_year', true);
 		$paniteraId = $this->input->get('panitera_id', true);
 
-		if ($inputBulan) {
-			$now = Carbon::parse($inputBulan . '-01'); // format YYYY-MM
-		} else {
-			$now = Carbon::now();
+		if (!$filterWaktu) {
+			$filterWaktu = Carbon::now()->format('Y-m');
 		}
 
-		$query = PerkaraJadwalSidang::with(['perkara'])
+		$isAllYear = ($isAllYearInput == '1') || (strpos($filterWaktu, '-all') !== false);
+		$yearValue = substr($filterWaktu, 0, 4);
+
+		if ($isAllYear) {
+			$now = Carbon::parse($yearValue . '-01-01');
+		} else {
+			$now = Carbon::parse($filterWaktu . '-01'); // format YYYY-MM
+		}
+
+		$query = PerkaraJadwalSidang::with(['perkara.perkara_penetapan'])
 			->where(function($q) {
 				$q->whereNull('edoc_bas')->orWhere('edoc_bas', '');
 			})
-			->whereMonth('tanggal_sidang', $now->month)
 			->whereYear('tanggal_sidang', $now->year);
+
+		if (!$isAllYear) {
+			$query->whereMonth('tanggal_sidang', $now->month);
+		}
 
 		// Filter by jenis perkara (G | P) based on the route segment
 		if ($jenis === 'gugatan') {
@@ -125,13 +136,15 @@ class MonitoringBasController extends APP_Controller
 				$join->on('panitera_pn.id', '=', 'pp.panitera_id')
 					->where('pp.aktif', 'Y');
 			})
-			->leftJoin('perkara_jadwal_sidang as js', function ($join) use ($now) {
+			->leftJoin('perkara_jadwal_sidang as js', function ($join) use ($now, $isAllYear) {
 				$join->on('pp.perkara_id', '=', 'js.perkara_id')
 					->where(function($q) {
 						$q->whereNull('js.edoc_bas')->orWhere('js.edoc_bas', '');
 					})
-					->whereMonth('js.tanggal_sidang', '=', $now->month)
 					->whereYear('js.tanggal_sidang', '=', $now->year);
+				if (!$isAllYear) {
+					$join->whereMonth('js.tanggal_sidang', '=', $now->month);
+				}
 			});
 
 		if ($jenis === 'gugatan') {
@@ -171,8 +184,10 @@ class MonitoringBasController extends APP_Controller
 			'page_name' => "Monitoring BAS " . ucfirst($jenis ?? 'Keseluruhan'),
 			'data' => $data,
 			'search' => $search,
+			'filter_waktu' => $filterWaktu,
 			'bulan_value' => $now->format('Y-m'),
-			'bulan_label' => $now->translatedFormat('F Y'),
+			'bulan_label' => $isAllYear ? ('Sepanjang Tahun ' . $now->year) : $now->translatedFormat('F Y'),
+			'is_all_year' => $isAllYear,
 			'offset' => $offset,
 			'total_data' => $config['total_rows'],
 			'total_year' => $total_year,

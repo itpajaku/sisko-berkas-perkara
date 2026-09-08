@@ -210,6 +210,14 @@ class MenuSeeder extends AbstractSeed
 					"link" => "/monitoring_bas_permohonan",
 					"icon" => "ti ti-writing",
 				],
+				[
+					"id" => 25,
+					"title" => "Monitoring Ikrar Talak",
+					"section_id" => 6,
+					"is_sub" => false,
+					"link" => "/monitoring_ikrar_talak",
+					"icon" => "ti ti-calendar-event",
+				],
 			])
 			->saveData();
 	}

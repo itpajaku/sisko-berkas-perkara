@@ -177,6 +177,10 @@ $route['monitoring_bas_permohonan'] = 'MonitoringBasController/index/permohonan'
 $route['monitoring_bas_permohonan/page'] = 'MonitoringBasController/pagination/permohonan';
 $route['monitoring_bas_permohonan/page/(:num)'] = 'MonitoringBasController/pagination/permohonan/$1';
 
+$route['monitoring_ikrar_talak'] = 'MonitoringIkrarTalakController/index';
+$route['monitoring_ikrar_talak/page'] = 'MonitoringIkrarTalakController/pagination';
+$route['monitoring_ikrar_talak/page/(:num)'] = 'MonitoringIkrarTalakController/pagination/$1';
+
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes

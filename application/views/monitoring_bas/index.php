@@ -108,16 +108,25 @@ use App\Libraries\Templ;
 								</select>
 							</div>
 
-							<div class="input-group" style="width: 200px;">
-								<span class="input-group-text"><i class="ti ti-calendar"></i></span>
-								<input type="month"
-									   class="form-control"
-									   name="bulan"
-									   value="<?= $bulan_value ?>"
-									   hx-get="<?= site_url('monitoring_bas' . (isset($jenis) && $jenis ? '_' . $jenis : '') . '/page') ?>"
-									   hx-trigger="change"
-									   hx-include="#filter-form" />
-							</div>
+							<div class="input-group" style="width: 250px;">
+									<span class="input-group-text"><i class="ti ti-calendar"></i></span>
+									<input type="month"
+										   class="form-control"
+										   name="filter_waktu"
+										   value="<?= $is_all_year ? (substr($bulan_value, 0, 4) . '-01') : $bulan_value ?>"
+										   hx-get="<?= site_url('monitoring_bas' . (isset($jenis) && $jenis ? '_' . $jenis : '') . '/page') ?>"
+										   hx-trigger="change"
+										   hx-include="#filter-form" />
+									<div class="input-group-text p-0" title="Sepanjang Tahun" data-bs-toggle="tooltip">
+										<div class="form-check form-switch m-0 px-3 py-2 d-flex align-items-center justify-content-center h-100" style="min-height: 100%;">
+											<input class="form-check-input m-0" style="cursor: pointer;" type="checkbox" role="switch" name="is_all_year" value="1"
+												<?= $is_all_year ? 'checked' : '' ?>
+												hx-get="<?= site_url('monitoring_bas' . (isset($jenis) && $jenis ? '_' . $jenis : '') . '/page') ?>"
+												hx-trigger="change"
+												hx-include="#filter-form">
+										</div>
+									</div>
+								</div>
 
 							<div class="input-group" style="width: 280px;">
 								<span class="input-group-text"><i class="ti ti-search"></i></span>
