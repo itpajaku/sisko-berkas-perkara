@@ -6,6 +6,11 @@ mkdir -p /var/www/html/application/logs /var/www/html/doc/output
 chown -R www-data:www-data /var/www/html/application/logs /var/www/html/doc/output
 chmod -R 775 /var/www/html/application/logs /var/www/html/doc/output
 
+# Pastikan file .env ada untuk kompatibilitas
+if [ ! -f /var/www/html/.env ] && [ -f /var/www/html/.env.docker ]; then
+    cp /var/www/html/.env.docker /var/www/html/.env
+fi
+
 # Tunggu database siap jika DB_HOST didefinisikan
 if [ -n "$DB_HOST" ] && [ "$DB_HOST" != "localhost" ]; then
     echo "Menunggu koneksi database di $DB_HOST:3306..."

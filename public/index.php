@@ -50,7 +50,20 @@ require_once BACKPATH . "/vendor/autoload.php";
 // Load dotenv ke $_SERVER dan $_ENV jika file .env ada
 Dotenv\Dotenv::createMutable(BACKPATH)->safeLoad();
 
-// Salin variabel environment dari $_SERVER ke $_ENV agar terbaca seragam
+// Sinkronkan variabel environment dari getenv(), $_ENV, dan $_SERVER agar terbaca seragam
+foreach (getenv() as $key => $val) {
+	if (!isset($_ENV[$key])) {
+		$_ENV[$key] = $val;
+	}
+	if (!isset($_SERVER[$key])) {
+		$_SERVER[$key] = $val;
+	}
+}
+foreach ($_ENV as $key => $val) {
+	if (!isset($_SERVER[$key]) && is_string($val)) {
+		$_SERVER[$key] = $val;
+	}
+}
 foreach ($_SERVER as $key => $val) {
 	if (!isset($_ENV[$key]) && is_string($val)) {
 		$_ENV[$key] = $val;

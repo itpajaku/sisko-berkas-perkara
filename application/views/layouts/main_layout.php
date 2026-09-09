@@ -40,7 +40,7 @@ use App\Libraries\AuthData; ?>
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
           <a href="javascript:void(0)" class="text-nowrap logo-img">
-            <img src="<?= base_url($_SERVER['LOGO']) ?>" width="180" alt="" />
+            <img src="<?= base_url($_SERVER['LOGO'] ?? $_ENV['LOGO'] ?? 'logos/SISKO-BERKAS.svg') ?>" width="180" alt="" />
           </a>
           <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
             <i class="ti ti-x fs-8"></i>
