@@ -4,6 +4,12 @@ require_once('vendor/autoload.php');
 // Load dotenv ke $_SERVER
 Dotenv\Dotenv::createMutable(__DIR__)->safeLoad();
 
+foreach ($_SERVER as $key => $val) {
+    if (!isset($_ENV[$key]) && is_string($val)) {
+        $_ENV[$key] = $val;
+    }
+}
+
 return
     [
         'paths' => [

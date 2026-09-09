@@ -1,41 +1,65 @@
-FROM php:7.4-apache
+FROM php:8.2-apache
 
-# Install dependencies dan ekstensi PHP
-RUN apt-get update && apt-get install -y \
-    libpng-dev libjpeg-dev libonig-dev libxml2-dev libzip-dev \
-    zip unzip git curl \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd mysqli pdo_mysql
+# Install dependencies sistem dan build tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    libicu-dev \
+    zip \
+    unzip \
+    git \
+    curl \
+    default-mysql-client \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+        pdo \
+        pdo_mysql \
+        mysqli \
+        mbstring \
+        zip \
+        exif \
+        pcntl \
+        bcmath \
+        gd \
+        intl \
+        xml \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Aktifkan mod_rewrite
+# Aktifkan mod_rewrite Apache
 RUN a2enmod rewrite
 
-# Salin file konfigurasi vhost ke Apache
+# Salin konfigurasi VirtualHost Apache
 COPY vhost.conf /etc/apache2/sites-available/ci3.conf
-
-# Aktifkan virtual host dan nonaktifkan default
 RUN a2dissite 000-default.conf && a2ensite ci3.conf
 
-# Buat folder log CI3 jika belum ada
-RUN mkdir -p /var/www/html/application/logs \
-    && chown -R www-data:www-data /var/www/html/application/logs \
-    && chmod -R 755 /var/www/html/application/logs
-
-# Salin seluruh source code ke dalam container
-COPY . /var/www/html
-COPY .env /var/www/html/.env
-
-# Set permission
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
-
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Salin Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-RUN composer install --no-interaction --prefer-dist \
-    && composer dump-autoload --optimize
+# Salin composer files terlebih dahulu untuk caching layer Docker
+COPY composer.json composer.lock* ./
+
+# Install dependencies via composer
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev || composer update --no-interaction --prefer-dist --optimize-autoloader --no-dev
+
+# Salin seluruh source code project
+COPY . .
+
+# Siapkan direktori log dan permission
+RUN mkdir -p application/logs doc/output \
+    && chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 application/logs doc/output
+
+# Salin dan siapkan script entrypoint
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 80
 
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["apache2-foreground"]

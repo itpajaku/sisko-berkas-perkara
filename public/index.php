@@ -47,8 +47,15 @@ if (!file_exists(BACKPATH . "/vendor/autoload.php")) {
 }
 require_once BACKPATH . "/vendor/autoload.php";
 
-// Load dotenv ke $_SERVER
-Dotenv\Dotenv::createMutable(BACKPATH)->load();
+// Load dotenv ke $_SERVER dan $_ENV jika file .env ada
+Dotenv\Dotenv::createMutable(BACKPATH)->safeLoad();
+
+// Salin variabel environment dari $_SERVER ke $_ENV agar terbaca seragam
+foreach ($_SERVER as $key => $val) {
+	if (!isset($_ENV[$key]) && is_string($val)) {
+		$_ENV[$key] = $val;
+	}
+}
 
 /*
  *---------------------------------------------------------------
