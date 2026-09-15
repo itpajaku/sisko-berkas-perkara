@@ -181,6 +181,10 @@ $route['monitoring_ikrar_talak'] = 'MonitoringIkrarTalakController/index';
 $route['monitoring_ikrar_talak/page'] = 'MonitoringIkrarTalakController/pagination';
 $route['monitoring_ikrar_talak/page/(:num)'] = 'MonitoringIkrarTalakController/pagination/$1';
 
+$route['perkara_dicabut'] = 'PerkaraDicabutController/index';
+$route['perkara_dicabut/page'] = 'PerkaraDicabutController/pagination';
+$route['perkara_dicabut/page/(:num)'] = 'PerkaraDicabutController/pagination/$1';
+
 /*
 | -------------------------------------------------------------------------
 | Sample REST API Routes

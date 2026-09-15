@@ -218,6 +218,14 @@ class MenuSeeder extends AbstractSeed
 					"link" => "/monitoring_ikrar_talak",
 					"icon" => "ti ti-calendar-event",
 				],
+				[
+					"id" => 26,
+					"title" => "Perkara Dicabut",
+					"section_id" => 8,
+					"is_sub" => false,
+					"link" => "/perkara_dicabut",
+					"icon" => "ti ti-file-off",
+				],
 			])
 			->saveData();
 	}

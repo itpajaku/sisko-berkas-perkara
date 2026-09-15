@@ -61,4 +61,9 @@ class Perkara extends Model
   {
     return $this->hasMany(PerkaraTransaksi::class, "perkara_id", "perkara_id");
   }
+
+  public function perkara_mediasi()
+  {
+    return $this->hasOne(PerkaraMediasi::class, "perkara_id", "perkara_id");
+  }
 }

@@ -18,4 +18,9 @@ class PerkaraPutusan extends Model
   {
     return $this->hasOne(Arsip::class, "perkara_id", "perkara_id");
   }
+
+  public function status_putusan()
+  {
+    return $this->belongsTo(StatusPutusan::class, "status_putusan_id", "id");
+  }
 }
