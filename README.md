@@ -28,7 +28,7 @@ Pastikan Docker dan Docker Compose sudah terpasang di sistem.
 
 3. **Akses Aplikasi:**
    - **Web App:** [http://localhost:8085](http://localhost:8085)
-   - **Database MariaDB:** `localhost:3307` (User: `root`, Password sesuai `.env.docker`)
+   - **Database MariaDB:** `localhost:8086` (User: `root`, Password sesuai `.env.docker`)
 
 4. **Perintah Berguna:**
    - Melihat log aplikasi:
