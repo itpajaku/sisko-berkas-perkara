@@ -104,7 +104,8 @@ class Auth extends CI_Controller
 			if (isset($this->session->userdata["http_auth_redirect"])) {
 				$redirectUrl = $this->session->userdata["http_auth_redirect"];
 			} else {
-				$redirectUrl = base_url($this->redirectPage[$profile->groupid]);
+				$dest = $this->getRedirectDestination($profile->groupid ?? null);
+				$redirectUrl = base_url(ltrim($dest, "/"));
 			}
 
 			$this->session->unset_userdata("http_auth_redirect");
@@ -116,10 +117,8 @@ class Auth extends CI_Controller
 			];
 
 			$this->output
-				// ->set_header("HX-Redirect: " . $redirectUrl)
-				->set_header("HX-Redirect: " . "/dashboard")
+				->set_header("HX-Redirect: " . $redirectUrl)
 				->set_header("HX-Trigger: login-success")
-				// ->set_content_type("text/html")
 				->set_output(
 					Templ::component("auth/auth_alert", [
 						"message" => "Login Berhasil, Anda akan diarahkan sebentar lagi.",
