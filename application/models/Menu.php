@@ -10,7 +10,7 @@ class Menu extends Model
 
   public function access_menu()
   {
-    return $this->belongsTo(AccessMenu::class, 'id', 'menu_id');
+    return $this->hasMany(AccessMenu::class, 'menu_id', 'id');
   }
 
   public function menu_section()

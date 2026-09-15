@@ -23,7 +23,19 @@ class PengaturanController extends APP_Controller
     $this->pengaturanService = PengaturanService::getInstance();
   }
 
-  public function access_menu_page() {}
+  public function menu_page()
+  {
+    MethodFilter::must('get');
+    $menuSections = MenuSection::with(['menu' => function ($q) {
+      $q->orderBy('id', 'asc');
+    }])->get();
+
+    Templ::render('pengaturan/menu_page', [
+      'menu_sections' => $menuSections,
+    ])->layout('layouts/main_layout', [
+      'title' => 'Manajemen Menu Sistem'
+    ]);
+  }
 
   public function update()
   {
@@ -122,7 +134,7 @@ class PengaturanController extends APP_Controller
       );
     } catch (\Throwable $th) {
       $this->output
-        ->set_header("HX-Trigger : " . json_encode([
+        ->set_header("HX-Trigger: " . json_encode([
           "htmx:toastr" => [
             "message" => $th->getMessage(),
             "level" => "error"
@@ -148,7 +160,7 @@ class PengaturanController extends APP_Controller
       $this->output->set_output(Templ::component("pengaturan/menu_access_form", $data));
     } catch (\Throwable $th) {
       $this->output
-        ->set_header("HX-Trigger : " . json_encode([
+        ->set_header("HX-Trigger: " . json_encode([
           "htmx:toastr" => [
             "message" => $th->getMessage(),
             "level" => "error"
@@ -169,7 +181,7 @@ class PengaturanController extends APP_Controller
         'menu_id' => Hashid::singleDecode(RequestBody::post('menu_id'))
       ]);
       $this->output
-        ->set_header("HX-Trigger : " . json_encode([
+        ->set_header("HX-Trigger: " . json_encode([
           "htmx:toastr" => [
             "message" => "Berhasil menambah akses",
             "level" => "success"
@@ -181,7 +193,7 @@ class PengaturanController extends APP_Controller
         );
     } catch (\Throwable $th) {
       $this->output
-        ->set_header("HX-Trigger : " . json_encode([
+        ->set_header("HX-Trigger: " . json_encode([
           "htmx:toastr" => [
             "message" => $th->getMessage(),
             "level" => "error"
@@ -198,7 +210,7 @@ class PengaturanController extends APP_Controller
     try {
       $this->pengaturanService->attachMenuToGroup(Hashid::singleDecode($en_group_id));
       $this->output
-        ->set_header("HX-Trigger : " . json_encode([
+        ->set_header("HX-Trigger: " . json_encode([
           "htmx:toastr" => [
             "message" => "Berhasil menambah akses",
             "level" => "success"
@@ -210,7 +222,7 @@ class PengaturanController extends APP_Controller
         );
     } catch (\Throwable $th) {
       $this->output
-        ->set_header("HX-Trigger : " . json_encode([
+        ->set_header("HX-Trigger: " . json_encode([
           "htmx:toastr" => [
             "message" => $th->getMessage(),
             "level" => "error"
@@ -232,7 +244,7 @@ class PengaturanController extends APP_Controller
       $this->pengaturanService->detach_section($group_id, $section_id);
       $message = "Berhasil menghapus akses ke session ini";
       $this->output
-        ->set_header("HX-Trigger : " . json_encode([
+        ->set_header("HX-Trigger: " . json_encode([
           "htmx:toastr" => [
             "message" => $message,
             "level" => "success"
@@ -242,7 +254,7 @@ class PengaturanController extends APP_Controller
         ->set_output($message);
     } catch (\Throwable $th) {
       $this->output
-        ->set_header("HX-Trigger : " . json_encode([
+        ->set_header("HX-Trigger: " . json_encode([
           "htmx:toastr" => [
             "message" => $th->getMessage(),
             "level" => "error"
@@ -279,7 +291,7 @@ class PengaturanController extends APP_Controller
 
       $message = "Berhasil mendapat akses ke section ini";
       $this->output
-        ->set_header("HX-Trigger : " . json_encode([
+        ->set_header("HX-Trigger: " . json_encode([
           "htmx:toastr" => [
             "message" => $message,
             "level" => "success"
@@ -305,7 +317,14 @@ class PengaturanController extends APP_Controller
       $group_id = Hashid::singleDecode($en_group_id);
 
       $data['en_group_id'] = $en_group_id;
-      $data['allowed_section'] = AccessMenuSection::with('menu_section')->where('group_id', $group_id)->get();
+      // Tampilkan seluruh section menu aktif agar admin bisa mengelola akses ke semua menu untuk grup ini
+      $data['allowed_section'] = MenuSection::where('is_active', 1)->with(['menu' => function ($q) {
+        $q->where('is_active', 1);
+      }])->get()->map(function ($section) {
+        $item = new \stdClass();
+        $item->menu_section = $section;
+        return $item;
+      });
       $data['allowed_menu'] = AccessMenu::where("group_id", $group_id)->get();
       $this->output->set_output(Templ::component('pengaturan/menu_form', $data));
     } catch (\Throwable $th) {

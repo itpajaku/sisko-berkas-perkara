@@ -9,7 +9,8 @@ $route["auth"] = "auth/Auth/index";
 $route["login"] = "auth/Auth/login";
 $route["logout"] = "auth/Auth/logout";
 
-$route["admin"] = "admin/Dashboard.php";
+$route["admin"] = "admin/Dashboard";
+$route["admin/dashboard"] = "admin/Dashboard";
 
 $route['dashboard'] = 'DashboardController/index';
 $route['dashboard_gugatan'] = 'DashboardGugatanController/index';
@@ -92,6 +93,7 @@ $route["akta_cerai/(:any)/ekspedisi"]["DELETE"] =
 
 $route["pengaturan/akun"]["GET"] = "PengaturanController/akun_page";
 $route["pengaturan/akun"]["POST"] = "PengaturanController/add_akun";
+$route["pengaturan/menu"]["GET"] = "PengaturanController/menu_page";
 $route["pengaturan/akun/(:any)"]["GET"] = 'PengaturanController/detail_akun/$1';
 $route["pengaturan/akun/(:any)"]["DELETE"] =
 	'PengaturanController/delete_akun/$1';
