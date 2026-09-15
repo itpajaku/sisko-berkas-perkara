@@ -2,6 +2,7 @@
 
 use App\Libraries\MethodFilter;
 use App\Libraries\Templ;
+use App\Models\BerkasGugatan;
 use App\Models\Hakim;
 use App\Models\PerkaraIkrarTalak;
 use Carbon\Carbon;
@@ -38,6 +39,7 @@ class MonitoringIkrarTalakController extends APP_Controller
 		$isAllYearInput = $this->input->get('is_all_year', true);
 		$hakimFilter = $this->input->get('hakim', true);
 		$statusFilter = $this->input->get('status', true); // 'belum' | 'sudah' | ''
+		$registerFilter = $this->input->get('register_status', true) ?: 'all'; // 'all' | 'registered' | 'unregistered'
 
 		if (!$filterWaktu) {
 			$filterWaktu = Carbon::now()->format('Y-m');
@@ -83,6 +85,22 @@ class MonitoringIkrarTalakController extends APP_Controller
 
 		if ($hakimFilter) {
 			$query->where('perkara_ikrar_talak.majelis_hakim_nama', 'LIKE', "%{$hakimFilter}%");
+		}
+
+		// Filter status register berkas
+		if ($registerFilter !== 'all') {
+			$registeredIds = BerkasGugatan::pluck('perkara_id')->filter()->unique()->toArray();
+			if ($registerFilter === 'registered') {
+				if (empty($registeredIds)) {
+					$query->whereRaw('1 = 0');
+				} else {
+					$query->whereIn('perkara_ikrar_talak.perkara_id', $registeredIds);
+				}
+			} elseif ($registerFilter === 'unregistered') {
+				if (!empty($registeredIds)) {
+					$query->whereNotIn('perkara_ikrar_talak.perkara_id', $registeredIds);
+				}
+			}
 		}
 
 		$config = $this->paginationConfig();
@@ -186,9 +204,21 @@ class MonitoringIkrarTalakController extends APP_Controller
 			->offset($offset)
 			->get();
 
+		// Ambil status register berkas gugatan lokal
+		$perkaraIds = $data->pluck('perkara_id')->filter()->unique()->toArray();
+		$berkasGugatanMap = [];
+		if (!empty($perkaraIds)) {
+			$berkasGugatanMap = BerkasGugatan::whereIn('perkara_id', $perkaraIds)
+				->get(['id', 'perkara_id', 'status', 'nomor_perkara'])
+				->keyBy('perkara_id')
+				->all();
+		}
+
 		return [
 			'page_name' => "Monitoring Ikrar Talak",
 			'data' => $data,
+			'berkas_gugatan' => $berkasGugatanMap,
+			'register_status' => $registerFilter,
 			'search' => $search,
 			'filter_waktu' => $filterWaktu,
 			'bulan_value' => $now->format('Y-m'),
@@ -260,6 +290,7 @@ class MonitoringIkrarTalakController extends APP_Controller
 				'data' => $viewData['data'],
 				'offset' => $viewData['offset'],
 				'bulan_label' => $viewData['bulan_label'],
+				'berkas_gugatan' => $viewData['berkas_gugatan'] ?? [],
 			]) . '
 			<div id="periode-label" hx-swap-oob="true">
 				<small class="text-muted">Periode: ' . $viewData['bulan_label'] . '</small>

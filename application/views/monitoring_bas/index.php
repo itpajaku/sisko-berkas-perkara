@@ -2,7 +2,7 @@
 
 use App\Libraries\Templ;
 ?>
-<div class="container-lg">
+<div class="container-fluid px-4" style="max-width: 100% !important; width: 100% !important;">
 	<?= Templ::component("layouts/page_header", [
 		"page_name" => $page_name,
 		"breadcrumbs" => [

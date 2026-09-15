@@ -2,7 +2,7 @@
 
 use App\Libraries\Templ;
 ?>
-<div class="container-lg">
+<div class="container-fluid px-4" style="max-width: 100% !important; width: 100% !important;">
 	<?= Templ::component("layouts/page_header", [
 		"page_name" => $page_name,
 		"breadcrumbs" => [
@@ -124,6 +124,21 @@ use App\Libraries\Templ;
 								</select>
 							</div>
 
+							<!-- Filter Status Register Berkas -->
+							<div class="input-group" style="width: 190px;">
+								<span class="input-group-text"><i class="ti ti-folder"></i></span>
+								<select class="form-select"
+									id="filter-register-status"
+									name="register_status"
+									hx-get="<?= site_url('monitoring_ikrar_talak/page') ?>"
+									hx-trigger="change"
+									hx-include="#filter-form">
+									<option value="all" <?= (($register_status ?? 'all') === 'all') ? 'selected' : '' ?>>Semua Register</option>
+									<option value="registered" <?= (($register_status ?? '') === 'registered') ? 'selected' : '' ?>>Teregistrasi</option>
+									<option value="unregistered" <?= (($register_status ?? '') === 'unregistered') ? 'selected' : '' ?>>Belum Register</option>
+								</select>
+							</div>
+
 							<!-- Filter Waktu / Bulan + Sepanjang Tahun -->
 							<div class="input-group" style="width: 240px;">
 								<span class="input-group-text"><i class="ti ti-calendar"></i></span>
@@ -167,6 +182,7 @@ use App\Libraries\Templ;
 							'data' => $data,
 							'offset' => $offset ?? 0,
 							'bulan_label' => $bulan_label,
+							'berkas_gugatan' => $berkas_gugatan ?? [],
 						]) ?>
 					</div>
 				</div>

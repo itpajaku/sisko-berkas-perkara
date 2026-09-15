@@ -82,7 +82,15 @@ class MonitoringBasController extends APP_Controller
 			});
 		}
 
-		$config = $this->paginationConfig();
+		$perPageInput = $this->input->get('per_page', true);
+		$perPage = 20;
+		if ($perPageInput === 'all' || $perPageInput === '-1') {
+			$perPage = 10000;
+		} else if (is_numeric($perPageInput) && (int)$perPageInput > 0) {
+			$perPage = (int)$perPageInput;
+		}
+
+		$config = $this->paginationConfig($perPage);
 
 		// Adjust base URL based on jenis
 		$baseUrlSuffix = $jenis ? "_{$jenis}" : "";
@@ -294,10 +302,10 @@ class MonitoringBasController extends APP_Controller
 		);
 	}
 
-	private function paginationConfig(): array
+	private function paginationConfig(int $perPage = 20): array
 	{
 		return [
-			'per_page' => 20,
+			'per_page' => $perPage,
 			'uri_segment' => 3,
 			'use_page_numbers' => TRUE,
 			'full_tag_open'   => '<nav><ul class="pagination justify-content-center">',
