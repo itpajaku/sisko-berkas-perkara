@@ -37,8 +37,12 @@ if (!function_exists('isSecure')) {
 		return false;
 	}
 }
-if (!empty($_SERVER['BASE_URL'])) $config['base_url'] = $_SERVER['BASE_URL'];
-else $config['base_url'] = isSecure() ? 'https://' . $_SERVER['HTTP_HOST'] : 'http://' . $_SERVER['HTTP_HOST'];
+if (!empty($_SERVER['BASE_URL'])) {
+	$config['base_url'] = rtrim($_SERVER['BASE_URL'], '/') . '/';
+} else {
+	$host = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
+	$config['base_url'] = (isSecure() ? 'https://' : 'http://') . $host . '/';
+}
 
 /*
 |--------------------------------------------------------------------------
