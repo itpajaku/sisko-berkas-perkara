@@ -7,6 +7,15 @@ services:
     restart: unless-stopped
     ports:
       - "${APP_PORT:-8085}:80"
+    volumes:
+      - ./:/var/www/html
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /var/www/html
+          ignore:
+            - .git/
     environment:
       APP_NAME: "${APP_NAME:-Sistem Kontrol Berkas}"
       APP_KEY: "${APP_KEY:-base64:Z9l1f07NBCJrPOTNrKQnT7SxGGR9P3mQSBkzGK29NT4=}"

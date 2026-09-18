@@ -1,14 +1,26 @@
 #!/bin/bash
 set -e
 
-# Buat direktori logs & output jika belum ada serta set permission
-mkdir -p /var/www/html/application/logs /var/www/html/doc/output
-chown -R www-data:www-data /var/www/html/application/logs /var/www/html/doc/output
-chmod -R 775 /var/www/html/application/logs /var/www/html/doc/output
+# Buat direktori logs, cache & output jika belum ada serta set permission
+mkdir -p /var/www/html/application/logs /var/www/html/application/cache /var/www/html/doc/output
+chown -R www-data:www-data /var/www/html/application/logs /var/www/html/application/cache /var/www/html/doc/output
+chmod -R 775 /var/www/html/application/logs /var/www/html/application/cache /var/www/html/doc/output
 
 # Pastikan file .env ada untuk kompatibilitas
 if [ ! -f /var/www/html/.env ] && [ -f /var/www/html/.env.docker ]; then
     cp /var/www/html/.env.docker /var/www/html/.env
+fi
+
+# Cek dependencies composer: jika vendor belum ada di mount, salin dari cache build atau jalankan composer install
+if [ ! -f /var/www/html/vendor/autoload.php ]; then
+    if [ -d /var/www/vendor-cache ] && [ -f /var/www/vendor-cache/autoload.php ]; then
+        echo "Menyalin vendor dependencies dari build cache..."
+        mkdir -p /var/www/html/vendor
+        cp -rp /var/www/vendor-cache/. /var/www/html/vendor/
+    else
+        echo "Vendor belum tersedia, menjalankan composer install..."
+        composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev || composer update --no-interaction --prefer-dist --optimize-autoloader --no-dev
+    fi
 fi
 
 # Tunggu database siap jika DB_HOST didefinisikan

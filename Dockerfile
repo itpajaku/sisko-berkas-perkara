@@ -47,13 +47,16 @@ COPY composer.json composer.lock* ./
 # Install dependencies via composer
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev || composer update --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
+# Simpan backup vendor untuk bootstrap jika volume mount host belum memiliki vendor
+RUN cp -rp /var/www/html/vendor /var/www/vendor-cache 2>/dev/null || true
+
 # Salin seluruh source code project
 COPY . .
 
-# Siapkan direktori log dan permission
-RUN mkdir -p application/logs doc/output \
+# Siapkan direktori log, cache dan permission
+RUN mkdir -p application/logs application/cache doc/output \
     && chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 application/logs doc/output
+    && chmod -R 775 application/logs application/cache doc/output
 
 # Salin dan siapkan script entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
